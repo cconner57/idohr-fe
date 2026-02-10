@@ -67,23 +67,12 @@ interface CustomViewTransitionDocument extends Document {
 
 import { useUIStore } from '../stores/ui'
 
-console.log('Router: File loaded')
 
-router.beforeEach(async (to, from, next) => {
-  console.log('Router: beforeEach started', { to: to.path, from: from.path })
-  try {
-    const uiStore = useUIStore()
-    console.log('Router: Got UI Store')
-    uiStore.startLoading()
-    console.log('Router: UI Store loading started')
-    next() // Ensure next is called!
-  } catch (e) {
-    console.error('Router: beforeEach Error', e)
-    next()
-  }
+router.beforeEach(async () => {
+  const uiStore = useUIStore()
+  uiStore.startLoading()
 })
 
-/*
 router.beforeResolve((to, from, next) => {
   const doc = document as unknown as CustomViewTransitionDocument
 
@@ -97,7 +86,6 @@ router.beforeResolve((to, from, next) => {
     await nextTick()
   })
 })
-*/
 
 router.afterEach((to) => {
   const { submitMetric } = useMetrics()
@@ -107,8 +95,7 @@ router.afterEach((to) => {
   submitMetric('page_view', { path: to.fullPath })
 })
 
-router.onError((error) => {
-  console.error('Router Error:', error)
+router.onError(() => {
   const uiStore = useUIStore()
   uiStore.stopLoading()
 })

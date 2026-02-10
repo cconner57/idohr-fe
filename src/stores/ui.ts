@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 
 export const useUIStore = defineStore('ui', () => {
-  console.log('UIStore: Initializing...')
   const isLoading = ref(false)
   const isRestored = ref(false)
 
