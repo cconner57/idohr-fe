@@ -73,12 +73,15 @@ router.beforeEach(async () => {
 
 router.beforeResolve((to, from, next) => {
   const doc = document as unknown as CustomViewTransitionDocument
+  console.log('Router: beforeResolve', { to, from, isStart: from === START_LOCATION })
 
   if (!doc.startViewTransition || from === START_LOCATION) {
+    console.log('Router: Skipping view transition')
     next()
     return
   }
 
+  console.log('Router: Starting view transition')
   doc.startViewTransition(async () => {
     next()
     await nextTick()
