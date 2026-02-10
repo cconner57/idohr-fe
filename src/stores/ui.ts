@@ -16,7 +16,13 @@ export const useUIStore = defineStore('ui', () => {
   const STORAGE_KEY = 'admin_ui_state'
   const CURRENT_VERSION = 1
 
-  const saved = localStorage.getItem(STORAGE_KEY)
+  let saved = null
+  try {
+    saved = localStorage.getItem(STORAGE_KEY)
+  } catch (e) {
+    console.error('Failed to access localStorage', e)
+  }
+
   if (saved) {
     try {
       const parsed = JSON.parse(saved)

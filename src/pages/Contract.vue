@@ -2,10 +2,10 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import AdoptionContract from '@/components/contracts/AdoptionContract.vue'
-import FosterToAdoptContract from '@/components/contracts/FosterToAdoptContract.vue'
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
 import Button from '@/components/common/ui/Button.vue'
+import AdoptionContract from '@/components/contracts/AdoptionContract.vue'
+import FosterToAdoptContract from '@/components/contracts/FosterToAdoptContract.vue'
 import type { IPet } from '@/models/common'
 
 interface ContractResponse {
@@ -266,6 +266,7 @@ const handleSubmit = async () => {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

@@ -7,7 +7,6 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import NavBar from './components/common/nav-bar/NavBar.vue'
-import PageLoader from './components/common/PageLoader.vue'
 import Toast from './components/common/ui/Toast.vue'
 import { useUIStore } from './stores/ui'
 
@@ -20,7 +19,6 @@ const showNavBar = computed(() => {
 </script>
 
 <template>
-  <PageLoader />
   <Toast
     :show="uiStore.toast.show"
     :message="uiStore.toast.message"

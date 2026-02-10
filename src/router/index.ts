@@ -57,18 +57,12 @@ const router = createRouter({
   },
 })
 
-type StartViewTransitionOptions = {
-  update?: ViewTransitionUpdateCallback
-  types?: string[]
-}
-
 interface CustomViewTransitionDocument extends Document {
-
-  startViewTransition(
-    callback?: ViewTransitionUpdateCallback,
-    options?: StartViewTransitionOptions,
-  ): any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  startViewTransition: any
 }
+
+
 
 import { useUIStore } from '../stores/ui'
 

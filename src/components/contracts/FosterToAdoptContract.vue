@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/* eslint-disable max-lines */
 import { computed, ref, watch } from 'vue'
 
 import InputSignature from '../common/ui/InputSignature.vue'

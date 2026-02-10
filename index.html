@@ -23,6 +23,25 @@
     <!--app-head-->
   </head>
   <body>
+    <div id="debug-error" style="color: red; padding: 20px; font-family: monospace; display: none;"></div>
+    <script>
+      window.onerror = function(msg, url, line, col, error) {
+        const div = document.getElementById('debug-error');
+        if (div) {
+          div.style.display = 'block';
+          div.innerHTML += '<h3>Global Error:</h3>' + msg + '<br>' + url + ':' + line + ':' + col + '<br>' + (error ? error.stack : '') + '<hr>';
+        }
+        console.error('Global Error caught:', msg, error);
+      };
+      window.addEventListener('unhandledrejection', function(event) {
+        const div = document.getElementById('debug-error');
+        if (div) {
+          div.style.display = 'block';
+          div.innerHTML += '<h3>Unhandled Promise Rejection:</h3>' + event.reason + '<hr>';
+        }
+        console.error('Unhandled Rejection:', event.reason);
+      });
+    </script>
     <div id="app"></div>
 
     <script type="module" src="/src/main.ts"></script>
