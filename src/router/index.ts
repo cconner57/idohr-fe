@@ -2,7 +2,15 @@ import { nextTick } from 'vue'
 import { createRouter, createWebHistory, START_LOCATION } from 'vue-router'
 
 import { useMetrics } from '../composables/useMetrics'
+import About from '../pages/About.vue'
+import Adopt from '../pages/Adopt.vue'
+import Contract from '../pages/Contract.vue'
+import Donate from '../pages/Donate.vue'
 import Home from '../pages/Home.vue'
+import NotFound from '../pages/NotFound.vue'
+import PetAdoption from '../pages/PetAdoption.vue'
+import SurrenderPet from '../pages/SurrenderPet.vue'
+import Volunteer from '../pages/Volunteer.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
