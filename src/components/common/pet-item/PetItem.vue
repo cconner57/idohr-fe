@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { type PropType,ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+import { useMetrics } from '../../../composables/useMetrics'
 import { goToAdopt } from '../../../utils/navigate.ts'
 import Button from '../ui/Button.vue'
-import { ref, type PropType } from 'vue'
 import Capsules from '../ui/Capsules.vue'
 
 const props = defineProps({
@@ -32,6 +34,10 @@ const props = defineProps({
     required: false,
     default: 'medium',
   },
+  priority: {
+    type: Boolean,
+    default: false,
+  },
 })
 const router = useRouter()
 
@@ -41,26 +47,30 @@ function onImgError() {
   imgError.value = true
 }
 
+const { submitMetric } = useMetrics()
+
 function handleAdopt() {
+  submitMetric('spotlight_click', { petId: props.id, petName: props.name })
   goToAdopt(router, props.id.toLowerCase())
 }
 </script>
 
 <template>
-  <div class="pet-item">
+  <div class="pet-item" :style="{ viewTransitionName: `pet-card-${props.id}` }">
     <img
       v-if="!imgError"
-      :src="`/images/${props.photo ?? ''}`"
+      :src="`/pet-photos/${props.photo ?? ''}`"
       :alt="props.name"
       height="250"
       width="240"
-      loading="lazy"
+      :style="{ viewTransitionName: 'pet-' + props.id }"
+      :fetchpriority="priority ? 'high' : 'auto'"
       @error="onImgError"
       @click="handleAdopt"
     />
     <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
     <div class="info-section">
-      <h5>{{ props.name }}</h5>
+      <h3>{{ props.name }}</h3>
       <div v-if="props.capsules.length > 0" class="capsules">
         <template v-for="capText in props.capsules" :key="capText">
           <Capsules v-if="capText && capText !== 'Invalid Date'">{{ capText }}</Capsules>
@@ -82,80 +92,120 @@ function handleAdopt() {
   width: 280px;
   border-radius: 8px;
   overflow: hidden;
-  background-color: var(--white);
-  color: var(--font-color-dark);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+  background-color: var(--text-inverse);
+  color: var(--text-primary);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
   height: 400px;
 
   img {
     width: 100%;
-    object-fit: cover;
     height: 180px;
-    background: url('/images/paw.svg') 90px 60px/100px 100px no-repeat #add8e6;
+    object-fit: cover;
+    object-position: center center;
+    background-color: #f9fafb;
     cursor: pointer;
   }
 
   .img-fallback {
     width: 100%;
     height: 180px;
-    background: url('/images/paw.svg') 90px 60px/100px 100px no-repeat #add8e6;
+    background-color: #f9fafb;
+    position: relative;
+    cursor: pointer;
+  }
+
+  /* Create the white paw icon using a mask */
+  .img-fallback::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: #fff;
+    mask: url('/images/paw.svg') no-repeat;
+    mask-position: 90px 60px;
+    mask-size: 100px 100px;
   }
 
   .info-section {
     display: flex;
     flex-direction: column;
     padding: 0 20px 16px;
-    height: 100%;
+    flex: 1;
+    overflow: hidden;
   }
 
-  h5 {
+  h3 {
     font-size: 1.5rem;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.6;
+    padding: 4px 0;
+    flex-shrink: 0;
+    text-wrap: balance;
   }
 
   .capsules {
     display: flex;
     gap: 8px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow: hidden;
     margin-bottom: 16px;
   }
 
   p {
-    font-size: 1rem;
-    flex-grow: 1;
-    margin-bottom: 12px;
+    font-size: 0.925rem;
+    flex-grow: 0;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.5;
+    padding-bottom: 2px;
+  }
+
+  @media (width <= 768px) {
+    p {
+      -webkit-line-clamp: 4;
+      line-clamp: 4;
+    }
   }
 
   .adopt-button {
     margin-top: auto;
   }
 
-  @media (min-width: 321px) and (max-width: 430px) {
+  @media (width >= 321px) and (width <= 430px) {
     & .img-fallback {
-      height: 400px;
-      background: url('/images/paw.svg') 90px 50px/100px 100px no-repeat #add8e6;
+      background-color: #add8e6;
     }
+
+    & .img-fallback::after {
+      mask-position: center center;
+    }
+
     & .info-section {
       & .capsules {
         margin-bottom: 8px;
-        gap: 2px;
+        gap: 6px;
       }
     }
   }
-  @media (min-width: 431px) and (max-width: 768px) {
-  }
-  @media (min-width: 769px) and (max-width: 1024px) {
-  }
-  @media (min-width: 1025px) and (max-width: 1440px) {
+
+  @media (width >= 1025px) and (width <= 1440px) {
     width: 240px;
     height: 360px;
+
     & .img-fallback {
-      height: 360px;
-      background: url('/images/paw.svg') 70px 50px/100px 100px no-repeat #add8e6;
+      background-color: #add8e6;
     }
+
+    & .img-fallback::after {
+      mask-position: center center;
+    }
+
     & .info-section {
       & .capsules {
         margin-bottom: 12px;
@@ -163,12 +213,17 @@ function handleAdopt() {
       }
     }
   }
-  @media (min-width: 1441px) {
+
+  @media (width >= 1441px) {
     width: 260px;
     height: 380px;
+
     & .img-fallback {
-      height: 380px;
-      background: url('/images/paw.svg') 80px 55px/100px 100px no-repeat #add8e6;
+      background-color: #add8e6;
+    }
+
+    & .img-fallback::after {
+      mask-position: center center;
     }
   }
 }

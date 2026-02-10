@@ -1,11 +1,50 @@
 <script setup lang="ts">
+import { onMounted,ref } from 'vue'
+
 import Candid from '../../common/candid-award/Candid.vue'
+import { Spinner } from '../../common/ui'
+
+const currentYear = new Date().getFullYear()
+const previousYear = currentYear - 1
+
+const countCurrent = ref(0)
+const countPrevious = ref(0)
+const isLoading = ref(true)
+
+import { API_ENDPOINTS } from '../../../constants/api'
+
+const fetchCount = async (year: number) => {
+  try {
+    const response = await fetch(`${API_ENDPOINTS.ADOPTED_PETS_COUNT}?year=${year}`)
+    const json = await response.json()
+    
+    if (json.data && typeof json.data.count === 'number') {
+      return json.data.count
+    }
+    
+    return json.count || 0
+  } catch (error) {
+    console.error(`Error fetching count for ${year}:`, error)
+    return 0
+  }
+}
+
+const getLabel = (count: number) => (count === 1 ? 'pet' : 'pets')
+
+onMounted(async () => {
+  
+  const [prev, curr] = await Promise.all([fetchCount(previousYear), fetchCount(currentYear)])
+
+  countPrevious.value = prev
+  countCurrent.value = curr
+  isLoading.value = false
+})
 </script>
 
 <template>
   <section class="impact">
     <h4>Our Impact</h4>
-    <content>
+    <div class="content">
       <div class="awards">
         <Candid type="Gold" year="2024" />
         <Candid type="Gold" year="2023" />
@@ -13,128 +52,158 @@ import Candid from '../../common/candid-award/Candid.vue'
       </div>
       <div class="divider"></div>
       <div class="stats">
-        <span>
-          <h5>500+</h5>
-          <p>pets rescued since 2020</p>
-        </span>
-        <span>
-          <h5>500+</h5>
-          <p>pets rescued since 2020</p>
-        </span>
+        <div v-if="isLoading" class="loader-container">
+          <Spinner />
+        </div>
+        <template v-else>
+          <span>
+            <h5>{{ countPrevious }}</h5>
+            <p>{{ getLabel(countPrevious) }} rescued in {{ previousYear }}</p>
+          </span>
+          <span>
+            <h5>{{ countCurrent }}</h5>
+            <p>{{ getLabel(countCurrent) }} rescued in {{ currentYear }}</p>
+          </span>
+        </template>
       </div>
-    </content>
+    </div>
   </section>
 </template>
 
 <style scoped lang="css">
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
 .impact {
-  max-width: var(--desktop-breakpoint);
-  background-color: var(--white);
+  width: 100%;
+  background-color: var(--text-inverse);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px 50px 50px 50px;
+  padding: 24px 50px 40px;
   border-radius: 12px;
   margin-top: -200px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
+  container-type: inline-size;
+  container-name: impact;
 
   & h4 {
     font-size: 2rem;
-    color: var(--font-color-dark);
-    margin-left: -15px;
+    color: var(--text-primary);
+    margin-bottom: 24px;
   }
-  & content {
+
+  & .content {
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 100%;
-    color: var(--font-color-dark);
+    color: var(--text-primary);
+    gap: 40px;
   }
+
   & .awards {
     display: flex;
-    gap: 50px;
-    width: 50%;
+    gap: 40px;
+    justify-content: center;
   }
+
   .divider {
-    border-left: 5px solid gray;
-    height: 150px;
-    border-radius: 12px;
-    margin: 0 90px 0 80px;
+    border-left: 2px solid var(--border-color);
+    height: 120px;
+    margin: 0 20px;
   }
+
   .stats {
     display: flex;
-    gap: 100px;
-    width: 45%;
+    gap: 40px;
+    justify-content: center;
+    width: 100%;
+    max-width: 450px;
+    min-height: 100px; 
+
     & span {
       display: flex;
       flex-direction: column;
       gap: 8px;
+      align-items: center;
+      text-align: center;
+
       & h5 {
         font-size: 3rem;
-        color: var(--font-color-dark);
+        color: var(--text-primary);
       }
+
       & p {
-        font-size: 1.25rem;
-        color: var(--font-color-dark);
+        font-size: 1.1rem;
+        color: var(--text-primary);
+        max-width: 150px;
       }
     }
   }
 
-  @media (min-width: 321px) and (max-width: 430px) {
+  @media (width <= 900px) {
     margin-top: -80px;
-    padding: 16px 20px 30px 20px;
-    gap: 12px;
-    overflow: hidden;
+    padding: 30px;
+    height: auto;
+
     & h4 {
-      font-size: 1.5rem;
       margin-left: 0;
-    }
-    & content {
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-    & .awards {
-      flex-direction: column;
-      justify-content: center;
-      margin-top: 1.5rem;
-    }
-    .divider {
-      height: 5px;
-      width: 250px;
-      border-left: none;
-      border-top: 5px solid gray;
-      border-radius: 12px;
-      margin: 2rem 0 0.5rem;
-    }
-    .stats {
-      gap: 50px;
-      justify-content: center;
+      text-align: left;
       width: 100%;
-      margin-left: 3rem;
+      margin-bottom: 20px;
+    }
+
+    & .content {
+      flex-direction: column;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .divider {
+      width: 100%;
+      height: 2px;
+      border-left: none;
+      border-top: 2px solid var(--border-color);
+      margin: 0;
+    }
+
+    & .awards {
+      width: 100%;
+      gap: 40px;
+      margin-top: 0;
+      justify-content: center;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      width: 100%;
+      gap: 30px;
+      justify-content: center;
+      min-width: 0;
+
       & span {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        & h5 {
-          font-size: 2rem;
-          margin-left: 0;
-        }
-        & p {
-          font-size: 1rem;
-          margin-left: 0;
-        }
+        align-items: center;
+        text-align: center;
       }
     }
   }
 
-  @media (min-width: 431px) and (max-width: 768px) {
-  }
-  @media (min-width: 769px) and (max-width: 1024px) {
-  }
-  @media (min-width: 1025px) and (max-width: 1440px) {
-    max-width: 1120px;
-    & h4 {
-      font-size: 1.75rem;
+  @media (width <= 480px) {
+    margin-top: -30px; 
+    padding: 24px;
+
+    .stats {
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
     }
   }
 }

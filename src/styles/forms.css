@@ -1,0 +1,84 @@
+/* Forms & Inputs (Dashboard Only) */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+.control input,
+.control textarea {
+  width: 100%;
+  max-width: 100%; /* Prevent overflow on small screens */
+  border: 1px solid #e7ebf0;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s;
+  background: #fff;
+  color: var(--text-primary);
+}
+
+.control input::placeholder,
+.control textarea::placeholder {
+  color: var(--text-primary);
+  opacity: 0.6;
+}
+
+.control input:focus,
+.control textarea:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgb(from var(--color-secondary) r g b / 40%);
+}
+
+/* Autofill styling fix */
+.control input:-webkit-autofill,
+.control input:-webkit-autofill:hover,
+.control input:-webkit-autofill:focus,
+.control input:-webkit-autofill:active {
+  box-shadow: 0 0 0 30px #fff inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.control textarea {
+  resize: vertical;
+}
+
+input[type='date'],
+input[type='time'] {
+  appearance: auto;
+  color-scheme: light dark;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='time']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+
+input[type='date']::placeholder,
+input[type='time']::placeholder {
+  color: inherit;
+  opacity: 0.6;
+}
+
+/*
+  Global Settings Input Style
+  Standardizes width for inputs in settings rows
+*/
+.settings-input {
+  width: 320px !important;
+  max-width: 100%;
+  margin-left: auto; /* Force right alignment in flex container */
+}

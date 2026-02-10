@@ -1,0 +1,24 @@
+/* Shared Button Colors */
+.button-color-green {
+  background-color: var(--color-primary);
+}
+
+.button-color-green:hover {
+  background-color: oklch(from var(--color-primary) 40% c h);
+}
+
+.button-color-blue {
+  background-color: var(--color-secondary);
+}
+
+.button-color-blue:hover {
+  background-color: oklch(from var(--color-secondary) 40% c h);
+}
+
+.button-color-purple {
+  background-color: var(--color-tertiary);
+}
+
+.button-color-purple:hover {
+  background-color: oklch(from var(--color-tertiary) 40% c h);
+}

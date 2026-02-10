@@ -1,0 +1,135 @@
+<script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue'
+
+const props = defineProps<{
+  show: boolean
+  message: string
+  type?: 'success' | 'error' | 'info'
+  duration?: number
+}>()
+
+const emit = defineEmits<{
+  close: []
+}>()
+
+let timer: number
+
+function startTimer() {
+  clearTimeout(timer)
+  if (props.duration !== 0) {
+    timer = window.setTimeout(() => {
+      emit('close')
+    }, props.duration || 6000)
+  }
+}
+
+onMounted(() => {
+  if (props.show) {
+    startTimer()
+  }
+})
+
+import { watch } from 'vue'
+watch(
+  () => props.show,
+  (val) => {
+    if (val) startTimer()
+  },
+)
+
+onUnmounted(() => {
+  clearTimeout(timer)
+})
+</script>
+
+<template>
+  <Transition name="toast-fade">
+    <div v-if="show" class="toast-container" :class="type || 'success'">
+      <div class="icon">
+        <span v-if="type === 'error'">✕</span>
+        <span v-else>✓</span>
+      </div>
+      <span class="message">{{ message }}</span>
+      <button class="close-btn" @click="emit('close')">✕</button>
+    </div>
+  </Transition>
+</template>
+
+<style scoped>
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 2000;
+  min-width: 300px;
+  border-left: 6px solid;
+}
+
+.toast-container.success {
+  border-left-color: var(--color-primary);
+}
+
+.toast-container.error {
+  border-left-color: var(--color-danger);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.success .icon {
+  background: oklch(from var(--color-primary) l c h / 10%);
+  color: var(--color-primary);
+}
+
+.error .icon {
+  background: oklch(from var(--color-danger) l c h / 10%);
+  color: var(--color-danger);
+}
+
+.message {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--text-primary);
+}
+
+.toast-fade-enter-active,
+.toast-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toast-fade-enter-from,
+.toast-fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+}
+</style>

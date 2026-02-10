@@ -13,12 +13,16 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
+    "moduleResolution": "bundler",
+    "module": "ESNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "noErrorTruncation": true
+    "noErrorTruncation": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

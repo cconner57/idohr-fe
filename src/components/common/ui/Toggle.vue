@@ -1,93 +1,114 @@
 <script setup lang="ts">
-const { leftLabel = 'No', rightLabel = 'Yes' } = defineProps<{
-  leftLabel?: string
-  rightLabel?: string
+
+const props = withDefaults(
+  defineProps<{
+    modelValue: boolean
+    label?: string
+    disabled?: boolean
+    labelPosition?: 'left' | 'right'
+    fullWidth?: boolean
+  }>(),
+  {
+    modelValue: false,
+    disabled: false,
+    labelPosition: 'right',
+    fullWidth: false,
+  },
+)
+
+const emit = defineEmits<{
+  'update:modelValue': [value: boolean]
 }>()
+
+function toggle() {
+  if (!props.disabled) {
+    emit('update:modelValue', !props.modelValue)
+  }
+}
 </script>
 
 <template>
-  <div class="switch-row">
-    <span class="switch-text">{{ leftLabel }}</span>
-    <label class="switch">
-      <input id="allergies" type="checkbox" class="switch-input" />
-      <span class="switch__track"></span>
-      <span class="switch__thumb"></span>
-    </label>
-
-    <span class="switch-text">{{ rightLabel }}</span>
+  <div
+    class="toggle-wrapper"
+    :class="{
+      disabled: props.disabled,
+      'label-left': props.labelPosition === 'left',
+      'full-width': props.fullWidth,
+    }"
+    @click="toggle"
+  >
+    <div
+      class="toggle-switch"
+      :class="{ active: props.modelValue }"
+      role="switch"
+      :aria-checked="props.modelValue"
+      :aria-label="props.label"
+    >
+      <div class="toggle-thumb"></div>
+    </div>
+    <span v-if="props.label" class="toggle-label">{{ props.label }}</span>
   </div>
 </template>
 
-<style scoped lang="css">
-.switch-row {
-  display: flex;
+<style scoped>
+.toggle-wrapper {
+  display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 6px;
-}
-.switch-text {
-  color: black;
-  font-weight: 600;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 28px;
-  border-radius: 999px;
   cursor: pointer;
+  user-select: none;
 }
 
-.switch-input {
-  position: absolute;
-  inset: 0;
+.toggle-wrapper.full-width {
   width: 100%;
-  height: 100%;
-  opacity: 0;
-  margin: 0;
-  cursor: pointer;
+  justify-content: space-between;
 }
 
-.switch__track {
-  position: absolute;
-  inset: 0;
-  background: #e7ebf0;
+.toggle-wrapper.label-left {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.toggle-wrapper.label-left.full-width {
+  justify-content: space-between;
+}
+
+.toggle-wrapper.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toggle-switch {
+  width: 44px; 
+  height: 24px;
+  background-color: var(--color-neutral-border-strong);
   border-radius: 999px;
-  transition: background 0.2s ease;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
-}
-.switch__thumb {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease;
+  padding: 2px;
+  transition: background-color 0.2s ease;
+  position: relative;
 }
 
-.switch-input:checked ~ .switch__track {
-  background: #00a5ad;
-}
-.switch-input:checked ~ .switch__thumb {
-  transform: translateX(18px);
+.toggle-switch.active {
+  background-color: var(--color-primary);
 }
 
-.switch-input:focus-visible ~ .switch__track {
-  box-shadow: 0 0 0 3px rgba(0, 165, 173, 0.4);
-}
-.switch-input:checked + .switch .switch__track {
-  background: #00a5ad;
-}
-.switch-input:checked + .switch .switch__thumb {
-  transform: translateX(18px);
+.toggle-thumb {
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0);
 }
 
-.switch-input:focus-visible + .switch .switch__track {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 165, 173, 0.4);
+.toggle-switch.active .toggle-thumb {
+  transform: translateX(20px);
+}
+
+.toggle-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 </style>

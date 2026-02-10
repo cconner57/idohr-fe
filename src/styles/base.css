@@ -1,128 +1,205 @@
 @font-face {
-  font-family: 'Roboto-V';
+  font-family: Roboto-V;
   src: url('../assets/fonts/Roboto-Variable.ttf') format('truetype-variations');
   font-weight: 1 999;
+  font-display: swap;
 }
 
 :root {
-  --green: #00a5ad;
-  --green-hover: #006f73;
-  --green-weak: #7fd1c9;
-  --green-weak-hover: #5ea5a9;
+  /* ========================================================================
+     Strict 8-Color Palette (OKLCH)
+     ======================================================================== */
+  --color-primary: oklch(65.66% 0.1117 200.913deg); /* User-specified Brand Teal */
+  --color-secondary: oklch(50% 0.22 260deg); /* Deep Blue/Purple - Fixed typo & darkened */
+  --color-tertiary: oklch(55% 0.18 310deg); /* Pink/Purple - Darkened */
+  --color-danger: oklch(60% 0.2 20deg); /* Vibrant Red - Alerts/Error */
+  --color-warning: oklch(75% 0.18 85deg); /* Warm Yellow - Warning */
+  --color-neutral: oklch(25% 0.04 260deg); /* Cool Dark Grey - Neutral/Text */
+  --text-primary: var(--color-neutral); /* Main text color */
+  --text-secondary: oklch(40% 0.06 260deg); /* Cool Grey text color - Darkened from 45% */
+  --text-inverse: oklch(99% 0.01 260deg); /* Cool White - Inverse text/Background */
 
-  --blue: #1976d2;
-  --blue-hover: #1565c0;
-  --blue-weak: #aed9ff;
+  /* Color Variations */
+  --color-primary-light: oklch(from var(--color-primary) 93% c h);
+  --color-primary-dark: oklch(from var(--color-primary) 45% c h);
+  --color-secondary-light: oklch(from #1976d2 90% c h);
+  --color-secondary-dark: oklch(from #1976d2 10% c h);
+  --color-tertiary-light: oklch(from #6b5b95 90% c h);
+  --color-tertiary-dark: oklch(from #6b5b95 10% c h);
+  --color-danger-light: oklch(from #c73a67 90% c h);
+  --color-danger-dark: oklch(from #c73a67 10% c h);
+  --color-warning-light: oklch(from #deb024 90% c h);
+  --color-warning-dark: oklch(from #deb024 10% c h);
+  --color-neutral-light: oklch(from #1f2121 90% c h);
+  --color-neutral-dark: oklch(from #1f2121 10% c h);
 
-  --purple: #6b5b95;
-  --purple-hover: #5a4d7a;
-  --purple-weak: #cdbaf0;
+  /* Color Hover States */
+  --color-primary-hover: oklch(from #00a5ad 95% c h);
+  --color-secondary-hover: oklch(from #1976d2 95% c h);
+  --color-tertiary-hover: oklch(from #6b5b95 95% c h);
+  --color-danger-hover: oklch(from #c73a67 95% c h);
+  --color-warning-hover: oklch(from #deb024 95% c h);
+  --color-neutral-hover: oklch(from #1f2121 95% c h);
 
-  --white: #f8f8f3;
-  --red: #c73a67;
-  --yellow: #deb024;
+  /* Weak Variants (Backgrounds) - 96% Lightness, Low Chroma (Pastel) */
+  --color-primary-weak: oklch(from #00a5ad 96% 0.04 h);
+  --color-secondary-weak: oklch(from #1976d2 96% 0.04 h);
+  --color-tertiary-weak: oklch(from #6b5b95 96% 0.04 h);
+  --color-danger-weak: oklch(from #c73a67 96% 0.04 h);
+  --color-warning-weak: oklch(from #deb024 96% 0.04 h);
+  --color-neutral-weak: oklch(from #1f2121 96% 0.02 h); /* Even lower for neutral */
 
-  --background: #00a5ad;
+  /* Surface Variants (Subtle Backgrounds) - 98% Lightness */
+  --color-primary-surface: oklch(from #00a5ad 98% 0.02 h);
+  --color-secondary-surface: oklch(from #1976d2 98% 0.02 h);
+  --color-tertiary-surface: oklch(from #6b5b95 98% 0.02 h);
+  --color-danger-surface: oklch(from #c73a67 98% 0.02 h);
+  --color-warning-surface: oklch(from #deb024 98% 0.02 h);
+  --color-neutral-surface: oklch(from #1f2121 98% 0.01 h);
 
-  --font-color-light: #fefeff;
-  --font-color-dark: #1f2121;
+  /* Border Variants - 85% Lightness */
+  --color-primary-border: oklch(from #00a5ad 85% c h);
+  --color-secondary-border: oklch(from #1976d2 85% c h);
+  --color-tertiary-border: oklch(from #6b5b95 85% c h);
+  --color-danger-border: oklch(from #c73a67 85% c h);
+  --color-warning-border: oklch(from #deb024 85% c h);
+  --color-neutral-border: oklch(from #1f2121 85% c h);
 
+  /* Soft Text Variants - 50% Lightness */
+  --color-primary-text-soft: oklch(from #00a5ad 50% c h);
+  --color-secondary-text-soft: oklch(from #1976d2 50% c h);
+  --color-tertiary-text-soft: oklch(from #6b5b95 50% c h);
+  --color-danger-text-soft: oklch(from #c73a67 50% c h);
+  --color-warning-text-soft: oklch(from #deb024 50% c h);
+  --color-neutral-text-soft: oklch(from #1f2121 50% c h);
+
+  /* Strong Variants - 40% Lightness */
+  --color-primary-strong: oklch(from #00a5ad 40% c h);
+  --color-secondary-strong: oklch(from #1976d2 40% c h);
+  --color-tertiary-strong: oklch(from #6b5b95 40% c h);
+  --color-danger-strong: oklch(from #c73a67 40% c h);
+  --color-warning-strong: oklch(from #deb024 40% c h);
+  --color-neutral-strong: oklch(from #1f2121 40% c h);
+
+  /* Strong Border Variants - 80% Lightness */
+  --color-primary-border-strong: oklch(from #00a5ad 80% c h);
+  --color-secondary-border-strong: oklch(from #1976d2 80% c h);
+  --color-tertiary-border-strong: oklch(from #6b5b95 80% c h);
+  --color-danger-border-strong: oklch(from #c73a67 80% c h);
+  --color-warning-border-strong: oklch(from #deb024 80% c h);
+  --color-neutral-border-strong: oklch(from #1f2121 80% c h);
+
+  /* Shadow Colors */
+  --shadow-color: oklch(from #1f2121 10% c h);
+
+  /* Legacy Aliases Removed */
+  --border-color: #e0e0e0; /* Exception: Common border */
+
+  /* Layout Variables */
   --font-regular: 'Roboto-V';
-
-  --border-color: #e0e0e0;
-
   --mobile-breakpoint: 440px;
   --tablet-breakpoint: 1024px;
   --desktop-breakpoint: 1440px;
-
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
-
   --viewport-small-phone: 320px;
   --viewport-phone: 430px;
   --viewport-tablet: 768px;
   --viewport-landscape-tablet: 1024px;
   --viewport-desktop: 1280px;
   --viewport-large-desktop: 1440px;
+
+  /* Global Layout Padding matching Hero Section */
+  --layout-padding-side: clamp(16px, 10dvw, 170px);
+
+  /* Typography Scale */
+  --font-size-h1: clamp(2rem, 5vw, 4.25rem);
+  --font-size-h2: clamp(1.75rem, 4vw, 3rem);
+  --font-size-h3: clamp(1.5rem, 3vw, 2.25rem);
+  --font-size-h4: clamp(1.25rem, 2vw, 1.75rem);
+  --font-size-h5: clamp(1.1rem, 1.5vw, 1.5rem);
+  --font-size-h6: 1rem;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
 
-* {
-  margin: 0;
-  padding: 0;
-  font: inherit;
-  font-family: var(--font-regular);
+/* Global Scrollbar Styling - Hide for Native Feel but allow scroll */
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 html {
-  color-scheme: dark light;
-  hanging-punctuation: first last;
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE 10+ */
+  background-color: var(--text-inverse); /* Cool White to match Admin pages and prevent black flicker */
 }
 
+/* Base Native App Feel */
 body {
-  min-height: 100dvh;
+  background-color: var(--text-inverse); /* Cool White to match Admin pages and prevent black flicker */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  overscroll-behavior-y: none; /* Prevent pull-to-refresh on body if implemented elsewhere */
 }
 
-html,
-body {
-  background: var(--green, #00a5ad);
-  min-height: 100%;
+/* Allow text selection on content that matters */
+p, h1, h2, h3, h4, h5, h6, span, td, th, li, a {
+  user-select: text;
 }
 
-html,
-body,
-#app {
-  max-width: 100dvw;
-  overflow-x: clip;
-}
-
-img,
-picture,
-svg,
-video {
-  display: block;
-  height: auto;
+/* Fix iOS Zoom on Inputs */
+input, textarea, select, button {
+  font-size: 16px !important; /* Forces 16px to prevent zoom */
   max-width: 100%;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  vertical-align: middle;
-  font-style: italic;
-  background-repeat: no-repeat;
-  background-size: cover;
-  shape-margin: 0.75rem;
+/* Button & Interactive - No Selection */
+button, .btn, a.btn, label, .clickable {
+  user-select: none;
+  cursor: pointer;
+  touch-action: manipulation; /* Improves tap response */
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  text-wrap: balance;
-  font-family: var(--font-regular);
-  color: var(--tertiary);
-  font-weight: 700;
+/* View Transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  mix-blend-mode: normal;
 }
 
-p {
-  max-width: 75ch;
-  text-wrap: pretty;
-  font-family: var(--font-regular);
-  font-weight: 300;
-  font-size: 1rem;
+::view-transition-old(root) {
+  animation-name: fade-out;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  :has(:target) {
-    scroll-behavior: smooth;
-    scroll-padding-top: 3rem;
+::view-transition-new(root) {
+  animation-name: fade-in;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* Typography Utilities */
+.text-balance {
+  text-wrap: balance;
 }

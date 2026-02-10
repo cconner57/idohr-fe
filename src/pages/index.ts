@@ -1,7 +1,0 @@
-export { default as About } from './About.vue'
-export { default as Adopt } from './Adopt.vue'
-export { default as Home } from './Home.vue'
-export { default as Donate } from './Donate.vue'
-export { default as Volunteer } from './Volunteer.vue'
-export { default as PetAdoption } from './PetAdoption.vue'
-export { default as SurrenderPet } from './SurrenderPet.vue'

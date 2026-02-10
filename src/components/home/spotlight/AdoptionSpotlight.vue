@@ -1,41 +1,59 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import PetItem from '../../common/pet-item/PetItem.vue'
-import { useIsMobile } from '../../../utils/useIsMobile.ts'
+import { computed, ref, watch } from 'vue'
+
 import type { IPet } from '../../../models/common.ts'
-import { mockPetsData } from '../../../stores/mockPetData.ts'
+import { useIsMobile } from '../../../utils/useIsMobile.ts'
+import PetItem from '../../common/pet-item/PetItem.vue'
+import { Spinner } from '../../common/ui'
+
+const props = defineProps<{
+  pets: IPet[]
+  loading: boolean
+  error: string | null
+}>()
 
 const isMobile = useIsMobile()
 
-const allPets = mockPetsData.filter((pet) => pet.profileSettings.isSpotlightFeatured)
+const randomPet = ref<IPet | null>(null)
+console.log('AdoptionSpotlight props.pets:', props.pets)
+watch(
+  [() => props.pets, isMobile],
+  ([newPets, newIsMobile], [oldPets, oldIsMobile]) => {
+    if (!newIsMobile) return
 
-const randomPet = ref<IPet | null>(
-  isMobile.value ? allPets[Math.floor(Math.random() * allPets.length)] : null,
+    const hasPets = newPets && newPets.length > 0
+    if (!hasPets) return
+
+    const justSwitchedToMobile = !oldIsMobile
+    const justLoadedPets = !oldPets || oldPets.length === 0
+
+    if (justSwitchedToMobile || justLoadedPets) {
+      randomPet.value = newPets[Math.floor(Math.random() * newPets.length)]
+    }
+  },
+  { immediate: true },
 )
-
-watch(isMobile, (newIsMobile, oldIsMobile) => {
-  if (newIsMobile && !oldIsMobile) {
-    randomPet.value = allPets[Math.floor(Math.random() * allPets.length)]
-  }
-})
 
 const displayedPets = computed((): IPet[] => {
   if (isMobile.value) {
     return randomPet.value ? [randomPet.value] : []
   }
-  return allPets
+  return props.pets
 })
 </script>
 
 <template>
   <section class="adoption-spotlight">
-    <h4>Adoption Spotlight</h4>
-    <div class="pet-list">
+    <h2>Adoption Spotlight</h2>
+    <div v-if="loading" class="loader-container">
+      <Spinner />
+    </div>
+    <div v-else class="pet-list">
       <PetItem
         v-for="pet in displayedPets"
         :key="pet.id"
         :name="pet.name"
-        :id="pet.id.toLowerCase()"
+        :id="(pet.slug || pet.id).toLowerCase()"
         :photo="pet.photos?.find((p) => p.isPrimary)?.url || null"
         :description="pet.descriptions?.spotlight || ''"
         :size="isMobile ? 'large' : 'medium'"
@@ -45,60 +63,91 @@ const displayedPets = computed((): IPet[] => {
 </template>
 
 <style scoped lang="css">
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+}
+
 .adoption-spotlight {
-  background-color: var(--white);
+  background-color: var(--text-inverse);
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin: -120px auto 0;
-  max-width: 1440px;
-  padding: 24px 50px 40px 50px;
-  max-height: 510px;
+  margin: -120px 0 0;
+  width: 100%;
+  padding: 24px 50px 40px;
 
-  & h4 {
+  & h2 {
     font-size: 2rem;
-    color: var(--font-color-dark);
+    color: var(--text-primary);
   }
 
   .pet-list {
     display: flex;
     gap: 3rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    justify-content: center; 
+    margin-left: -50px;
+    margin-right: -50px;
+    padding-left: 50px;
+    padding-right: 50px;
   }
 
-  @media (min-width: 321px) and (max-width: 430px) {
-    margin: -3rem 0 0;
+  @media (width <= 430px) {
+    margin: 2rem 0 0;
     padding: 1rem 2rem;
     gap: 0.5rem;
-    & h4 {
+
+    & h2 {
       font-size: 1.5rem;
     }
+
     .pet-list {
       gap: 1rem;
+      margin-left: -2rem;
+      margin-right: -2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      justify-content: flex-start; 
     }
   }
-  @media (min-width: 431px) and (max-width: 768px) {
-    & h4 {
+
+  @media (width >= 431px) and (width <= 768px) {
+    margin: -20px 0 0;
+
+    & h2 {
       font-size: 1.75rem;
     }
   }
-  @media (min-width: 769px) and (max-width: 1024px) {
-    & h4 {
+
+  @media (width >= 769px) and (width <= 1024px) {
+    & h2 {
       font-size: 1.75rem;
     }
   }
-  @media (min-width: 1025px) and (max-width: 1440px) {
+
+  @media (width >= 1025px) and (width <= 1440px) {
     width: 100%;
-    max-width: 1120px;
     padding: 24px 30px 30px;
-    & h4 {
+
+    & h2 {
       font-size: 1.75rem;
     }
+
     .pet-list {
       gap: 2rem;
+      margin-left: -30px;
+      margin-right: -30px;
+      padding-left: 30px;
+      padding-right: 30px;
     }
   }
 }

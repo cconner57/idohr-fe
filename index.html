@@ -1,13 +1,70 @@
 <!doctype html>
-<html lang="">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link
+      rel="preload"
+      href="/src/assets/fonts/Roboto-Variable.ttf"
+      as="font"
+      type="font/ttf"
+      crossorigin
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+    <meta name="theme-color" content="#00a5ad" />
+    <meta
+      name="description"
+      content="Volunteer with I Dream of Home Rescue to help homeless cats and kittens find loving homes. Join our team today!"
+    />
     <title>I Dream of Home Rescue</title>
+    <meta name="apple-mobile-web-app-title" content="IDOHR">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <style>
+      #loading-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        /* Using a clean white background to make the teal paw POP */
+        background-color: #f8f8f3; 
+        transition: opacity 0.4s ease-out;
+      }
+      
+      #loading-screen img {
+        width: 100px; /* Slightly larger for better visibility */
+        height: 100px;
+        animation: logo-pulse 2.5s infinite ease-in-out;
+      }
+
+      @keyframes logo-pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+      }
+
+      /* Automatically hide when app is mounted (not empty) */
+      #app:not(:empty) ~ #loading-screen {
+        opacity: 0;
+        pointer-events: none;
+        display: none; /* Ensure it's removed from layout */
+      }
+      
+      /* Hide on Desktop (Non-PWA view) */
+      @media (min-width: 1024px) {
+        #loading-screen {
+            display: none !important;
+        }
+      }
+    </style>
+    <!--app-head-->
   </head>
   <body>
     <div id="app"></div>
+    <div id="loading-screen">
+      <img src="/images/paw.svg" alt="Loading..." />
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

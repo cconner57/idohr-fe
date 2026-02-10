@@ -1,145 +1,91 @@
 <script setup lang="ts">
-import type { SurrenderFormState } from '../models/common'
-import { reactive, ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted,reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
 import {
   AggressiveSection,
+  BehaviorSection,
   FeedingSection,
   HouseholdSection,
   MedicalSection,
-  BehaviorSection,
   OtherSection,
-} from '../components/about/surrender'
-import Button from '../components/common/ui/Button.vue'
-import SurrenderSteps from '../components/about/surrender/SurrenderSteps.vue'
-import PetSelectSection from '../components/about/surrender/PetSelectSection.vue'
+} from '@/components/about/surrender/index.ts'
+import PetSelectSection from '@/components/about/surrender/PetSelectSection.vue'
+import SurrenderSteps from '@/components/about/surrender/SurrenderSteps.vue'
+import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
+import Button from '@/components/common/ui/Button.vue'
+import { useMetrics } from '@/composables/useMetrics'
+import { useSurrenderStore } from '@/stores/surrender'
 
-const formState = reactive<SurrenderFormState>({
-  // Cat & Household Information
-  firstName: '',
-  lastName: '',
-  phoneNumber: '',
-  email: '',
-  streetAddress: '',
-  city: '',
-  state: '',
-  zipCode: '',
-  whenToSurrenderCat: '',
-  catName: '',
-  catSex: '',
-  catAge: '',
-  catOwnershipDuration: '',
-  catLocationFound: '',
-  catWhySurrendered: '',
-  agesOfHouseholdMembers: '',
-  otherPetsInHousehold: '',
+const { submitMetric } = useMetrics()
 
-  // Behavior
-  catsBehaviorTowardsKnownPeople: '',
-  catsBehaviorTowardsStrangers: '',
-  catsBehaviorTowardsKnownAnimals: '',
-  commentsOnBehavior: '',
-  catsReactionToNewPeople: '',
-  catHouseTrained: '',
-  catSpendMajorityOfTime: '',
-  catLeftAloneDuration: '',
-  catWhenLeftAlone: '',
-  catLeftAloneBehaviors: '',
-  catHowItPlays: '',
-  catToysItLikes: '',
-  catGamesItLikes: '',
-  catScaredOfAnything: '',
-  catScaredOfAnythingExplanation: '',
-  catBadHabits: '',
-  catAllowedOnFurniture: '',
-  catSleepAtNight: '',
-  catBehaviorFoodOthers: '',
-  catBehaviorToysOthers: '',
-  catProblemsRidingInCar: '',
-  catProblemsRidingInCarExplanation: '',
-  catEscapedBefore: '',
-  catEscapedBeforeExplanation: '',
-
-  // Aggressive Behavior
-  catEverAttackedPeople: '',
-  catEverAttackedPeopleExplanation: '',
-  catEverAttackedOtherCats: '',
-  catEverAttackedOtherCatsExplanation: '',
-
-  // Medical History
-  catVeterinarianList: '',
-  catVeterinarianYearlyVisits: '',
-  catSpayedNeutered: '',
-  catVaccinationHistory: '',
-  catVaccinationsCurrent: '',
-  catTestedHeartworm: '',
-  catTestedHeartwormExplanation: '',
-  catHeartwormPrevention: '',
-  catHeartwormPreventionExplanation: '',
-  catMicrochipped: '',
-  catMicrochippedExplanation: '',
-  catVetOrGroomerBehavior: '',
-  catVetMuzzled: '',
-  catPastOrPresentHealthProblems: '',
-  catPastOrPresentHealthProblemsExplanation: '',
-  catCurrentMedications: '',
-  catCurrentMedicationsExplanation: '',
-
-  // Feeding
-  catTypeOfFood: '',
-  catEatingFrequency: '',
-  catAmountOfFood: '',
-  catFoodTreats: '',
-  catFoodTreatsExplanation: '',
-
-  // Other
-  additionalInformation: '',
-  fullBodyPhotoOfCat: '',
-  closeUpPhotoOfCatsFace: '',
-  copiesOfRecords: '',
+onMounted(() => {
+  submitMetric('form_start', { form: 'surrender' })
 })
 
-const formStep = ref(0)
-const selectedAnimal = ref<'dog' | 'cat' | null>(null)
-const formError = ref<boolean>(false)
+const router = useRouter()
+const surrenderStore = useSurrenderStore()
+const {
+  formState,
+  step,
+  isSubmitted,
+  hasAttemptedSubmit,
+  selectedAnimal,
+  validationErrors,
+  isStepValid,
+} = storeToRefs(surrenderStore)
+const { nextStep, prevStep, resetForm } = surrenderStore
+
+const touched = reactive<Record<string, boolean>>({})
+
+const handleBlur = (field: string) => {
+  touched[field] = true
+}
+
+const formError = computed(() => hasAttemptedSubmit.value && !isStepValid.value)
 
 const handleSubmit = () => {
-  if (formStep.value === 0 && !selectedAnimal.value) {
-    formError.value = true
-    console.log('Form submitted with state:', selectedAnimal.value)
+  if (!nextStep()) {
+    globalThis.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+
     return
   }
-  console.log('Form submitted with state:', formState)
-  // Add form validation and submission logic here
-  if (formStep.value < 6) {
-    formStep.value += 1
-  } else {
-    // Final submission logic
-    alert('Form submitted successfully!')
-  }
+  globalThis.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const handleReset = async () => {
+  await router.push('/')
+  resetForm()
 }
 
 const headerText = computed(() => {
-  if (!selectedAnimal.value || formStep.value === 0) {
+  if (!selectedAnimal.value || step.value === 0) {
     return 'Surrender Pet'
   }
-  return selectedAnimal.value === 'cat' ? 'Feline Surrender' : 'Canine Surrender'
+  return selectedAnimal.value === 'cat' ? 'Cat Surrender' : 'Dog Surrender'
+})
+
+const formattedAnimal = computed(() => {
+  if (!selectedAnimal.value) return ''
+  return selectedAnimal.value.charAt(0).toUpperCase() + selectedAnimal.value.slice(1)
 })
 </script>
 
 <template>
   <section class="page-shell">
-    <section class="form-card" aria-labelledby="form-title">
+    <section v-if="!isSubmitted" class="form-card" aria-labelledby="form-title">
       <div class="form-header">
         <img
-          v-if="selectedAnimal === 'cat' && formStep > 0"
-          src="../../public/images/cat.png"
+          v-if="selectedAnimal === 'cat' && step > 0"
+          src="/images/cat.png"
           alt="cat"
           height="50"
           width="100"
         />
         <img
-          v-if="selectedAnimal === 'dog' && formStep > 0"
-          src="../../public/images/dog.png"
+          v-if="selectedAnimal === 'dog' && step > 0"
+          src="/images/dog.png"
           alt="cat"
           height="50"
           width="100"
@@ -147,88 +93,214 @@ const headerText = computed(() => {
         <h1>{{ headerText }}</h1>
       </div>
       <SurrenderSteps
-        v-if="selectedAnimal && formStep > 0"
-        :formStep="formStep"
+        v-if="selectedAnimal && step > 0"
+        :formStep="step"
         :selectedAnimal="selectedAnimal"
       />
-      <content>
-        <PetSelectSection
-          v-if="formStep === 0"
-          :formError="formError"
-          :selectedAnimal="selectedAnimal"
-          @update:selectedAnimal="
-            (value) => {
-              selectedAnimal = value
-            }
-          "
-        />
-        <HouseholdSection v-if="formStep === 1" :formState="formState" />
-        <BehaviorSection v-if="formStep === 2" :formState="formState" />
-        <AggressiveSection v-if="formStep === 3" :formState="formState" />
-        <MedicalSection v-if="formStep === 4" :formState="formState" />
-        <FeedingSection v-if="formStep === 5" :formState="formState" />
-        <OtherSection v-if="formStep === 6" :formState="formState" />
-      </content>
+      <PetSelectSection
+        v-if="step === 0"
+        :formError="formError"
+        :selectedAnimal="selectedAnimal"
+        @update:selectedAnimal="(value: any) => (selectedAnimal = value)"
+      />
+      <HouseholdSection
+        v-if="step === 1 && selectedAnimal"
+        :formState="formState"
+        :touched="touched"
+        :handleBlur="handleBlur"
+        :hasAttemptedSubmit="hasAttemptedSubmit"
+        :selectedAnimal="formattedAnimal"
+      />
+      <BehaviorSection
+        v-if="step === 2 && selectedAnimal"
+        :formState="formState"
+        :touched="touched"
+        :handleBlur="handleBlur"
+        :hasAttemptedSubmit="hasAttemptedSubmit"
+        :selectedAnimal="formattedAnimal"
+      />
+      <AggressiveSection
+        v-if="step === 3 && selectedAnimal"
+        :formState="formState"
+        :touched="touched"
+        :handleBlur="handleBlur"
+        :hasAttemptedSubmit="hasAttemptedSubmit"
+        :selectedAnimal="formattedAnimal"
+      />
+      <MedicalSection
+        v-if="step === 4 && selectedAnimal"
+        :formState="formState"
+        :touched="touched"
+        :handleBlur="handleBlur"
+        :hasAttemptedSubmit="hasAttemptedSubmit"
+        :selectedAnimal="formattedAnimal"
+      />
+      <FeedingSection
+        v-if="step === 5 && selectedAnimal"
+        :formState="formState"
+        :touched="touched"
+        :handleBlur="handleBlur"
+        :hasAttemptedSubmit="hasAttemptedSubmit"
+        :selectedAnimal="formattedAnimal"
+      />
+      <OtherSection
+        v-if="step === 6 && selectedAnimal"
+        :formState="formState"
+        :touched="touched"
+        :handleBlur="handleBlur"
+        :hasAttemptedSubmit="hasAttemptedSubmit"
+        :selectedAnimal="formattedAnimal"
+      />
+
+      <div
+        v-if="hasAttemptedSubmit && validationErrors.length > 0"
+        class="validation-summary"
+        role="alert"
+        aria-live="polite"
+      >
+        <p class="summary-title">Please complete the following required fields:</p>
+        <div class="tags">
+          <span v-for="err in validationErrors" :key="err" class="tag is-danger">{{ err }}</span>
+        </div>
+      </div>
+
       <div class="actions">
+        <Button
+          v-if="step > 0"
+          @click="prevStep"
+          title="Back"
+          color="white"
+          size="large"
+          style="border: 1px solid var(--color-primary); color: var(--color-primary)"
+        />
         <Button
           @click="handleSubmit"
           type="submit"
-          :title="formStep === (selectedAnimal === 'dog' ? 6 : 5) ? 'Submit' : 'Next'"
+          :title="step === 6 ? 'Submit' : 'Next'"
           color="green"
           size="large"
-          :disabled="formStep === 0 && !selectedAnimal"
         />
       </div>
     </section>
+
+    <FormSubmitted v-else @reset="handleReset" formType="surrender" />
   </section>
 </template>
 
 <style scoped lang="css">
 .page-shell {
   min-height: 100vh;
-  background-color: var(--green);
-  padding: 9rem 16px 64px;
+  background-color: var(--color-primary);
+  padding: 9rem var(--layout-padding-side) 64px;
+  container-type: inline-size;
+  container-name: shell;
+
+  @media (width <= 440px) {
+    padding: 6rem 16px 32px;
+  }
+
   .form-card {
-    max-width: 1100px;
+    max-width: 1600px;
     margin: 0 auto;
-    background: var(--white);
-    color: var(--font-color-dark);
+    background: var(--text-inverse);
+    color: var(--text-primary);
     border-radius: 24px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
     padding: 48px 48px 32px;
+
+    @container shell (max-width: 800px) {
+      padding: 32px 16px;
+    }
+
     .form-header {
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 16px;
       margin-bottom: 4px;
-      color: var(--green);
-      & h1 {
+      color: var(--color-primary);
+
+      h1 {
         font-size: 4.25rem;
         line-height: 1.2;
         letter-spacing: 0.2px;
+        color: var(--color-primary);
       }
+
       img {
         width: 100px;
       }
+
+      @container shell (max-width: 800px) {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        margin-bottom: 1rem;
+
+        h1 {
+          font-size: 2.25rem;
+          text-align: center;
+        }
+
+        img {
+          width: 60px;
+          height: 60px;
+        }
+      }
+
+      @container shell (max-width: 480px) {
+        h1 {
+          font-size: 1.75rem;
+        }
+      }
     }
+
     .actions {
       display: flex;
       justify-content: center;
       gap: 16px;
       margin-top: 20px;
+
+      @media (width <= 600px) {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
     }
   }
-  @media (max-width: 440px) {
-    .form-header {
-      flex-direction: column;
-      align-items: center;
-      gap: 0px;
+
+  .validation-summary {
+    background-color: #fff1f2;
+    border: 1px solid #e11d48;
+    color: #9f1239;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);
+
+    .summary-title {
+      font-weight: 700;
       margin-bottom: 1rem;
-      & h1 {
-        font-size: 1.75rem;
-        text-align: center;
-      }
+      font-size: 1.1rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .tag.is-danger {
+      background-color: #fce7f3;
+      color: #9f1239;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
     }
   }
 }

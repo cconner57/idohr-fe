@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { defineEmits } from 'vue'
-
 const { formError, selectedAnimal } = defineProps<{
   formError: boolean
   selectedAnimal: 'dog' | 'cat' | null
@@ -14,8 +12,8 @@ const updateSelectedAnimal = (value: 'dog' | 'cat') => {
 </script>
 
 <template>
-  <h5>Will you be surrendering Dog(s) or Cat(s)?</h5>
-  <div class="times">
+  <h2>Will you be surrendering Dog(s) or Cat(s)?</h2>
+  <div class="times" :class="{ 'has-error': formError }">
     <label class="time-card">
       <input
         type="radio"
@@ -44,30 +42,37 @@ const updateSelectedAnimal = (value: 'dog' | 'cat') => {
       </div>
     </label>
   </div>
-  <p v-if="formError" class="error">Please select an option above</p>
 </template>
 
 <style scoped lang="css">
-h5 {
+h2 {
   margin-top: 3rem;
   margin-bottom: 12px;
+  font-size: 1.5rem;
 }
+
 .times {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
   margin-bottom: 4rem;
 }
+
+.times.has-error .time-card {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 1px var(--color-danger);
+}
+
 .time-card {
   position: relative;
   display: flex;
   align-items: flex-start;
   gap: 10px;
   padding: 12px;
-  border: 1px solid #e7ebf0;
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 4%);
   cursor: pointer;
   user-select: none;
   transition:
@@ -75,6 +80,7 @@ h5 {
     border-color 0.2s,
     box-shadow 0.2s;
 }
+
 .time-card > input {
   position: absolute;
   opacity: 0;
@@ -82,30 +88,35 @@ h5 {
   height: 1px;
   pointer-events: none;
 }
+
 .time-card:has(> input:checked) {
-  background: var(--green-weak);
-  border-color: var(--green);
-  box-shadow: 0 0 0 3px rgba(30, 99, 217, 0.18) inset;
+  background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary) inset;
 }
+
 .time-card:has(> input:focus-visible) {
-  box-shadow: 0 0 0 3px rgba(30, 99, 217, 0.45);
+  box-shadow: 0 0 0 3px oklch(from var(--color-secondary) l c h / 45%);
 }
+
 .time-card__content small {
-  color: #6b7b8a;
+  color: var(--color-neutral-text-soft);
   display: block;
   margin-top: 4px;
 }
+
 @supports not (selector(:has(*))) {
   .time-card > input:checked + .time-card__content {
-    background: #e8f1ff;
+    background: var(--color-primary-weak);
     border-radius: 10px;
     margin: -12px;
     padding: 12px;
-    box-shadow: 0 0 0 2px #bfd0ff inset;
+    box-shadow: 0 0 0 2px var(--color-primary-border-strong) inset;
   }
 }
+
 .error {
-  color: var(--red);
+  color: var(--color-danger);
   font-size: 1.5rem;
   margin-top: -2rem;
 }

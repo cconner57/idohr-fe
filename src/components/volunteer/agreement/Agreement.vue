@@ -1,19 +1,9 @@
 <script setup lang="ts">
-import type { VolunteerFormState } from '../../../models/common'
+
 import InputField from '../../common/ui/InputField.vue'
 import InputSignature from '../../common/ui/InputSignature.vue'
 
-const {
-  name,
-  fullName,
-  age,
-  signature,
-  signatureDate,
-  parentName,
-  parentSignature,
-  parentDate,
-  formState,
-} = defineProps<{
+defineProps<{
   age: number | null
   fullName: string
   name: string
@@ -22,7 +12,21 @@ const {
   parentSignature: string | null
   signature: string | null
   signatureDate: string
-  formState: VolunteerFormState
+  hasNameError?: boolean
+  hasDateError?: boolean
+  hasSignatureError?: boolean
+  hasParentNameError?: boolean
+  hasParentDateError?: boolean
+  hasParentSignatureError?: boolean
+}>()
+
+const emit = defineEmits<{
+  'update:fullName': [value: string]
+  'update:parentName': [value: string]
+  'update:signature': [value: string | null]
+  'update:signatureDate': [value: string]
+  'update:parentSignature': [value: string | null]
+  'update:parentDate': [value: string]
 }>()
 </script>
 
@@ -30,33 +34,70 @@ const {
   <fieldset class="waiver-container">
     <legend id="waiv" class="section-title">Agreement</legend>
     <p class="waiver">
-      I, {{ name === ' ' ? '(volunteer name)' : name }}, hereby volunteer to assist in various tasks
-      to support IDOHR. I understand that IDOHR and partners are not responsible for any illness or
-      injury caused during volunteer work. I agree to hold harmless IDOHR and partners should I
-      become sick or injured from any animals as a result of my volunteer work.
+      I, {{ name === ' ' ? '(volunteer name)' : name }}, agree to volunteer with I Dream of Home
+      Rescue (IDOHR) and abide by its policies. I understand that animal handling involves risks of
+      injury (e.g., bites, scratches) and illness, and I assume full responsibility for these risks.
+      I hereby release and forever discharge IDOHR, its board, and affiliates from any claims,
+      demands, or causes of action arising from my service. In an emergency, I authorize IDOHR to
+      seek medical treatment on my behalf. I further grant IDOHR the right to use photos or videos
+      of me for promotional or social media purposes.
     </p>
 
     <div class="acknowledgement">
       <div class="name-date-container">
-        <InputField label="Name" placeholder="" :modelValue="fullName" />
-        <InputField label="Date" placeholder="" type="date" :modelValue="signatureDate" />
+        <InputField
+          label="Name"
+          placeholder=""
+          :modelValue="fullName"
+          @update:modelValue="(val) => emit('update:fullName', String(val))"
+          :hasError="hasNameError"
+        />
+        <InputField
+          label="Date"
+          placeholder=""
+          type="date"
+          :modelValue="signatureDate"
+          @update:modelValue="(val) => emit('update:signatureDate', String(val))"
+          :hasError="hasDateError"
+        />
       </div>
-      <InputSignature label="Signature" placeholder="" :modelValue="signature" />
+      <InputSignature
+        label="Signature"
+        placeholder=""
+        :modelValue="signature"
+        @update:modelValue="(val) => emit('update:signature', val)"
+        :hasError="hasSignatureError"
+      />
     </div>
 
-    <label v-if="age !== null && age < 18" for="parental-consent" class="label"
-      >If under 18, I ({{ parentName === '' ? 'parent/guardian name' : parentName }}) give
+    <label v-if="age !== null && age < 21" for="parental-consent" class="label"
+      >If under 21, I ({{ parentName === '' ? 'parent/guardian name' : parentName }}) give
       permission for my child to volunteer with IDOHR and agree to the above waiver.</label
     >
-    <div v-if="age !== null && age < 18" class="parentGuardian">
+    <div v-if="age !== null && age < 21" class="parentGuardian">
       <div class="name-date-container">
-        <InputField label="Parent/Guardian Name" placeholder="" v-model="formState.parentName" />
-        <InputField label="Date" placeholder="" type="date" :modelValue="parentDate" />
+        <InputField
+          label="Parent/Guardian Name"
+          placeholder=""
+          :modelValue="parentName"
+          @update:modelValue="(val) => emit('update:parentName', String(val))"
+          :hasError="hasParentNameError"
+        />
+        <InputField
+          label="Date"
+          placeholder=""
+          type="date"
+          :modelValue="parentDate"
+          @update:modelValue="(val) => emit('update:parentDate', String(val))"
+          :hasError="hasParentDateError"
+        />
       </div>
       <InputSignature
         label="Parent/Guardian Signature"
         placeholder=""
         :modelValue="parentSignature"
+        @update:modelValue="(val) => emit('update:parentSignature', val)"
+        :hasError="hasParentSignatureError"
       />
     </div>
   </fieldset>
@@ -79,17 +120,21 @@ const {
     & .name-date-container {
       display: flex;
       gap: 12px;
+
       & > :nth-child(1) {
         flex: 1;
       }
+
       & > :nth-child(2) {
         flex: 0 0 33%;
       }
     }
-    @media (max-width: 440px) {
+
+    @media (width <= 440px) {
       .name-date-container {
         flex-direction: column;
-        gap: 0px;
+        gap: 0;
+
         & > :nth-child(2) {
           flex: none;
         }
@@ -98,7 +143,7 @@ const {
   }
 
   label {
-    border-top: 2px solid gray;
+    border-top: 2px solid #808080;
     padding-top: 12px;
     margin-top: 12px;
     font-weight: 600;
@@ -106,26 +151,27 @@ const {
     text-align: center;
   }
 
-  @media (max-width: 440px) {
+  @media (width <= 440px) {
     grid-template-columns: repeat(1, minmax(0, 1fr));
     gap: 8px;
   }
 }
 
 .waiver {
-  color: black;
+  color: #000;
   background: #fff;
   border: 1px dashed #cfe2ff;
   padding: 12px;
   border-radius: 10px;
   font-size: 1rem;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
   line-height: 1.4;
   margin-bottom: 12px;
   width: 100%;
   max-width: 100%;
   grid-column: 1 / -1;
 
-  @media (max-width: 440px) {
+  @media (width <= 440px) {
     font-size: 0.9rem;
   }
 }

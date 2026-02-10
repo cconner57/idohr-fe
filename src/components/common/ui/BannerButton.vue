@@ -12,7 +12,7 @@ const props = withDefaults(
     imgSrc: '',
     title: 'Adopt a Pet',
     subtitle: 'Find your perfect companion',
-    color: '#2563EB',
+    color: 'blue',
     type: 'button',
   },
 )
@@ -49,34 +49,47 @@ const imgSrcComputed = computed(() => (props.imgSrc && props.imgSrc.length ? pro
   padding: 24px;
   border-radius: 8px;
   cursor: pointer;
-  height: 160px;
-  width: 300px;
+  min-height: 160px;
+  height: auto;
+  width: 100%;
   transition:
     background-color 0.2s,
     border-color 0.2s;
-  color: var(--font-color-light);
+  color: var(--text-inverse);
   overflow: hidden;
 
-  @media (max-width: 440px) {
+  @media (width <= 440px) {
     width: 100%;
   }
 }
+
 .banner-text {
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 img {
   border-radius: 8px;
 }
+
+.button-color-blue img,
+.button-color-green img,
+.button-color-purple img {
+  filter: brightness(0) invert(1);
+}
+
 h5 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
+  color: inherit;
 }
+
 p {
   margin: 0;
   font-size: 1rem;
+  color: inherit;
 }
 </style>

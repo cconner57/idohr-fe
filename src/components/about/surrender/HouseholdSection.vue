@@ -1,103 +1,304 @@
 <script setup lang="ts">
+import type { SurrenderFormState } from '../../../models/surrender-form.ts'
+import {
+  formatPhoneNumber,
+  sanitizeAddress,
+  sanitizeCity,
+  sanitizeName,
+  sanitizeZip,
+} from '../../../utils/validators.ts'
+import ButtonToggle from '../../common/ui/ButtonToggle.vue'
+import HoneypotField from '../../common/ui/HoneypotField.vue'
 import InputField from '../../common/ui/InputField.vue'
-import type { SurrenderFormState } from '../../../models/common'
+import InputSelectGroup from '../../common/ui/InputSelectGroup.vue'
 import InputTextArea from '../../common/ui/InputTextArea.vue'
 
-const { formState } = defineProps<{
+const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = defineProps<{
   formState: SurrenderFormState
+  touched: Record<string, boolean>
+  handleBlur: (_field: string) => void // eslint-disable-line no-unused-vars
+  hasAttemptedSubmit: boolean
+  selectedAnimal: string
 }>()
 </script>
 
 <template>
   <div class="household-section">
-    <h5>Cat & Household Information</h5>
-    <section>
-      <InputField label="First Name" placeholder="First Name" :modelValue="formState.firstName" />
-      <InputField label="Last Name" placeholder="Last Name" :modelValue="formState.lastName" />
-    </section>
-    <section>
+    <h5>{{ selectedAnimal }} & Household Information</h5>
+    <HoneypotField :model-value="formState.fax_number || null" @update:model-value="val => formState.fax_number = val as string" />
+    <fieldset class="household-grid">
+      <InputField
+        label="First Name"
+        placeholder="First Name"
+        :modelValue="formState.firstName"
+        @update:modelValue="(val) => (formState.firstName = sanitizeName(val))"
+        :hasError="
+          (touched.firstName && !formState.firstName) ||
+          (hasAttemptedSubmit && !formState.firstName)
+        "
+        @blur="handleBlur('firstName')"
+      />
+      <InputField
+        label="Last Name"
+        placeholder="Last Name"
+        :modelValue="formState.lastName"
+        @update:modelValue="(val) => (formState.lastName = sanitizeName(val))"
+        :hasError="
+          (touched.lastName && !formState.lastName) || (hasAttemptedSubmit && !formState.lastName)
+        "
+        @blur="handleBlur('lastName')"
+      />
       <InputField
         label="Phone Number"
         placeholder="Phone Number"
         :modelValue="formState.phoneNumber"
+        @update:modelValue="(val) => (formState.phoneNumber = formatPhoneNumber(val))"
+        maxlength="13"
+        :hasError="
+          (touched.phoneNumber && !formState.phoneNumber) ||
+          (hasAttemptedSubmit && !formState.phoneNumber)
+        "
+        @blur="handleBlur('phoneNumber')"
       />
-      <InputField label="Email" placeholder="Email" :modelValue="formState.email" />
-    </section>
-    <section>
+      <InputField
+        label="Email"
+        placeholder="Email"
+        v-model="formState.email"
+        :hasError="(touched.email && !formState.email) || (hasAttemptedSubmit && !formState.email)"
+        @blur="handleBlur('email')"
+      />
       <InputField
         label="Street Address"
         placeholder="Street Address"
         :modelValue="formState.streetAddress"
+        @update:modelValue="(val) => (formState.streetAddress = sanitizeAddress(val))"
+        :hasError="
+          (touched.streetAddress && !formState.streetAddress) ||
+          (hasAttemptedSubmit && !formState.streetAddress)
+        "
+        @blur="handleBlur('streetAddress')"
       />
-      <InputField label="City" placeholder="City" :modelValue="formState.city" />
-    </section>
-    <section>
-      <InputField label="State" placeholder="State" :modelValue="formState.state" />
-      <InputField label="Zip Code" placeholder="Zip Code" :modelValue="formState.zipCode" />
-    </section>
-    <section>
+      <InputField
+        label="City"
+        placeholder="City"
+        :modelValue="formState.city"
+        @update:modelValue="(val) => (formState.city = sanitizeCity(val))"
+        :hasError="(touched.city && !formState.city) || (hasAttemptedSubmit && !formState.city)"
+        @blur="handleBlur('city')"
+      />
+      <InputField
+        label="State"
+        placeholder="State"
+        :modelValue="formState.state"
+        @update:modelValue="(val) => (formState.state = sanitizeCity(val))"
+        :hasError="(touched.state && !formState.state) || (hasAttemptedSubmit && !formState.state)"
+        @blur="handleBlur('state')"
+      />
+      <InputField
+        label="Zip Code"
+        placeholder="Zip Code"
+        :modelValue="formState.zipCode"
+        @update:modelValue="(val) => (formState.zipCode = sanitizeZip(val))"
+        maxlength="5"
+        :hasError="
+          (touched.zipCode && !formState.zipCode) || (hasAttemptedSubmit && !formState.zipCode)
+        "
+        @blur="handleBlur('zipCode')"
+      />
+
       <InputTextArea
-        label="When do you need to surrender your cat"
-        placeholder="When do you need to surrender your cat"
-        :modelValue="formState.whenToSurrenderCat"
+        class="full-width"
+        :label="`When do you need to surrender your ${selectedAnimal.toLowerCase()}`"
+        :placeholder="`When do you need to surrender your ${selectedAnimal.toLowerCase()}`"
+        :modelValue="formState.whenToSurrenderAnimal"
+        @update:modelValue="(val) => (formState.whenToSurrenderAnimal = val ?? '')"
+        :hasError="
+          (touched.whenToSurrenderAnimal && !formState.whenToSurrenderAnimal) ||
+          (hasAttemptedSubmit && !formState.whenToSurrenderAnimal)
+        "
+        @blur="handleBlur('whenToSurrenderAnimal')"
       />
-      <InputField label="Cat's Name" placeholder="Cat's Name" :modelValue="formState.catName" />
-      <InputField label="Age" placeholder="Age" :modelValue="formState.catAge" />
-      <fieldset class="field col-span-2" aria-labelledby="cat-sex-legend">
-        <legend id="cat-sex-legend" class="label">Sex</legend>
-        <fieldset class="chips" aria-labelledby="cat-sex-legend">
-          <label class="chip"><input type="checkbox" /> <span>Male</span></label>
-          <label class="chip"><input type="checkbox" /> <span>Female</span></label>
-          <label class="chip"><input type="checkbox" /> <span>Unknown</span></label>
-        </fieldset>
-      </fieldset>
-    </section>
-    <section>
+      <InputField
+        :label="`${selectedAnimal}'s Name`"
+        :placeholder="`${selectedAnimal}'s Name`"
+        :modelValue="formState.animalName"
+        @update:modelValue="(val) => (formState.animalName = val as string)"
+        :hasError="
+          (touched.animalName && !formState.animalName) ||
+          (hasAttemptedSubmit && !formState.animalName)
+        "
+        @blur="handleBlur('animalName')"
+      />
+      <InputField
+        label="Age"
+        placeholder="Age"
+        :modelValue="formState.animalAge"
+        @update:modelValue="(val) => (formState.animalAge = val as string)"
+        :hasError="
+          (touched.animalAge && !formState.animalAge) ||
+          (hasAttemptedSubmit && !formState.animalAge)
+        "
+        @blur="handleBlur('animalAge')"
+      />
+      <InputSelectGroup
+        label="Sex"
+        :options="['Male', 'Female', 'Unknown']"
+        :modelValue="formState.animalSex"
+        @update:modelValue="(val) => (formState.animalSex = val as string)"
+        :hasError="
+          (touched.animalSex && !formState.animalSex) ||
+          (hasAttemptedSubmit && !formState.animalSex)
+        "
+        @blur="handleBlur('animalSex')"
+      />
+
       <InputTextArea
-        label="How long have you had your cat?"
-        placeholder="How long have you had your cat?"
-        :modelValue="formState.catOwnershipDuration"
+        class="full-width"
+        :label="`How long have you had your ${selectedAnimal.toLowerCase()}?`"
+        :placeholder="`How long have you had your ${selectedAnimal.toLowerCase()}?`"
+        :modelValue="formState.animalOwnershipDuration"
+        @update:modelValue="(val) => (formState.animalOwnershipDuration = val ?? '')"
+        :hasError="
+          (touched.animalOwnershipDuration && !formState.animalOwnershipDuration) ||
+          (hasAttemptedSubmit && !formState.animalOwnershipDuration)
+        "
+        @blur="handleBlur('animalOwnershipDuration')"
       />
       <InputTextArea
-        label="Where did you get your cat?"
-        placeholder="Where did you get your cat?"
-        :modelValue="formState.catLocationFound"
+        class="full-width"
+        :label="`Where did you get your ${selectedAnimal.toLowerCase()}?`"
+        :placeholder="`Where did you get your ${selectedAnimal.toLowerCase()}?`"
+        :modelValue="formState.animalLocationFound"
+        @update:modelValue="(val) => (formState.animalLocationFound = val ?? '')"
+        :hasError="
+          (touched.animalLocationFound && !formState.animalLocationFound) ||
+          (hasAttemptedSubmit && !formState.animalLocationFound)
+        "
+        @blur="handleBlur('animalLocationFound')"
       />
       <InputTextArea
-        label="Why are you surrendering your cat?"
-        placeholder="Why are you surrendering your cat?"
-        :modelValue="formState.catWhySurrendered"
+        class="full-width"
+        :label="`Why are you surrendering your ${selectedAnimal.toLowerCase()}?`"
+        :placeholder="`Why are you surrendering your ${selectedAnimal.toLowerCase()}?`"
+        :modelValue="formState.animalWhySurrendered"
+        @update:modelValue="(val) => (formState.animalWhySurrendered = val ?? '')"
+        :hasError="
+          (touched.animalWhySurrendered && !formState.animalWhySurrendered) ||
+          (hasAttemptedSubmit && !formState.animalWhySurrendered)
+        "
+        @blur="handleBlur('animalWhySurrendered')"
       />
-    </section>
-    <div>
-      <h5>Including yourself, how many people of the following ages live in your home?</h5>
-      <section>
-        <InputField label="Female - Ages 0-3" placeholder="" :modelValue="formState.email" />
-        <InputField label="Male - Ages 0-3" placeholder="" :modelValue="formState.email" />
-        <InputField label="Female - Ages 4-9" placeholder="" :modelValue="formState.email" />
-        <InputField label="Male - Ages 4-9" placeholder="" :modelValue="formState.email" />
-        <InputField label="Female - Ages 10-17" placeholder="" :modelValue="formState.email" />
-        <InputField label="Male - Ages 10-17" placeholder="" :modelValue="formState.email" />
-        <InputField label="Female - Ages 18-29" placeholder="" :modelValue="formState.email" />
-        <InputField label="Male - Ages 18-29" placeholder="" :modelValue="formState.email" />
-        <InputField label="Female - Ages 30-59" placeholder="" :modelValue="formState.email" />
-        <InputField label="Male - Ages 30-59" placeholder="" :modelValue="formState.email" />
-        <InputField label="Female - Ages 60+" placeholder="" :modelValue="formState.email" />
-        <InputField label="Male - Ages 60+" placeholder="" :modelValue="formState.email" />
-      </section>
+    </fieldset>
+    <div class="household-members-section">
+      <h5>Including yourself, how many people live in your home?</h5>
+      <p class="subtitle">Please list the age and gender of each person.</p>
+
+      <div v-for="(member, index) in formState.householdMembers" :key="index" class="member-row">
+        <div class="field-group gender-group">
+          <ButtonToggle
+            label="Gender"
+            :modelValue="member.gender"
+            @update:modelValue="(val) => (member.gender = val as 'Male' | 'Female')"
+            true-value="Male"
+            false-value="Female"
+          />
+        </div>
+
+        <div class="field-group age-group">
+          <InputField
+            label="Age"
+            placeholder="Age"
+            :modelValue="member.age"
+            @update:modelValue="
+              (val) => (member.age = String(val).replace(/\D/g, '').substring(0, 3))
+            "
+            maxlength="3"
+            class="clean-input"
+            :hasError="
+              (touched[`householdMembers[${index}].age`] || hasAttemptedSubmit) && !member.age
+            "
+            @blur="handleBlur(`householdMembers[${index}].age`)"
+          />
+        </div>
+
+        <div class="field-group quantity-group">
+          <InputField
+            label="Quantity"
+            placeholder="Qty"
+            type="number"
+            :modelValue="member.count"
+            @update:modelValue="(val) => (member.count = Number(val))"
+            min="1"
+            class="clean-input"
+            :hasError="
+              (touched[`householdMembers[${index}].count`] || hasAttemptedSubmit) &&
+              (!member.count || member.count < 1)
+            "
+            @blur="handleBlur(`householdMembers[${index}].count`)"
+          />
+        </div>
+
+        <button
+          v-if="formState.householdMembers.length > 1"
+          type="button"
+          class="remove-btn"
+          @click="formState.householdMembers.splice(index, 1)"
+          aria-label="Remove member"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path
+              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="add-btn"
+        @click="formState.householdMembers.push({ age: '', gender: 'Female', count: 1 })"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Add Another Person / Group
+      </button>
     </div>
-    <section>
-      <fieldset class="field col-span-2" aria-labelledby="other-animals-legend">
-        <legend id="other-animals-legend" class="label">
-          What other animals did the cat live with?
-        </legend>
-        <fieldset class="chips" aria-labelledby="other-animals-legend">
-          <label class="chip"><input type="checkbox" /> <span>Dogs</span></label>
-          <label class="chip"><input type="checkbox" /> <span>Cats</span></label>
-          <label class="chip"><input type="checkbox" /> <span>Other</span></label>
-          <label class="chip"><input type="checkbox" /> <span>No other animals</span></label>
-        </fieldset>
-      </fieldset>
+    <section class="full-width">
+      <InputSelectGroup
+        :label="`What other animals did the ${selectedAnimal.toLowerCase()} live with?`"
+        :options="['Dogs', 'Cats', 'Other', 'No other animals']"
+        :modelValue="formState.otherPetsInHousehold"
+        @update:modelValue="(val) => (formState.otherPetsInHousehold = val as string)"
+        :hasError="
+          (touched.otherPetsInHousehold && !formState.otherPetsInHousehold) ||
+          (hasAttemptedSubmit && !formState.otherPetsInHousehold)
+        "
+        @blur="handleBlur('otherPetsInHousehold')"
+        :multiple="true"
+      />
     </section>
   </div>
 </template>
@@ -108,107 +309,181 @@ const { formState } = defineProps<{
   flex-direction: column;
   gap: 16px;
 
-  section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 0px;
-    column-gap: 16px;
+  .household-grid {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
-    fieldset.field {
-      border: 0;
-      padding: 0;
-      margin: 0;
-      @media (max-width: 440px) {
-        .col-span-2 {
-          grid-column: span 1;
+    @media (width >= 768px) {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+  }
+
+  fieldset.field {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .label {
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .household-members-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+    margin-bottom: 24px;
+
+    .subtitle {
+      color: var(--text-primary);
+      margin-top: -8px;
+      margin-bottom: 8px;
+    }
+
+    .member-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--color-neutral-surface);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+
+      @media (width <= 640px) {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .gender-group,
+    .age-group,
+    .quantity-group {
+      flex: 1;
+      width: 0;
+
+      @media (width <= 640px) {
+        width: 100%;
+        flex: none;
+      }
+    }
+
+    .gender-group .label {
+      @media (width <= 640px) {
+        text-align: center;
+      }
+    }
+
+    .field-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-neutral-strong);
+    }
+
+    .gender-toggle {
+      display: flex;
+      background: var(--text-inverse);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 4px;
+      height: 48px;
+
+      .toggle-btn {
+        flex: 1;
+        border: none;
+        background: transparent;
+        border-radius: 6px;
+        font-weight: 500;
+        color: var(--color-neutral-text-soft);
+        cursor: pointer;
+        padding: 0 4px;
+        transition: all 0.2s;
+
+        &.active {
+          background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+          border: 1px solid var(--color-primary);
+          box-shadow: 0 0 0 1px var(--color-primary) inset;
+          color: var(--text-primary);
+          font-weight: 600;
         }
       }
     }
 
-    .field {
-      @media (max-width: 440px) {
-        margin-bottom: 8px;
-      }
-    }
-    .col-span-2 {
-      grid-column: span 2;
-      @media (max-width: 440px) {
-        grid-column: span 1;
-      }
+    .clean-input {
+      margin-bottom: 0 !important;
     }
 
-    .label {
-      margin-bottom: 8px;
-    }
-    .chips {
+    .remove-btn {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      border: none;
-      @media (max-width: 440px) {
-        margin-top: 8px;
-        flex-direction: column;
-        text-align: center;
-        gap: 8px;
-      }
-    }
-    .chip {
-      position: relative;
-      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid #e7ebf0;
-      background-color: #fff;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--color-danger-light);
+      background: var(--text-inverse);
+      color: var(--color-danger);
+      border-radius: 8px;
       cursor: pointer;
-      user-select: none;
-      font-size: 1rem;
-      transition:
-        background 0.2s,
-        border-color 0.2s,
-        box-shadow 0.2s;
-
-      span {
-        font-weight: 600;
-        color: var(--text-900);
-        line-height: 1.5;
-      }
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-top: 29px;
 
       &:hover {
-        border-color: #d7e2f2;
-        background: #f2f7ff;
+        background: var(--color-danger-surface);
       }
-    }
-    .chip > input {
-      position: absolute;
-      opacity: 0;
-      width: 1px;
-      height: 1px;
-      pointer-events: none;
-    }
-    .chip:has(> input:checked) {
-      background: var(--green-weak);
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px #1e63d92e inset;
-      color: var(--font-color-dark);
-    }
-    .chip:has(> input:focus-visible) {
-      box-shadow: 0 0 0 3px var(--ring);
+
+      @media (width <= 640px) {
+        margin-top: 0;
+        width: 100%;
+        height: 40px;
+      }
     }
 
-    @supports not (selector(:has(*))) {
-      .chip > input:checked + span {
-        background: #e8f1ff;
-        border-radius: 999px;
-        padding: 6px 10px;
-        margin: -6px -10px;
-        box-shadow: 0 0 0 2px #bfd0ff inset;
-      }
-      .chip > input:focus-visible + span {
-        box-shadow: 0 0 0 3px var(--ring);
+    .add-btn {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--text-inverse);
+      border: 1px dashed var(--border-color);
+      border-radius: 8px;
+      color: var(--color-neutral-text-soft);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        border: 1px solid var(--color-primary);
+        background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+        color: var(--text-primary);
+        box-shadow: 0 0 0 1px var(--color-primary) inset;
+        font-weight: 600;
       }
     }
   }
+}
+
+fieldset.has-error .chips {
+  outline: 2px solid var(--color-danger);
+  border-color: var(--color-danger);
+  border-radius: 12px;
+  padding: 8px;
 }
 </style>

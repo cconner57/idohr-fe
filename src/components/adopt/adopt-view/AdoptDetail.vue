@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { IPet } from '../../../models/common'
+
+import type { IPet } from '../../../models/common.ts'
+import { calculateAge } from '../../../utils/date'
+import { formatDate } from '../../../utils/dateUtils'
+import { vibrate } from '../../../utils/haptics.ts'
 import Button from '../../common/ui/Button.vue'
 import Capsules from '../../common/ui/Capsules.vue'
+import AdditionalInfo from '../additional-info/AdditionalInfo.vue'
 import AdoptionFAQ from '../adopt-faq/AdoptionFAQ.vue'
 import AdoptionProcess from '../adopt-process/AdoptionProcess.vue'
-import MoreFriends from '../more-friends/MoreFriends.vue'
-import { formatDate } from '../../../utils/common'
-import AdditionalInfo from '../additional-info/AdditionalInfo.vue'
 import AdoptDrawer from './AdoptDrawer.vue'
 
 const props = defineProps<{
@@ -17,12 +19,12 @@ const props = defineProps<{
 const isDrawerOpen = ref(false)
 
 const handleStartAdoption = () => {
-  // Direct user to PetAdoption page
+  vibrate(50)
+  sessionStorage.setItem(
+    'adoption_pet',
+    JSON.stringify({ petId: props.pet.id, petName: props.pet.name, species: props.pet.species }),
+  )
   globalThis.location.href = `/pet-adoption/${props.pet.id}`
-}
-
-const handleScheduleMeet = () => {
-  isDrawerOpen.value = true
 }
 
 const handleShare = () => {
@@ -53,37 +55,33 @@ function onImgError() {
     <div class="adopt-detail__main">
       <img
         v-if="!imgError"
-        :src="`/images/${pet.photos?.primaryPhoto ?? ''}`"
+        :src="`/pet-photos/${pet.photos?.find((p) => p.isPrimary)?.url ?? ''}`"
         :alt="pet.name"
+        :style="{ viewTransitionName: 'pet-' + pet.id }"
         @error="onImgError"
       />
       <div v-else class="img-fallback" aria-hidden="true"></div>
       <div class="adopt-detail__info">
         <div class="adopt-detail__info__main">
-          <h1>{{ pet.name }}</h1>
+          <h1 class="text-balance">{{ pet.name }}</h1>
           <div class="adopt-detail__traits">
-            <Capsules v-if="pet?.physicalTraits?.species" :label="pet?.physicalTraits?.species" />
-            <Capsules v-if="pet?.physicalTraits?.sex" :label="pet?.physicalTraits?.sex" />
-            <Capsules
-              v-if="pet?.physicalTraits?.age"
-              :label="formatDate(pet?.physicalTraits?.age, true)"
-            />
+            <Capsules v-if="pet?.species" :label="pet?.species" />
+            <Capsules v-if="pet?.sex" :label="pet?.sex" />
+              <Capsules
+                v-if="pet?.physical?.dateOfBirth"
+                :label="calculateAge(pet?.physical?.dateOfBirth)"
+              />
           </div>
-          <p>{{ pet?.descriptions?.behavioralDescription }}</p>
+          <p>{{ pet?.descriptions?.fun }}</p>
           <div class="adopt-detail__actions">
             <Button
               title="Start Adoption"
               color="blue"
               @click="handleStartAdoption"
-              :fullWidth="false"
+              :fullWidth="true"
             />
-            <Button
-              title="Schedule a Meet"
-              color="purple"
-              @click="handleScheduleMeet"
-              :fullWidth="false"
-            />
-            <Button title="Share" color="green" @click="handleShare" :fullWidth="false" />
+
+            <Button title="Share" color="green" @click="handleShare" :fullWidth="true" />
           </div>
         </div>
         <AdditionalInfo :pet="pet" />
@@ -91,16 +89,16 @@ function onImgError() {
     </div>
     <div
       v-if="
-        pet.descriptions?.funDescription ||
+        pet.descriptions?.primary ||
         pet.descriptions?.additionalInformation?.length ||
         pet.profileSettings.showAdditionalInformation
       "
       class="adopt-detail__about"
     >
       <div class="adopt-detail__about__content">
-        <div v-if="pet.descriptions?.funDescription" class="adopt-detail__about__fun">
+        <div v-if="pet.descriptions?.primary" class="adopt-detail__about__fun">
           <h2>From {{ pet.name }}</h2>
-          <p>{{ pet.descriptions?.funDescription }}</p>
+          <p>{{ pet.descriptions?.primary }}</p>
         </div>
         <div
           class="adopt-detail__about__additional-info"
@@ -116,15 +114,53 @@ function onImgError() {
       </div>
       <div class="adopt-detail__about__medical" v-if="pet.profileSettings.showMedicalHistory">
         <h2>Medical History</h2>
+        <h3>Vaccinations</h3>
         <ul>
-          <li v-for="(shot, index) in pet.medicalHistory?.procedures" :key="index">
-            <p>{{ shot?.description }}</p>
+          <VaccinationItem
+            name="Rabies"
+            :date-administered="pet.medical?.vaccinations?.rabies?.dateAdministered"
+          />
+          <VaccinationItem
+            name="Bordetella"
+            :date-administered="pet.medical?.vaccinations?.bordetella?.dateAdministered"
+          />
+          <VaccinationItem
+            name="Canine Distemper"
+            :round1="pet.medical?.vaccinations?.canineDistemper?.round1?.dateAdministered"
+            :round2="pet.medical?.vaccinations?.canineDistemper?.round2?.dateAdministered"
+            :round3="pet.medical?.vaccinations?.canineDistemper?.round3?.dateAdministered"
+            :isComplete="pet.medical?.vaccinations?.canineDistemper?.isComplete"
+          />
+          <VaccinationItem
+            name="Feline Distemper"
+            :round1="pet.medical?.vaccinations?.felineDistemper?.round1?.dateAdministered"
+            :round2="pet.medical?.vaccinations?.felineDistemper?.round2?.dateAdministered"
+            :round3="pet.medical?.vaccinations?.felineDistemper?.round3?.dateAdministered"
+            :isComplete="pet.medical?.vaccinations?.felineDistemper?.isComplete"
+          />
+          <VaccinationItem
+            name="Feline Leukemia"
+            :round1="pet.medical?.vaccinations?.felineLeukemia?.round1?.dateAdministered"
+            :round2="pet.medical?.vaccinations?.felineLeukemia?.round2?.dateAdministered"
+            :round3="pet.medical?.vaccinations?.felineLeukemia?.round3?.dateAdministered"
+            :isComplete="pet.medical?.vaccinations?.felineLeukemia?.isComplete"
+          />
+          <VaccinationItem
+            name="Leptospira"
+            :round1="pet.medical?.vaccinations?.leptospira?.round1?.dateAdministered"
+            :round2="pet.medical?.vaccinations?.leptospira?.round2?.dateAdministered"
+            :round3="pet.medical?.vaccinations?.leptospira?.round3?.dateAdministered"
+            :isComplete="pet.medical?.vaccinations?.leptospira?.isComplete"
+          />
+          <VaccinationItem name="Other" :otherRounds="pet.medical?.vaccinations?.other" />
+        </ul>
+
+        <h3 v-if="pet.medical?.surgeries?.length">Surgeries</h3>
+        <ul v-if="pet.medical?.surgeries?.length">
+          <li v-for="(surgery, index) in pet.medical.surgeries" :key="'surgery-' + index">
+            <p>{{ surgery.name }}</p>
             <p>
-              {{
-                shot?.receivedTreatment
-                  ? 'Received on ' + formatDate(shot?.dateAdministered ?? '')
-                  : 'Not Received'
-              }}
+              {{ surgery.date ? 'Performed on ' + formatDate(surgery.date) : 'Date not available' }}
             </p>
           </li>
         </ul>
@@ -135,7 +171,7 @@ function onImgError() {
       <AdoptionFAQ />
     </div>
   </div>
-  <MoreFriends :pet="pet" />
+
   <AdoptDrawer
     :pet="pet"
     :isDrawerOpen="isDrawerOpen"
@@ -145,267 +181,226 @@ function onImgError() {
 
 <style scoped lang="css">
 .adopt-detail {
+  width: 100%;
+
   .adopt-detail__main {
     display: flex;
     gap: 30px;
+    width: 100%;
+
     img {
-      height: 500px;
-      width: 780px;
+      flex: 3;
+      width: 100%;
+      min-width: 0;
+      height: 600px;
       object-fit: cover;
+      object-position: top center;
       border-radius: 16px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
     }
+
     & .img-fallback {
-      height: 500px;
-      width: 780px;
+      flex: 3;
+      width: 0;
+      min-width: 0;
+      height: 600px;
       border-radius: 16px;
-      background: url('/images/paw.svg') 350px 180px/100px 100px no-repeat #add8e6;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+      background: url('/images/paw.svg') center/100px 100px no-repeat #add8e6;
+      box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
     }
+
     .adopt-detail__info {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      background-color: var(--white);
-      color: var(--font-color-dark);
-      padding: 20px;
+      background-color: var(--text-inverse);
+      color: var(--text-primary);
+      padding: 32px;
       border-radius: 16px;
-      max-width: 560px;
-      height: 500px;
-      max-height: 550px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
-      @media (max-width: 440px) {
-        max-width: 100%;
-        height: auto;
-        padding: 1rem;
-        gap: 15px;
-        max-height: none;
+      flex: 2;
+      width: 0;
+      min-width: 0;
+      height: auto;
+      min-height: 600px;
+      box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
+
+      @media (width <= 1024px) {
+        width: 100%;
+        min-height: auto;
       }
-      .adopt-detail__info__main {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        border-bottom: 1px solid rgb(178, 177, 177);
-        padding-bottom: 20px;
-        h1 {
-          font-size: 1.75rem;
-        }
-        @media (min-width: 321px) and (max-width: 430px) {
-          h1 {
-            font-size: 1.5rem;
-          }
-        }
-        .adopt-detail__traits {
-          display: flex;
-          flex-direction: row;
-          gap: 10px;
-          & p {
-            background-color: var(--green-weak);
-            padding: 4px 12px;
-            border-radius: 16px;
-          }
-          @media (min-width: 321px) and (max-width: 430px) {
-            flex-wrap: wrap;
-          }
-        }
-        .adopt-detail__actions {
-          display: flex;
-          flex-direction: row;
-          gap: 14px;
-          @media (max-width: 440px) {
-            flex-direction: column;
-          }
-        }
+
+    }
+
+    @media (width <= 1024px) {
+      flex-direction: column;
+
+      img,
+      .img-fallback {
+        width: 100%;
+        height: 400px;
+        flex: auto;
+      }
+
+      .adopt-detail__info {
+        width: 100%;
+        flex: auto;
       }
     }
   }
+
   .adopt-detail__about {
     display: flex;
     margin-top: 20px;
-    background-color: var(--white);
-    padding: 20px;
+    background-color: var(--text-inverse);
+    padding: 32px;
     border-radius: 16px;
-    color: var(--font-color-dark);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+    color: var(--text-primary);
+    box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
+    width: 100%;
+
     & .adopt-detail__about__content {
       width: 50%;
       margin-right: 20px;
+
       & .adopt-detail__about__fun {
         width: 100%;
         height: 50%;
       }
+
       & .adopt-detail__about__additional-info {
         margin-top: 2rem;
-        ul {
-          padding-left: 20px;
-          list-style: disc;
-          li {
-            margin-bottom: 8px;
-          }
-        }
+      }
+
+      & .adopt-detail__about__additional-info ul {
+        padding-left: 20px;
+        list-style: disc;
+      }
+
+      & .adopt-detail__about__additional-info li {
+        margin-bottom: 8px;
       }
     }
+
     & .adopt-detail__about__medical {
       width: 50%;
-      ul {
-        margin-bottom: 16px;
-        li {
-          margin-bottom: 8px;
-          display: flex;
-          border-bottom: 1px solid rgb(178, 177, 177);
-          width: 500px;
-          p {
-            margin-bottom: 8px;
-          }
-          p:first-child {
-            margin-right: 8px;
-            width: 300px;
-          }
-          p:last-child {
-            font-weight: bold;
-          }
-        }
-        li:last-of-type {
-          border-bottom: none;
-          margin-bottom: 0px;
-        }
-      }
     }
+
+    & .adopt-detail__about__medical ul {
+      margin-bottom: 16px;
+    }
+
+    & .adopt-detail__about__medical li {
+      margin-bottom: 8px;
+      display: flex;
+      border-bottom: 1px solid rgb(178 177 177);
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    & .adopt-detail__about__medical p {
+      margin-bottom: 8px;
+    }
+
+    & .adopt-detail__about__medical p:first-child {
+      margin-right: 8px;
+      flex: 1;
+    }
+
+    & .adopt-detail__about__medical p:last-child {
+      font-weight: 700;
+    }
+
+    & .adopt-detail__about__medical li:last-of-type {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
     h2 {
       font-size: 1.5rem;
       margin-bottom: 16px;
     }
+
     p {
       font-size: 1rem;
       line-height: 1.5;
       margin-bottom: 12px;
     }
-    @media (min-width: 321px) and (max-width: 430px) {
+
+    @media (width <= 768px) {
       flex-direction: column;
-      & .adopt-detail__about__fun {
-        h2 {
-          font-size: 1.25rem;
-        }
-        p {
-          font-size: 1rem;
-          line-height: 1.5;
-        }
-      }
+
       & .adopt-detail__about__content,
       & .adopt-detail__about__medical {
         width: 100%;
-        margin-right: 0px;
+        margin-right: 0;
       }
-      & .adopt-detail__about__additional-info {
-        margin-bottom: 2rem;
-        ul {
-          padding-left: 15px;
-          li {
-            font-size: 1rem;
-            margin-bottom: 6px;
-          }
-        }
-        h2 {
-          font-size: 1.25rem;
-        }
-        p {
-          font-size: 1rem;
-          line-height: 1.5;
-        }
-      }
+
       & .adopt-detail__about__medical {
-        ul {
-          margin-bottom: 0px;
-          li {
-            width: 100%;
-            flex-direction: column;
-            p:first-child {
-              margin-right: 0px;
-              width: 100%;
-            }
-          }
-        }
-        h2 {
-          font-size: 1.25rem;
-          margin-bottom: 12px;
-        }
-        p {
-          font-size: 1rem;
-          line-height: 1.5;
-          margin-bottom: 12px;
-        }
+        margin-top: 2rem;
       }
     }
   }
+
   .adopt-detail__adoption {
     display: flex;
     margin-top: 30px;
-    background-color: var(--white);
-    color: var(--font-color-dark);
-    padding: 20px;
+    background-color: var(--text-inverse);
+    color: var(--text-primary);
+    padding: 32px;
     border-radius: 16px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
-    @media (max-width: 440px) {
+    box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
+    width: 100%;
+
+    @media (width <= 768px) {
       flex-direction: column;
     }
   }
-  @media (min-width: 0px) and (max-width: 320px) {
+
+  @media (width <= 430px) {
+    padding: 0;
   }
-  @media (min-width: 321px) and (max-width: 430px) {
-    padding: 0 1rem;
-    .adopt-detail__main {
+}
+
+.adopt-detail__info__main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 1px solid rgb(178 177 177);
+  padding-bottom: 20px;
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  @media (width >= 321px) and (width <= 430px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .adopt-detail__traits {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+  }
+
+  .adopt-detail__traits p {
+    background-color: var(--color-primary-weak);
+    padding: 4px 12px;
+    border-radius: 16px;
+  }
+
+  .adopt-detail__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .adopt-detail__actions {
+    @media (width <= 440px) {
+      display: flex;
       flex-direction: column;
-      img {
-        width: 100%;
-        height: auto;
-        margin-top: 3rem;
-      }
-      & .img-fallback {
-        width: 100%;
-        height: 300px;
-        margin-top: 3rem;
-        background: url('/images/paw.svg') 150px 100px/100px 100px no-repeat #add8e6;
-      }
-    }
-  }
-  @media (min-width: 431px) and (max-width: 768px) {
-  }
-  @media (min-width: 769px) and (max-width: 1024px) {
-  }
-  @media (min-width: 1025px) and (max-width: 1440px) {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    & .adopt-detail__main {
-      max-width: 1100px;
-      & img {
-        width: 500px;
-      }
-    }
-    & .adopt-detail__adoption {
-      max-width: 1100px;
-      width: 100%;
-    }
-  }
-  @media (min-width: 1441px) {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    & .adopt-detail__main {
-      max-width: 1500px;
-      & img {
-        width: 900px;
-      }
-    }
-    & .adopt-detail__about {
-      max-width: 1500px;
-      width: 100%;
-    }
-    & .adopt-detail__adoption {
-      max-width: 1500px;
-      width: 100%;
     }
   }
 }

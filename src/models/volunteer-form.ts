@@ -1,13 +1,15 @@
-export interface VolunteerFormState {
+export interface IVolunteerFormState {
+  fax_number?: string
   firstName: string
   lastName: string
+  email: string
   address: string
   city: string
   zip: string
   phoneNumber: string
   birthday: string
   age: number | null
-  allergies: string
+  allergies: boolean | null
   emergencyContactName: string
   emergencyContactPhone: string
   volunteerExperience: string

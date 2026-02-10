@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
+
+import type { IPet } from '../../../models/common.ts'
 import Drawer from '../../common/drawer/Drawer.vue'
-import type { IPet } from '../../../models/common'
-import InputField from '../../common/ui/InputField.vue'
 import Button from '../../common/ui/Button.vue'
+import InputField from '../../common/ui/InputField.vue'
 
 const { pet, isDrawerOpen } = defineProps<{
   pet: IPet
@@ -26,7 +27,7 @@ const closeDrawer = () => {
 }
 
 const submitForm = () => {
-  // Handle form submission logic here
+  
   console.log('Form submitted:', formData)
   closeDrawer()
 }
@@ -105,23 +106,27 @@ const submitForm = () => {
 p {
   margin: 0;
   font-size: 1rem;
-  color: var(--font-color-dark);
+  color: var(--text-primary);
   margin-bottom: 1rem;
   font-weight: 300;
+
   &:last-of-type {
     margin-bottom: 2rem;
     text-align: center;
   }
 }
+
 ul {
   margin: 0 0 1rem 1.5rem;
   padding: 0;
   list-style-type: disc;
-  color: var(--font-color-dark);
+  color: var(--text-primary);
 }
+
 li {
   margin-bottom: 0.5rem;
 }
+
 .actions {
   display: flex;
   justify-content: center;
