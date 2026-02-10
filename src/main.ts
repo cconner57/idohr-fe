@@ -17,5 +17,15 @@ console.log('App: Waiting for router...')
 await router.isReady()
 console.log('App: Router ready, mounting...')
 
+// Aggressively unregister any service workers to kill the zombie PWA cache
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const registration of registrations) {
+      console.log('Unregistering SW:', registration)
+      registration.unregister()
+    }
+  })
+}
+
 app.mount('#app')
 console.log('App: Mounted.')
