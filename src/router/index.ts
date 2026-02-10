@@ -1,6 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-
 import { nextTick } from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import { useMetrics } from '../composables/useMetrics'
 
@@ -10,17 +9,6 @@ const router = createRouter({
     {
       path: '/',
       component: () => import('../pages/Home.vue'),
-    },
-    {
-      path: '/login',
-      component: () => import('../pages/Login.vue'),
-      meta: { hideNavbar: true },
-    },
-    {
-      path: '/register',
-      name: 'register-invite',
-      component: () => import('../pages/RegisterFromInvite.vue'),
-      meta: { hideNavbar: true },
     },
     {
       path: '/about',
@@ -62,7 +50,7 @@ const router = createRouter({
     },
   ],
   scrollBehavior(to, from, savedPosition) {
-    if (to.path.startsWith('/admin') && savedPosition) {
+    if (savedPosition) {
       return savedPosition
     }
     return { top: 0 }
@@ -75,69 +63,18 @@ type StartViewTransitionOptions = {
 }
 
 interface CustomViewTransitionDocument extends Document {
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-explicit-any
+
   startViewTransition(
     callback?: ViewTransitionUpdateCallback,
     options?: StartViewTransitionOptions,
   ): any
 }
 
-import { useAuthStore } from '../stores/auth'
 import { useUIStore } from '../stores/ui'
 
-router.beforeEach(async (to, from, next) => {
-  const authStore = useAuthStore()
+router.beforeEach(async () => {
   const uiStore = useUIStore()
-
-  // Optimization: If restoring admin session with existing credentials, skip loader to prevent flicker
-  const isRestoringSession =
-    authStore.isAuthenticated && uiStore.isRestored && to.path.startsWith('/admin')
-
-  if (!isRestoringSession) {
-    uiStore.startLoading()
-  }
-
-  if (!authStore.initialized) {
-    if (isRestoringSession) {
-      // Optimistic load: Verify in background, don't block navigation
-      authStore.initialize().catch(console.error)
-    } else {
-      await authStore.initialize()
-    }
-  }
-
-  if (!authStore.user && authStore.isAuthenticated) {
-    // previously empty or intended for something. Removing empty block warning.
-    // If logic needed, add it. If not, maybe just remove.
-    // The original code was:
-    // if (!authStore.user && authStore.isAuthenticated) {
-    //
-    // }
-    // I'll just comment it out effectively or remove it if I can see context.
-    // Looking at previous context:
-    // 197:   if (!authStore.user && authStore.isAuthenticated) {
-    // 198:
-    // 199:   }
-    // It seems safe to remove or comment.
-  }
-
-  if (to.path === '/login' && authStore.isAuthenticated) {
-    next('/admin')
-    return
-  }
-
-  if (to.path.startsWith('/admin')) {
-    if (!authStore.isAuthenticated) {
-      next('/login')
-      return
-    }
-
-    // RBAC logic moved to AdminLayout.vue for state-based nav
-    next()
-    return
-  }
-
-  next()
+  uiStore.startLoading()
 })
 
 router.beforeResolve((to, from, next) => {
