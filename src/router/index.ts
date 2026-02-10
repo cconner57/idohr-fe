@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, START_LOCATION } from 'vue-router'
 
 import { useMetrics } from '../composables/useMetrics'
 
@@ -74,7 +74,7 @@ router.beforeEach(async () => {
 router.beforeResolve((to, from, next) => {
   const doc = document as unknown as CustomViewTransitionDocument
 
-  if (!doc.startViewTransition) {
+  if (!doc.startViewTransition || from === START_LOCATION) {
     next()
     return
   }
