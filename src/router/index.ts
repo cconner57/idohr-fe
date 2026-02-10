@@ -66,9 +66,20 @@ interface CustomViewTransitionDocument extends Document {
 
 import { useUIStore } from '../stores/ui'
 
-router.beforeEach(async () => {
-  const uiStore = useUIStore()
-  uiStore.startLoading()
+console.log('Router: File loaded')
+
+router.beforeEach(async (to, from, next) => {
+  console.log('Router: beforeEach started', { to: to.path, from: from.path })
+  try {
+    const uiStore = useUIStore()
+    console.log('Router: Got UI Store')
+    uiStore.startLoading()
+    console.log('Router: UI Store loading started')
+    next() // Ensure next is called!
+  } catch (e) {
+    console.error('Router: beforeEach Error', e)
+    next()
+  }
 })
 
 router.beforeResolve((to, from, next) => {
