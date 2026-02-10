@@ -96,7 +96,8 @@ router.afterEach((to) => {
   submitMetric('page_view', { path: to.fullPath })
 })
 
-router.onError(() => {
+router.onError((error) => {
+  console.error('Router Error:', error)
   const uiStore = useUIStore()
   uiStore.stopLoading()
 })
