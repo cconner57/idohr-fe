@@ -2,13 +2,14 @@ import { nextTick } from 'vue'
 import { createRouter, createWebHistory, START_LOCATION } from 'vue-router'
 
 import { useMetrics } from '../composables/useMetrics'
+import Home from '../pages/Home.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      component: () => import('../pages/Home.vue'),
+      component: Home,
     },
     {
       path: '/about',
