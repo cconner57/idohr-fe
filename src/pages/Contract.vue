@@ -2,8 +2,8 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-import AdoptionContract from '@/components/admin/adoptions/AdoptionContract.vue'
-import FosterToAdoptContract from '@/components/admin/adoptions/FosterToAdoptContract.vue'
+import AdoptionContract from '@/components/contracts/AdoptionContract.vue'
+import FosterToAdoptContract from '@/components/contracts/FosterToAdoptContract.vue'
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
 import Button from '@/components/common/ui/Button.vue'
 import type { IPet } from '@/models/common'
@@ -31,7 +31,9 @@ const isSubmitted = ref(false)
 const validationError = ref('')
 
 const contractData = ref<ContractResponse | null>(null)
-const contractComponent = ref<InstanceType<typeof AdoptionContract> | InstanceType<typeof FosterToAdoptContract> | null>(null)
+const contractComponent = ref<
+  InstanceType<typeof AdoptionContract> | InstanceType<typeof FosterToAdoptContract> | null
+>(null)
 
 // Fetch contract data
 onMounted(async () => {
@@ -111,7 +113,7 @@ const handleSubmit = async () => {
   // Submit
   const signature = contractComponent.value.form.signature
 
-  if (!contractData.value) return;
+  if (!contractData.value) return
 
   try {
     const res = await fetch('/api/contracts/submit', {
@@ -119,8 +121,8 @@ const handleSubmit = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         application_id: contractData.value.contract.application_id,
-        signature: signature
-      })
+        signature: signature,
+      }),
     })
 
     if (!res.ok) {
@@ -149,7 +151,10 @@ const handleSubmit = async () => {
     <div v-else-if="error" class="error-state">
       <h1>Unable to Load Contract</h1>
       <p>{{ error }}</p>
-      <p>Please contact us at <a href="mailto:cats@idohr.org">cats@idohr.org</a> if you believe this is an error.</p>
+      <p>
+        Please contact us at <a href="mailto:cats@idohr.org">cats@idohr.org</a> if you believe this
+        is an error.
+      </p>
     </div>
 
     <div v-else-if="isSubmitted" class="success-state">
@@ -172,7 +177,7 @@ const handleSubmit = async () => {
 
       <div class="actions-bar">
         <div v-if="validationError" class="validation-message">
-            {{ validationError }}
+          {{ validationError }}
         </div>
 
         <p class="terms-reminder">
@@ -200,7 +205,8 @@ const handleSubmit = async () => {
   justify-content: center;
 }
 
-.loading-state, .error-state {
+.loading-state,
+.error-state {
   text-align: center;
   color: var(--text-inverse);
   margin-top: 4rem;
@@ -257,7 +263,11 @@ const handleSubmit = async () => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
