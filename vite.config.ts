@@ -4,7 +4,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+
 
 dns.setDefaultResultOrder('ipv4first')
 
@@ -12,121 +12,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
-    plugins: [vue(), VitePWA({
-      registerType: 'autoUpdate',
-      strategies: 'injectManifest',
-      srcDir: 'src',
-      filename: 'sw.js',
-      includeAssets: ['favicon.ico', 'images/paw.svg', 'apple-touch-icon.png'],
-      manifest: {
-        name: 'Adoption OS',
-        short_name: 'IDOHR',
-        description: 'Adoption Management System',
-        theme_color: '#00a5ad',
-        background_color: '#fbfbfb',
-        start_url: '/admin',
-        scope: '/admin/',
-        display: 'standalone',
-        orientation: 'portrait',
-        icons: [
-          {
-            src: '/images/idohr-logo.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: '/images/idohr-logo.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ],
-        shortcuts: [
-          {
-            name: 'Pet Records',
-            short_name: 'Records',
-            description: 'Manage Pet Records',
-            url: '/admin/pets',
-            icons: [{ src: '/images/paw.svg', sizes: '96x96', type: 'image/svg+xml' }]
-          },
-          {
-            name: 'Applications',
-            short_name: 'Apps',
-            description: 'Review Adoptions',
-            url: '/admin/applications',
-            icons: [{ src: '/images/idohr-logo.png', sizes: '192x192', type: 'image/png' }]
-          },
-          {
-            name: 'Donate',
-            short_name: 'Donate',
-            description: 'Support IDOHR',
-            url: '/donate',
-            icons: [{ src: '/images/heart.svg', sizes: '96x96', type: 'image/svg+xml' }]
-          },
-          {
-            name: 'Volunteer',
-            short_name: 'Volunteer',
-            description: 'Join the Team',
-            url: '/volunteer',
-            icons: [{ src: '/images/hand.svg', sizes: '96x96', type: 'image/svg+xml' }]
-          }
-        ]
-      },
-      workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith('/v1'),
-            method: 'GET',
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache-get',
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 72 * 60 * 60 // 3 days
-              }
-            }
-          },
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith('/v1'),
-            method: 'POST',
-            handler: 'NetworkOnly',
-            options: {
-              backgroundSync: {
-                name: 'offline-mutations-post',
-                options: {
-                  maxRetentionTime: 24 * 60 // 24 hours
-                }
-              }
-            }
-          },
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith('/v1'),
-            method: 'PUT',
-            handler: 'NetworkOnly',
-            options: {
-              backgroundSync: {
-                name: 'offline-mutations-put',
-                options: {
-                  maxRetentionTime: 24 * 60
-                }
-              }
-            }
-          },
-          {
-            urlPattern: ({ url }) => url.pathname.startsWith('/v1'),
-            method: 'DELETE',
-            handler: 'NetworkOnly',
-            options: {
-              backgroundSync: {
-                name: 'offline-mutations-delete',
-                options: {
-                  maxRetentionTime: 24 * 60
-                }
-              }
-            }
-          }
-        ]
-      }
-    })],
+    plugins: [vue()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
