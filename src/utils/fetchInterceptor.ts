@@ -28,9 +28,21 @@ export function setupFetchInterceptor() {
       }
 
       if (authStore.isAuthenticated) {
-        console.log('Session expired (401), logging out...')
-        uiStore.showToast('Session expired. Please login again.', 'error')
-        await authStore.logout()
+        console.log('Session expired (401), clearing auth...')
+
+        // Clear auth state but don't force redirect unless we are in a protected route
+        const currentPath = window.location.pathname
+        const isProtectedRoute = currentPath.startsWith('/admin')
+
+        if (isProtectedRoute) {
+          uiStore.showToast('Session expired. Please login again.', 'error')
+          await authStore.logout() // This redirects to /login
+        } else {
+          // Just clear local state silently for public pages
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+          authStore.user = null
+        }
       }
     }
 

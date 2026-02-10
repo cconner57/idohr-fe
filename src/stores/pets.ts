@@ -24,6 +24,8 @@ export const usePetStore = defineStore('pets', () => {
 
   const adoptedPets = ref<IPet[]>([])
 
+  const error = ref<string | null>(null)
+
   const fetchPets = async (forceRefresh = false) => {
     const isFresh = Date.now() - lastFetched.value < CACHE_DURATION
     if (currentPets.value.length > 0 && isFresh && !forceRefresh) {
@@ -31,6 +33,7 @@ export const usePetStore = defineStore('pets', () => {
     }
 
     isFetching.value = true
+    error.value = null
     try {
       const response = await fetch(`${API_ENDPOINTS.PETS}?status=available&sort=age`)
       if (!response.ok) throw new Error('Failed to fetch pets')
@@ -38,9 +41,9 @@ export const usePetStore = defineStore('pets', () => {
       const data = await response.json()
       currentPets.value = Array.isArray(data) ? data : data.data || []
       lastFetched.value = Date.now()
-    } catch (error) {
-      console.error('Error fetching pets:', error)
-      throw error
+    } catch (err: unknown) {
+      console.error('Error fetching pets:', err)
+      error.value = err instanceof Error ? err.message : 'Failed to fetch pets'
     } finally {
       isFetching.value = false
     }
@@ -70,9 +73,9 @@ export const usePetStore = defineStore('pets', () => {
       adminPets.value = Array.isArray(data) ? data : data.data || []
       lastAdminFetched.value = Date.now()
       lastAdminParams.value = paramsString
-    } catch (error) {
-      console.error('Error fetching admin pets:', error)
-      throw error
+    } catch (err) {
+      console.error('Error fetching admin pets:', err)
+      throw err
     } finally {
       isFetching.value = false
     }
@@ -92,9 +95,9 @@ export const usePetStore = defineStore('pets', () => {
       if (!response.ok) throw new Error('Failed to fetch adopted pets')
       const data = await response.json()
       adoptedPets.value = Array.isArray(data) ? data : data.data || []
-    } catch (error) {
-      console.error('Error fetching adopted pets:', error)
-      throw error
+    } catch (err) {
+      console.error('Error fetching adopted pets:', err)
+      throw err
     } finally {
       isFetching.value = false
     }
@@ -134,11 +137,11 @@ export const usePetStore = defineStore('pets', () => {
 
       // Update successful, maybe fetch fresh data or just leave optimistic?
       // Leaving optimistic is fine.
-    } catch (error) {
-      console.error('Error updating pet:', error)
+    } catch (err) {
+      console.error('Error updating pet:', err)
       // Revert or fetch?
       await fetchPets(true) // Revert by fetching fresh
-      throw error
+      throw err
     }
   }
 
@@ -185,5 +188,6 @@ export const usePetStore = defineStore('pets', () => {
     selectPet,
     clearSelectedPet,
     initFromSession,
+    error,
   }
 })

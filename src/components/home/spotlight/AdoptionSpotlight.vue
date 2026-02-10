@@ -48,6 +48,9 @@ const displayedPets = computed((): IPet[] => {
     <div v-if="loading" class="loader-container">
       <Spinner />
     </div>
+    <div v-else-if="error" class="error-container">
+      <p>Unable to load spotlight pets.</p>
+    </div>
     <div v-else class="pet-list">
       <PetItem
         v-for="pet in displayedPets"
@@ -69,6 +72,16 @@ const displayedPets = computed((): IPet[] => {
   align-items: center;
   min-height: 200px;
   width: 100%;
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  width: 100%;
+  color: var(--color-danger);
+  font-weight: 500;
 }
 
 .adoption-spotlight {
@@ -94,7 +107,7 @@ const displayedPets = computed((): IPet[] => {
     overflow-x: auto;
     padding-bottom: 8px;
     -webkit-overflow-scrolling: touch;
-    justify-content: center; 
+    justify-content: center;
     margin-left: -50px;
     margin-right: -50px;
     padding-left: 50px;
@@ -116,7 +129,7 @@ const displayedPets = computed((): IPet[] => {
       margin-right: -2rem;
       padding-left: 2rem;
       padding-right: 2rem;
-      justify-content: flex-start; 
+      justify-content: flex-start;
     }
   }
 

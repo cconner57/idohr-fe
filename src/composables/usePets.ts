@@ -8,9 +8,9 @@ export function usePets() {
   const { currentPets, isFetching: loading } = storeToRefs(store)
 
   const spotlightPets = computed(() => {
-    
+
     const featured = currentPets.value.filter(
-      (p) => p.profileSettings && p.profileSettings.isSpotlightFeatured,
+      (p) => p.profileSettings?.isSpotlightFeatured,
     )
 
     if (featured.length > 0) {
@@ -27,7 +27,7 @@ export function usePets() {
   return {
     spotlightPets,
     loading,
-    error: null, 
+    error: store.error,
     fetchSpotlight,
   }
 }
