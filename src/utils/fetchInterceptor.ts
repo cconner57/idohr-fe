@@ -27,7 +27,7 @@ export function setupFetchInterceptor() {
         return response
       }
 
-      if (authStore.isAuthenticated) {
+      if (authStore.isAuthenticated && !authStore.isCheckingAuth) {
         console.log('Session expired (401), clearing auth...')
 
         // Clear auth state but don't force redirect unless we are in a protected route

@@ -19,14 +19,17 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!user.value)
 
+  const isCheckingAuth = ref(false)
+
   const checkAuth = async () => {
+    isCheckingAuth.value = true
     try {
       const response = await fetch(API_ENDPOINTS.USERS_ME, {
         credentials: 'include',
       })
       if (response.ok) {
         const data = await response.json()
-        if (data && data.data) {
+        if (data?.data) {
           user.value = data.data
           localStorage.setItem('user', JSON.stringify(data.data))
         }
@@ -37,6 +40,8 @@ export const useAuthStore = defineStore('auth', () => {
     } catch (error) {
       console.error('Check auth error:', error)
       user.value = null
+    } finally {
+      isCheckingAuth.value = false
     }
   }
 
@@ -99,6 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     user,
     isAuthenticated,
+    isCheckingAuth,
     login,
     checkAuth,
     logout,
