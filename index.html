@@ -24,6 +24,16 @@
   <body>
     <div id="debug-error" style="color: red; padding: 20px; font-family: monospace; display: none;"></div>
     <script>
+      // Force unregister all Service Workers to fix caching issues
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            console.log('Unregistering SW:', registration);
+            registration.unregister();
+          }
+        });
+      }
+
       window.onerror = function(msg, url, line, col, error) {
         const div = document.getElementById('debug-error');
         if (div) {
