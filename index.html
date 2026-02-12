@@ -10,6 +10,7 @@
       type="font/ttf"
       crossorigin
     />
+    <link rel="preload" as="image" href="/images/hero.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
     <meta
       name="description"
@@ -22,7 +23,6 @@
     <!--app-head-->
   </head>
   <body>
-    <div id="debug-error" style="color: red; padding: 20px; font-family: monospace; display: none;"></div>
     <script>
       // Force unregister all Service Workers to fix caching issues
       if ('serviceWorker' in navigator) {
@@ -33,23 +33,6 @@
           }
         });
       }
-
-      window.onerror = function(msg, url, line, col, error) {
-        const div = document.getElementById('debug-error');
-        if (div) {
-          div.style.display = 'block';
-          div.innerHTML += '<h3>Global Error:</h3>' + msg + '<br>' + url + ':' + line + ':' + col + '<br>' + (error ? error.stack : '') + '<hr>';
-        }
-        console.error('Global Error caught:', msg, error);
-      };
-      window.addEventListener('unhandledrejection', function(event) {
-        const div = document.getElementById('debug-error');
-        if (div) {
-          div.style.display = 'block';
-          div.innerHTML += '<h3>Unhandled Promise Rejection:</h3>' + event.reason + '<hr>';
-        }
-        console.error('Unhandled Rejection:', event.reason);
-      });
     </script>
     <div id="app"></div>
 
