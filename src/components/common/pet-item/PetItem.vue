@@ -58,7 +58,6 @@ function handleAdopt() {
 <template>
   <div class="pet-item" :style="{ viewTransitionName: `pet-card-${props.id}` }">
     <img
-      v-if="!imgError"
       :src="`/pet-photos/${props.photo ?? ''}`"
       :alt="props.name"
       height="250"
@@ -68,7 +67,7 @@ function handleAdopt() {
       @error="onImgError"
       @click="handleAdopt"
     />
-    <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
+    <!-- <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div> -->
     <div class="info-section">
       <h3>{{ props.name }}</h3>
       <div v-if="props.capsules.length > 0" class="capsules">
