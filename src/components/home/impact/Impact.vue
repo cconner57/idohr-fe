@@ -9,7 +9,8 @@ const previousYear = currentYear - 1
 
 const countCurrent = ref(0)
 const countPrevious = ref(0)
-const isLoading = ref(true)
+const isLoadingCurrent = ref(true)
+const isLoadingPrevious = ref(true)
 
 import { API_ENDPOINTS } from '../../../constants/api'
 
@@ -17,11 +18,11 @@ const fetchCount = async (year: number) => {
   try {
     const response = await fetch(`${API_ENDPOINTS.ADOPTED_PETS_COUNT}?year=${year}`)
     const json = await response.json()
-    
+
     if (json.data && typeof json.data.count === 'number') {
       return json.data.count
     }
-    
+
     return json.count || 0
   } catch (error) {
     console.error(`Error fetching count for ${year}:`, error)
@@ -31,13 +32,16 @@ const fetchCount = async (year: number) => {
 
 const getLabel = (count: number) => (count === 1 ? 'pet' : 'pets')
 
-onMounted(async () => {
-  
-  const [prev, curr] = await Promise.all([fetchCount(previousYear), fetchCount(currentYear)])
+onMounted(() => {
+  fetchCount(previousYear).then((prev) => {
+    countPrevious.value = prev
+    isLoadingPrevious.value = false
+  })
 
-  countPrevious.value = prev
-  countCurrent.value = curr
-  isLoading.value = false
+  fetchCount(currentYear).then((curr) => {
+    countCurrent.value = curr
+    isLoadingCurrent.value = false
+  })
 })
 </script>
 
@@ -52,19 +56,24 @@ onMounted(async () => {
       </div>
       <div class="divider"></div>
       <div class="stats">
-        <div v-if="isLoading" class="loader-container">
-          <Spinner />
-        </div>
-        <template v-else>
-          <span>
+        <span>
+          <div v-if="isLoadingPrevious" class="loader-container">
+            <Spinner />
+          </div>
+          <template v-else>
             <h5>{{ countPrevious }}</h5>
             <p>{{ getLabel(countPrevious) }} rescued in {{ previousYear }}</p>
-          </span>
-          <span>
+          </template>
+        </span>
+        <span>
+          <div v-if="isLoadingCurrent" class="loader-container">
+            <Spinner />
+          </div>
+          <template v-else>
             <h5>{{ countCurrent }}</h5>
             <p>{{ getLabel(countCurrent) }} rescued in {{ currentYear }}</p>
-          </span>
-        </template>
+          </template>
+        </span>
       </div>
     </div>
   </section>
@@ -126,7 +135,7 @@ onMounted(async () => {
     justify-content: center;
     width: 100%;
     max-width: 450px;
-    min-height: 100px; 
+    min-height: 100px;
 
     & span {
       display: flex;
@@ -134,6 +143,9 @@ onMounted(async () => {
       gap: 8px;
       align-items: center;
       text-align: center;
+      flex: 1;
+      min-width: 120px;
+      position: relative;
 
       & h5 {
         font-size: 3rem;
@@ -197,7 +209,7 @@ onMounted(async () => {
   }
 
   @media (width <= 480px) {
-    margin-top: -30px; 
+    margin-top: -30px;
     padding: 24px;
 
     .stats {
