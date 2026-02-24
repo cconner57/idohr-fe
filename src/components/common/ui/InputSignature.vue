@@ -23,7 +23,7 @@ const getEventPosition = (event: MouseEvent | TouchEvent) => {
       return {
         offsetX: event.clientX - rect.left,
 
-        offsetY: event.clientY - rect.top, 
+        offsetY: event.clientY - rect.top,
       }
     } else {
       const touch = event.touches[0]
@@ -146,7 +146,7 @@ onUnmounted(() => {
   .signature-label {
     margin-bottom: 10px;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: normal;
     color: var(--text-primary);
   }
 

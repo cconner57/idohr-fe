@@ -69,6 +69,7 @@ fieldset.field {
 
 .label {
   margin-bottom: 8px;
+  font-weight: 400;
 
   @media (width <= 440px) {
     font-size: 13px;
@@ -115,7 +116,7 @@ fieldset.field {
   box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 
   span {
-    font-weight: 600;
+    font-weight: 500;
     color: var(--text-primary);
     line-height: 1.5;
   }

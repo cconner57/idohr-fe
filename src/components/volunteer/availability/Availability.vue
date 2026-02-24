@@ -209,7 +209,7 @@ const selected = computed({
 
 .section-label {
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--text-primary);
   margin: 0;
 }

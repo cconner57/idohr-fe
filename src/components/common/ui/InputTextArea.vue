@@ -49,7 +49,7 @@ const inputId = `textarea-${Math.random().toString(36).slice(2, 9)}`
 
 .label {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 0.5em;
   display: block;
 }

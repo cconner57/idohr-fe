@@ -77,7 +77,7 @@ const displayFalseLabel = computed(() => {
 
 .field-label {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: normal;
   color: var(--text-primary);
   margin-bottom: 4px;
 }

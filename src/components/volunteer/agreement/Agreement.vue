@@ -111,11 +111,18 @@ const emit = defineEmits<{
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
 
+  & .section-title {
+    margin-bottom: 24px;
+    display: block;
+    width: 100%;
+  }
+
   & .acknowledgement,
   .parentGuardian {
     display: flex;
     flex-direction: column;
     grid-column: 1 / -1;
+    gap: 16px;
 
     & .name-date-container {
       display: flex;
@@ -146,7 +153,7 @@ const emit = defineEmits<{
     border-top: 2px solid #808080;
     padding-top: 12px;
     margin-top: 12px;
-    font-weight: 600;
+    font-weight: normal;
     grid-column: 1 / -1;
     text-align: center;
   }
