@@ -6,13 +6,14 @@ import { useRoute } from 'vue-router'
 import AdoptDetail from '@/components/adopt/adopt-view/AdoptDetail.vue'
 import AdoptSummary from '@/components/adopt/adopt-view/AdoptSummary.vue'
 import FilterPanel from '@/components/adopt/FilterPanel.vue'
+import Spinner from '@/components/common/ui/Spinner.vue'
 import type { IPet } from '@/models/common'
 import { usePetStore } from '@/stores/pets'
 
 const props = defineProps<{ id?: string }>()
 const route = useRoute()
 const store = usePetStore()
-const { currentPets } = storeToRefs(store)
+const { currentPets, isFetching } = storeToRefs(store)
 
 const id = computed(() => props.id ?? (route.params.id as string | undefined))
 const isFilterPanelOpen = ref(false)
@@ -153,13 +154,18 @@ const pet = computed(() => {
       />
 
       <main>
-        <AdoptDetail v-if="pet" :pet="pet!" />
-        <AdoptSummary v-else-if="filteredPets.length > 0" :pets="filteredPets" />
-        <div v-else class="empty-state">
-          <h2>No pets found</h2>
-          <p>We couldn't find any friends matching that filter.</p>
-          <button class="reset-btn" @click="resetAllFilters">View All Pets</button>
+        <div v-if="isFetching" class="loading-state">
+          <Spinner />
         </div>
+        <template v-else>
+          <AdoptDetail v-if="pet" :pet="pet!" />
+          <AdoptSummary v-else-if="filteredPets.length > 0" :pets="filteredPets" />
+          <div v-else class="empty-state">
+            <h2>No pets found</h2>
+            <p>We couldn't find any friends matching that filter.</p>
+            <button class="reset-btn" @click="resetAllFilters">View All Pets</button>
+          </div>
+        </template>
       </main>
     </div>
   </div>
@@ -279,9 +285,6 @@ const pet = computed(() => {
     }
   }
 
-  @media (width >= 0) and (width <= 320px) {
-
-  }
 
   @media (width >= 321px) and (width <= 430px) {
     .content-wrapper {
@@ -447,5 +450,13 @@ const pet = computed(() => {
       transform: translateY(0);
     }
   }
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
 }
 </style>
