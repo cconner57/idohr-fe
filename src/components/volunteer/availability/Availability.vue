@@ -21,6 +21,8 @@ const selected = computed({
     <h3 class="section-label">Preference on time of day (select all that apply):</h3>
 
     <div class="times-grid" :class="{ 'has-error': hasError }">
+      <div class="sub-header">Everyday Shifts (Monday – Sunday)</div>
+
       <label class="time-card">
         <input type="checkbox" value="10AM – 12PM" v-model="selected" />
         <div class="time-card__content">
@@ -146,6 +148,8 @@ const selected = computed({
         </div>
       </label>
 
+      <div class="sub-header mt-2">Adoption Events (Saturday & Sunday Only)</div>
+
       <label class="time-card">
         <input type="checkbox" value="Adoption Event: 12pm - 2pm" v-model="selected" />
         <div class="time-card__content">
@@ -209,7 +213,7 @@ const selected = computed({
 
 .section-label {
   font-size: 0.95rem;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--text-primary);
   margin: 0;
 }
@@ -218,6 +222,19 @@ const selected = computed({
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 12px;
+}
+
+.sub-header {
+  grid-column: 1 / -1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  margin-bottom: 0px;
+}
+
+.sub-header.mt-2 {
+  margin-top: 16px;
 }
 
 .times-grid.has-error {
