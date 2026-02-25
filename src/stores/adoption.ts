@@ -3,6 +3,7 @@ import { computed, reactive, ref } from 'vue'
 
 import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
+import { API_ENDPOINTS } from '../constants/api'
 import type { FormState } from '../models/adopt-form'
 import { usePetStore } from './pets'
 
@@ -11,6 +12,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
   const step = ref(0)
   const isSubmitted = ref(false)
   const hasAttemptedSubmit = ref(false)
+  const submissionError = ref<string | null>(null)
 
   const formState = reactive<FormState>({
     fax_number: '',
@@ -258,6 +260,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
     step.value = 0
     isSubmitted.value = false
     hasAttemptedSubmit.value = false
+    submissionError.value = null
     sessionStorage.removeItem(STORAGE_KEY)
   }
 
@@ -355,7 +358,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
       // Re-verifying struct: CatAccess *string `json:"catAccess"`
       // Frontend is string[]. Must join it. Done above.
 
-      const response = await fetch('/applications/adoption', {
+      const response = await fetch(API_ENDPOINTS.ADOPTION_APPLICATION, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -369,12 +372,13 @@ export const useAdoptionStore = defineStore('adoption', () => {
       }
 
       isSubmitted.value = true
+      submissionError.value = null
       sessionStorage.removeItem(STORAGE_KEY)
       return true
     } catch (error: unknown) {
       console.error('Error submitting application:', error)
       const message = error instanceof Error ? error.message : String(error)
-      alert(`There was an error submitting your application: ${message}`)
+      submissionError.value = message
       return false
     }
   }
@@ -386,6 +390,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
     hasAttemptedSubmit,
     validationErrors,
     isStepValid,
+    submissionError,
     nextStep,
     prevStep,
     resetForm,

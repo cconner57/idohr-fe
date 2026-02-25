@@ -24,7 +24,7 @@ const router = useRouter()
 const adoptionStore = useAdoptionStore()
 const petStore = usePetStore()
 
-const { formState, step, isSubmitted, hasAttemptedSubmit, validationErrors } =
+const { formState, step, isSubmitted, hasAttemptedSubmit, validationErrors, submissionError } =
   storeToRefs(adoptionStore)
 const { selectedPet } = storeToRefs(petStore)
 
@@ -152,6 +152,11 @@ const handleReset = async () => {
         <div class="tags">
           <span v-for="err in validationErrors" :key="err" class="tag is-danger">{{ err }}</span>
         </div>
+      </div>
+
+      <div v-if="submissionError" class="validation-summary error-summary">
+        <p class="summary-title">There was an error submitting your application:</p>
+        <p class="error-message">{{ submissionError }}</p>
       </div>
 
       <div class="actions">
