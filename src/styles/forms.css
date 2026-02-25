@@ -61,11 +61,6 @@ input[type='time'] {
   color-scheme: light dark;
 }
 
-input[type='date']::-webkit-calendar-picker-indicator,
-input[type='time']::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-}
-
 
 input[type='date']::placeholder,
 input[type='time']::placeholder {

@@ -34,7 +34,7 @@ const headerText = () => {
 
 const messageText = () => {
   if (props.formType === 'volunteer') {
-    return "Thank you for volunteering! We'll review your application and get back to you shortly."
+    return "Thank you for applying! We'll review your application and get back to you shortly."
   }
   if (props.formType === 'surrender') {
     return "We'll review your form and get back to you shortly."
