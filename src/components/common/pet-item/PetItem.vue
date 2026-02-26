@@ -114,7 +114,7 @@ function handleAdopt() {
   background-color: var(--text-inverse);
   color: var(--text-primary);
   box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
-  height: 400px;
+  height: 360px;
 
   .img-wrapper {
     position: relative;
@@ -241,7 +241,7 @@ function handleAdopt() {
 
   @media (width >= 1025px) and (width <= 1440px) {
     width: 240px;
-    height: 360px;
+    height: 330px;
 
     & .img-fallback {
       background-color: #add8e6;
@@ -261,7 +261,7 @@ function handleAdopt() {
 
   @media (width >= 1441px) {
     width: 260px;
-    height: 380px;
+    height: 350px;
 
     & .img-fallback {
       background-color: #add8e6;

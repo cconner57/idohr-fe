@@ -28,6 +28,14 @@ const handleStartAdoption = () => {
   globalThis.location.href = `/pet-adoption/${props.pet.id}`
 }
 
+const handleScheduleMeet = () => {
+  isDrawerOpen.value = true
+}
+
+const handleRequestInformation = () => {
+  globalThis.location.href = `/pet-adoption/${props.pet.id}`
+}
+
 const handleShare = () => {
   const shareData = {
     title: `Check out ${props.pet.name} for adoption!`,
@@ -82,15 +90,6 @@ const petPhotoUrl = computed(() => {
                 :label="calculateAge(pet?.physical?.dateOfBirth)"
               />
           </div>
-          <output v-if="pet.sponsored?.isSponsored" class="sponsored-banner">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-            <span>
-              <strong>Adoption Fee Sponsored</strong>
-              <span class="sponsored-sub">A generous volunteer has covered this pet's adoption fee.</span>
-            </span>
-          </output>
           <p>{{ pet?.descriptions?.fun }}</p>
           <div class="adopt-detail__actions">
             <Button
@@ -99,11 +98,31 @@ const petPhotoUrl = computed(() => {
               @click="handleStartAdoption"
               :fullWidth="true"
             />
-
+            <Button
+              title="Schedule a Meet"
+              color="purple"
+              @click="handleScheduleMeet"
+              :fullWidth="true"
+            />
+            <Button
+              title="Request Information"
+              color="orange"
+              @click="handleRequestInformation"
+              :fullWidth="true"
+            />
             <Button title="Share" color="green" @click="handleShare" :fullWidth="true" />
           </div>
         </div>
         <AdditionalInfo :pet="pet" />
+        <output v-if="pet.sponsored?.isSponsored" class="sponsored-banner">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+          <span>
+            <strong>Adoption Fee Sponsored</strong>
+            <span class="sponsored-sub">A generous volunteer has covered this pet's adoption fee.</span>
+          </span>
+        </output>
       </div>
     </div>
     <div
@@ -216,6 +235,39 @@ const petPhotoUrl = computed(() => {
       @media (width <= 1024px) {
         width: 100%;
         min-height: auto;
+      }
+
+      .sponsored-banner {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.625rem;
+        background-color: hsl(43deg 96% 95%);
+        border: 1px solid hsl(43deg 96% 70%);
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        color: hsl(43deg 60% 25%);
+
+        svg {
+          flex-shrink: 0;
+          margin-top: 0.125rem;
+          color: hsl(43deg 96% 45%);
+        }
+
+        span {
+          display: flex;
+          flex-direction: column;
+          gap: 0.125rem;
+        }
+
+        strong {
+          font-size: 0.9rem;
+          font-weight: 700;
+        }
+
+        .sponsored-sub {
+          font-size: 0.8rem;
+          opacity: 0.85;
+        }
       }
 
     }
@@ -370,39 +422,6 @@ const petPhotoUrl = computed(() => {
       background-color: var(--color-primary-weak);
       padding: 4px 12px;
       border-radius: 16px;
-    }
-
-    .sponsored-banner {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.625rem;
-      background-color: hsl(43deg 96% 95%);
-      border: 1px solid hsl(43deg 96% 70%);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      color: hsl(43deg 60% 25%);
-
-      svg {
-        flex-shrink: 0;
-        margin-top: 0.125rem;
-        color: hsl(43deg 96% 45%);
-      }
-
-      span {
-        display: flex;
-        flex-direction: column;
-        gap: 0.125rem;
-      }
-
-      strong {
-        font-size: 0.9rem;
-        font-weight: 700;
-      }
-
-      .sponsored-sub {
-        font-size: 0.8rem;
-        opacity: 0.85;
-      }
     }
 
     .adopt-detail__actions {
