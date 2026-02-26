@@ -127,6 +127,12 @@ li {
   margin-bottom: 0.5rem;
 }
 
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
 .actions {
   display: flex;
   justify-content: center;
