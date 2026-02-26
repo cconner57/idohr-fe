@@ -101,7 +101,8 @@ const displayFalseLabel = computed(() => {
   border: 1px solid #e5e7eb;
   border-radius: 9px;
   padding: 2px;
-  height: 48px;
+  min-height: 48px;
+  height: auto;
   width: 100%;
   margin: 0;
   min-inline-size: 0;
@@ -120,14 +121,15 @@ const displayFalseLabel = computed(() => {
   font-weight: 500;
   color: #6b7280;
   cursor: pointer;
-  padding: 0 16px;
+  padding: 8px 10px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  white-space: nowrap;
-  height: 100%;
+  white-space: normal;
+  text-align: center;
+  min-height: 44px;
 
   &.active {
     background: #fff;
