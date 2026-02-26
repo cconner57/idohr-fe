@@ -43,9 +43,9 @@ const router = useRouter()
 
 const imgError = ref(false)
 
-// function onImgError() {
-//   imgError.value = true
-// }
+function onImgError() {
+  imgError.value = true
+}
 
 const { submitMetric } = useMetrics()
 
@@ -53,23 +53,19 @@ function handleAdopt() {
   submitMetric('spotlight_click', { petId: props.id, petName: props.name })
   goToAdopt(router, props.id.toLowerCase())
 }
-
-console.log('props', props)
-
-const imgBaseUrl = import.meta.env.VITE_R2_PUBLIC_URL;
 </script>
 
 <template>
   <div class="pet-item" :style="{ viewTransitionName: `pet-card-${props.id}` }">
     <img
       v-if="!imgError"
-      :src="`${imgBaseUrl}/${(props.photo || '').replace('/photos/', '/images/')}`"
+      :src="`/pet-photos/${props.photo ?? ''}`"
       :alt="props.name"
       height="250"
       width="240"
       :style="{ viewTransitionName: 'pet-' + props.id }"
       :fetchpriority="priority ? 'high' : 'auto'"
-
+      @error="onImgError"
       @click="handleAdopt"
     />
     <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
