@@ -55,13 +55,15 @@ function handleAdopt() {
 }
 
 console.log('props', props)
+
+const imgBaseUrl = import.meta.env.VITE_R2_PUBLIC_URL;
 </script>
 
 <template>
   <div class="pet-item" :style="{ viewTransitionName: `pet-card-${props.id}` }">
     <img
       v-if="!imgError"
-      :src="`/pet-photos/${props.photo ?? ''}`"
+      :src="`${imgBaseUrl}/${(props.photo || '').replace('/photos/', '/images/')}`"
       :alt="props.name"
       height="250"
       width="240"

@@ -21,7 +21,7 @@ defineProps<{
       :id="pet.slug || pet.id"
       :key="pet.id"
       :name="pet.name"
-      :photo="pet.photos?.find((p) => p.isPrimary)?.url"
+      :photo="pet.photos?.find((p) => p.isPrimary)?.thumbnailUrl || pet.photos?.find((p) => p.isPrimary)?.url"
       :priority="index === 0"
     />
   </div>
