@@ -53,6 +53,8 @@ function handleAdopt() {
   submitMetric('spotlight_click', { petId: props.id, petName: props.name })
   goToAdopt(router, props.id.toLowerCase())
 }
+
+console.log('props', props)
 </script>
 
 <template>
