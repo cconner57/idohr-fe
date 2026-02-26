@@ -69,7 +69,7 @@ function closeDrawer() {
   width: 100dvw;
   height: 100dvh;
   background-color: rgb(0 0 0 / 50%);
-  z-index: 1000;
+  z-index: 3000;
 
   .drawer {
     position: fixed;
@@ -78,7 +78,7 @@ function closeDrawer() {
     width: 100dvw;
     max-width: 500px;
     height: 100dvh;
-    z-index: 1005;
+    z-index: 3005;
     background-color: var(--text-inverse);
     box-shadow: -2px 0 10px rgb(0 0 0 / 10%);
     border-top-left-radius: 1rem;

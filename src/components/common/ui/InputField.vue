@@ -94,6 +94,10 @@ function onBlur(e: Event) {
   width: 100%;
 }
 
+.label {
+  color: var(--text-primary);
+}
+
 input {
   width: 100%;
   padding: 12px 16px;

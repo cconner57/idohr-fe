@@ -45,7 +45,7 @@ const submitForm = () => {
     </p>
     <ul>
       <li>Monday through Friday: 10am to 12pm and 6pm to 8pm</li>
-      <li>Weekends: 11am to 4pm</li>
+      <li>Weekends: 12pm to 4pm</li>
     </ul>
     <p>
       If these times don’t work for you, no problem! Simply fill out the form below, and one of our

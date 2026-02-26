@@ -12,12 +12,14 @@ import AdoptionFAQ from '../adopt-faq/AdoptionFAQ.vue'
 import AdoptionProcess from '../adopt-process/AdoptionProcess.vue'
 import VaccinationItem from '../vaccination-item/VaccinationItem.vue'
 import AdoptDrawer from './AdoptDrawer.vue'
+import RequestInfoDrawer from './RequestInfoDrawer.vue'
 
 const props = defineProps<{
   pet: IPet
 }>()
 
 const isDrawerOpen = ref(false)
+const isInfoDrawerOpen = ref(false)
 
 const handleStartAdoption = () => {
   vibrate(50)
@@ -33,7 +35,7 @@ const handleScheduleMeet = () => {
 }
 
 const handleRequestInformation = () => {
-  globalThis.location.href = `/pet-adoption/${props.pet.id}`
+  isInfoDrawerOpen.value = true
 }
 
 const handleShare = () => {
@@ -98,19 +100,19 @@ const petPhotoUrl = computed(() => {
               @click="handleStartAdoption"
               :fullWidth="true"
             />
-            <Button
-              title="Schedule a Meet"
-              color="purple"
-              @click="handleScheduleMeet"
-              :fullWidth="true"
-            />
+            <Button title="Share" color="green" @click="handleShare" :fullWidth="true" />
             <Button
               title="Request Information"
               color="orange"
               @click="handleRequestInformation"
               :fullWidth="true"
             />
-            <Button title="Share" color="green" @click="handleShare" :fullWidth="true" />
+            <Button
+              title="Schedule a Meet"
+              color="purple"
+              @click="handleScheduleMeet"
+              :fullWidth="true"
+            />
           </div>
         </div>
         <AdditionalInfo :pet="pet" />
@@ -120,7 +122,7 @@ const petPhotoUrl = computed(() => {
           </svg>
           <span>
             <strong>Adoption Fee Sponsored</strong>
-            <span class="sponsored-sub">A generous volunteer has covered this pet's adoption fee.</span>
+            <span class="sponsored-sub">A generous supporter has covered this pet's adoption fee.</span>
           </span>
         </output>
       </div>
@@ -184,6 +186,11 @@ const petPhotoUrl = computed(() => {
     :pet="pet"
     :isDrawerOpen="isDrawerOpen"
     @update:isDrawerOpen="isDrawerOpen = $event"
+  />
+  <RequestInfoDrawer
+    :pet="pet"
+    :isDrawerOpen="isInfoDrawerOpen"
+    @update:isDrawerOpen="isInfoDrawerOpen = $event"
   />
 </template>
 
@@ -429,6 +436,7 @@ const petPhotoUrl = computed(() => {
       grid-template-columns: 1fr 1fr;
       gap: 14px;
       flex-wrap: wrap;
+      margin-top: 1rem;
 
       @media (width <= 440px) {
         display: flex;

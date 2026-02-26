@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       host: 'localhost',
-      port: 5174,
+      port: 5173,
       allowedHosts: ['www.idohr.app', 'idohr.app'],
       proxy: {
         // Proxy all backend routes to local backend while maintaining relative paths

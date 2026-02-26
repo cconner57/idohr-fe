@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
   ADOPTED_PETS_COUNT: `${API_BASE_URL}/pets/adopted-count`,
   PET_SPOTLIGHT: `${API_BASE_URL}/pets/spotlight`,
   SURRENDER_APPLICATION: `${API_BASE_URL}/applications/surrender`,
+  PET_INQUIRY: `${API_BASE_URL}/applications/inquiry`,
   METRICS: `${API_BASE_URL}/metrics`,
   PETS: `${API_BASE_URL}/pets`,
   PET_PHOTOS: (id: string) => `${API_BASE_URL}/pets/${id}/photos`,
