@@ -69,7 +69,7 @@ const submitForm = async () => {
   <Drawer
     :modelValue="isDrawerOpen"
     @update:modelValue="closeDrawer"
-    :header="`Request Information About ${pet.name}`"
+    :header="'Request Information'"
   >
     <div v-if="isSubmitted" class="success">
       <p>Thank you! Your message has been sent. We'll get back to you as soon as possible.</p>
@@ -121,7 +121,7 @@ const submitForm = async () => {
       <p class="footer-note">We look forward to helping you find your new best friend!</p>
 
       <div class="actions">
-        <Button title="Submit" color="green" @click="submitForm()" :disabled="isSubmitting" />
+        <Button title="Submit" color="green" @click="submitForm()" :disabled="isSubmitting" :fullWidth="true" />
       </div>
     </template>
   </Drawer>

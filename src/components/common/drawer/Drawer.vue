@@ -94,9 +94,10 @@ function closeDrawer() {
       justify-content: space-between;
 
       & h2 {
-        margin: 0 0 0 4rem;
+        margin: 0;
         font-size: 1.5rem;
         color: var(--text-primary);
+        text-align: left;
       }
 
       .hx-btn {
@@ -175,7 +176,7 @@ function closeDrawer() {
 
       .drawer-header {
         & h2 {
-          margin: 0 0 0 3rem;
+          margin: 0;
           font-size: 1.35rem;
         }
       }
