@@ -72,7 +72,8 @@ const houseTrainedText = () => {
     </div>
     <div class="adopt-detail__additional-info__item">
       <p>Adoption Fee</p>
-      <p>{{ pet?.adoption?.fee !== undefined ? '$' + pet?.adoption?.fee : 'N/A' }}</p>
+      <p v-if="pet.sponsored?.isSponsored" class="sponsored-fee">Sponsored — $0</p>
+      <p v-else>{{ pet?.adoption?.fee !== undefined ? '$' + pet?.adoption?.fee : 'N/A' }}</p>
     </div>
   </div>
 </template>
@@ -98,8 +99,8 @@ const houseTrainedText = () => {
 
     p:last-child {
       text-wrap: wrap;
-      width: auto; 
-      flex: 1;    
+      width: auto;
+      flex: 1;
     }
   }
 }
@@ -126,6 +127,10 @@ const houseTrainedText = () => {
   & p:last-child {
     font-weight: 700;
     width: 300px;
+
+    &.sponsored-fee {
+      color: hsl(43 60% 25%);
+    }
 
     @media (width <= 440px) {
       width: auto;

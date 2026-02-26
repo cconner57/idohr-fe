@@ -23,6 +23,7 @@ defineProps<{
       :name="pet.name"
       :photo="pet.photos?.find((p) => p.isPrimary)?.url"
       :priority="index === 0"
+      :isSponsored="pet.sponsored?.isSponsored ?? false"
     />
   </div>
 </template>

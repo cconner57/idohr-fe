@@ -81,6 +81,15 @@ const petPhotoUrl = computed(() => {
                 :label="calculateAge(pet?.physical?.dateOfBirth)"
               />
           </div>
+          <output v-if="pet.sponsored?.isSponsored" class="sponsored-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span>
+              <strong>Adoption Fee Sponsored</strong>
+              <span class="sponsored-sub">A generous volunteer has covered this pet's adoption fee.</span>
+            </span>
+          </output>
           <p>{{ pet?.descriptions?.fun }}</p>
           <div class="adopt-detail__actions">
             <Button
@@ -370,46 +379,74 @@ const petPhotoUrl = computed(() => {
   }
 }
 
-.adopt-detail__info__main {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-bottom: 1px solid rgb(178 177 177);
-  padding-bottom: 20px;
-
-  h1 {
-    font-size: 2.5rem;
-  }
-
-  @media (width >= 321px) and (width <= 430px) {
+  .adopt-detail__info__main {
     h1 {
-      font-size: 1.5rem;
+      font-size: 2.5rem;
     }
-  }
 
-  .adopt-detail__traits {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 10px;
-  }
+    @media (width >= 321px) and (width <= 430px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
 
-  .adopt-detail__traits p {
-    background-color: var(--color-primary-weak);
-    padding: 4px 12px;
-    border-radius: 16px;
-  }
-
-  .adopt-detail__actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-
-  .adopt-detail__actions {
-    @media (width <= 440px) {
+    .adopt-detail__traits {
       display: flex;
-      flex-direction: column;
+      flex-flow: row wrap;
+      gap: 10px;
+    }
+
+    .adopt-detail__traits p {
+      background-color: var(--color-primary-weak);
+      padding: 4px 12px;
+      border-radius: 16px;
+    }
+
+    .sponsored-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.625rem;
+      background-color: hsl(43 96% 95%);
+      border: 1px solid hsl(43 96% 70%);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: hsl(43 60% 25%);
+
+      svg {
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+        color: hsl(43 96% 45%);
+      }
+
+      span {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+      }
+
+      strong {
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .sponsored-sub {
+        font-size: 0.8rem;
+        opacity: 0.85;
+      }
+    }
+
+    .adopt-detail__actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .adopt-detail__actions {
+      @media (width <= 440px) {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 }

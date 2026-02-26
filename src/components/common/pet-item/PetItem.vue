@@ -38,6 +38,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isSponsored: {
+    type: Boolean,
+    default: false,
+  },
 })
 const router = useRouter()
 
@@ -64,18 +68,26 @@ function handleAdopt() {
 
 <template>
   <div class="pet-item" :style="{ viewTransitionName: `pet-card-${props.id}` }">
-    <img
-      v-if="!imgError && photoSrc"
-      :src="photoSrc"
-      :alt="props.name"
-      height="250"
-      width="240"
-      :style="{ viewTransitionName: 'pet-' + props.id }"
-      :fetchpriority="priority ? 'high' : 'auto'"
-      @error="onImgError"
-      @click="handleAdopt"
-    />
-    <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
+    <div class="img-wrapper">
+      <img
+        v-if="!imgError && photoSrc"
+        :src="photoSrc"
+        :alt="props.name"
+        height="250"
+        width="240"
+        :style="{ viewTransitionName: 'pet-' + props.id }"
+        :fetchpriority="priority ? 'high' : 'auto'"
+        @error="onImgError"
+        @click="handleAdopt"
+      />
+      <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
+      <div v-if="props.isSponsored" class="sponsored-badge" aria-label="Adoption fee sponsored">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        Sponsored
+      </div>
+    </div>
     <div class="info-section">
       <h3>{{ props.name }}</h3>
       <div v-if="props.capsules.length > 0" class="capsules">
@@ -104,32 +116,58 @@ function handleAdopt() {
   box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
   height: 400px;
 
-  img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    object-position: center center;
-    background-color: #f9fafb;
-    cursor: pointer;
-  }
-
-  .img-fallback {
-    width: 100%;
-    height: 180px;
-    background-color: #f9fafb;
+  .img-wrapper {
     position: relative;
-    cursor: pointer;
-  }
+    width: 100%;
+    height: 180px;
+    flex-shrink: 0;
 
-  /* Create the white paw icon using a mask */
-  .img-fallback::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: #fff;
-    mask: url('/images/paw.svg') no-repeat;
-    mask-position: 90px 60px;
-    mask-size: 100px 100px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      background-color: #f9fafb;
+      cursor: pointer;
+      display: block;
+    }
+
+    .img-fallback {
+      width: 100%;
+      height: 100%;
+      background-color: #f9fafb;
+      position: relative;
+      cursor: pointer;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: #fff;
+        mask: url('/images/paw.svg') no-repeat;
+        mask-position: 90px 60px;
+        mask-size: 100px 100px;
+      }
+    }
+
+    .sponsored-badge {
+      position: absolute;
+      top: 0.625rem;
+      left: 0.625rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background-color: hsl(43 96% 50%);
+      color: hsl(43 96% 15%);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.5rem;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
+      pointer-events: none;
+    }
   }
 
   .info-section {
