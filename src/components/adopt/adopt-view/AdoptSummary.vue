@@ -3,9 +3,11 @@ import type { IPet } from '../../../models/common.ts'
 import { formatDate } from '../../../utils/common.ts'
 import PetItem from '../../common/pet-item/PetItem.vue'
 
-defineProps<{
+const props = defineProps<{
   pets: IPet[]
 }>()
+
+console.log('pets photos', props.pets)
 </script>
 
 <template>
