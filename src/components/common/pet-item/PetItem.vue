@@ -41,7 +41,7 @@ const props = defineProps({
 })
 const router = useRouter()
 
-const r2BaseUrl = computed(() => import.meta.env.VITE_R2_BASE_URL as string ?? '')
+const r2BaseUrl = computed(() => import.meta.env.VITE_R2_PUBLIC_URL as string ?? '')
 const photoSrc = computed(() => {
   if (!props.photo) return ''
   const r2Key = props.photo.replace(/^pets\//, '')
