@@ -95,7 +95,7 @@ const submitForm = async () => {
 
     <template v-else>
       <p>
-        Have a question about {{ pet.name }}? Fill out the form below and one of our team members
+        Have a question about <strong>{{ pet.name }}</strong>? Fill out the form below and one of our team members
         will get back to you as soon as possible.
       </p>
 

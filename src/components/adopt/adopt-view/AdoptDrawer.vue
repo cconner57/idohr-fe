@@ -37,15 +37,15 @@ const submitForm = () => {
   <Drawer
     :modelValue="isDrawerOpen"
     @update:modelValue="closeDrawer"
-    :header="`Schedule a Meet with ${pet.name}`"
+    :header="`Schedule a Meet`"
   >
     <p>
-      We’re excited to help you meet {{ pet.name }}! Our friendly volunteers are here to assist you
+      We’re excited to help you meet <strong>{{ pet.name }}</strong>! Our friendly volunteers are here to assist you
       in setting up a meet and greet. You’re welcome to visit our shelter during these hours:
     </p>
     <ul>
-      <li>Monday through Friday: 10am to 12pm and 6pm to 8pm</li>
-      <li>Weekends: 12pm to 4pm</li>
+      <li><strong>Monday through Friday</strong>: 10am to 12pm and 6pm to 8pm</li>
+      <li><strong>Weekends</strong>: 12pm to 4pm</li>
     </ul>
     <p>
       If these times don’t work for you, no problem! Simply fill out the form below, and one of our
