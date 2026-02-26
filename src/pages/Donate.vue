@@ -76,13 +76,20 @@ import Footer from '@/components/common/footer/Footer.vue'
       <section class="donate-card dog-card">
         <h2>Support Our Dogs</h2>
         <div class="illustration">
-          <img src="/images/paw.svg" alt="Dog Paw" />
+          <img src="/images/suki.jpeg" alt="Cute Dog" />
         </div>
 
         <div class="payment-methods">
           <div class="qr-section">
             <div class="qr-placeholder">
-              <img src="/images/paw.svg" class="qr-icon" alt="QR Code" />
+              <span class="username">I Dream of Home Rescue, Inc.</span>
+              <img
+                src="/images/dog-venmo.jpeg"
+                class="real-qr"
+                alt="PayPal QR Code"
+                width="400"
+                height="400"
+              />
               <span>Scan for PayPal</span>
             </div>
           </div>
@@ -319,13 +326,6 @@ import Footer from '@/components/common/footer/Footer.vue'
 
 .dog-card .illustration img {
   border-color: var(--color-secondary-light);
-  padding: 40px;
-  box-sizing: border-box;
-  background-color: var(--color-secondary-weak);
-  border-width: 6px;
-  box-shadow: inset 0 0 20px rgb(0 0 0 / 5%);
-  filter: brightness(0) saturate(100%) invert(42%) sepia(97%) saturate(1466%) hue-rotate(198deg)
-    brightness(99%) contrast(94%);
 }
 
 .dog-card .qr-placeholder {
@@ -333,19 +333,6 @@ import Footer from '@/components/common/footer/Footer.vue'
   color: var(--color-secondary);
   padding: 24px;
   border: 2px solid var(--color-secondary-light);
-}
-
-.dog-card .qr-icon {
-  width: 80px;
-  height: 80px;
-  opacity: 0.9;
-  margin-bottom: 12px;
-  filter: brightness(0) saturate(100%) invert(42%) sepia(97%) saturate(1466%) hue-rotate(198deg)
-    brightness(99%) contrast(94%);
-  border: 2px solid var(--color-secondary-light);
-  padding: 12px;
-  border-radius: 12px;
-  background-color: #fff;
 }
 
 .dog-card .btn-paypal {

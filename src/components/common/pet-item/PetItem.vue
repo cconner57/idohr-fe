@@ -135,7 +135,7 @@ function handleAdopt() {
     .img-fallback {
       width: 100%;
       height: 100%;
-      background-color: #f9fafb;
+      background-color: #add8e6;
       position: relative;
       cursor: pointer;
 
