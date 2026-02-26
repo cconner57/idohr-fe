@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type PropType,ref } from 'vue'
+import { computed, type PropType,ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useMetrics } from '../../../composables/useMetrics'
@@ -41,6 +41,13 @@ const props = defineProps({
 })
 const router = useRouter()
 
+const r2BaseUrl = computed(() => import.meta.env.VITE_R2_BASE_URL as string ?? '')
+const photoSrc = computed(() => {
+  if (!props.photo) return ''
+  const r2Key = props.photo.replace(/^pets\//, '')
+  return `${r2BaseUrl.value}/${r2Key}`
+})
+
 const imgError = ref(false)
 
 function onImgError() {
@@ -58,8 +65,8 @@ function handleAdopt() {
 <template>
   <div class="pet-item" :style="{ viewTransitionName: `pet-card-${props.id}` }">
     <img
-      v-if="!imgError"
-      :src="`/pet-photos/${props.photo ?? ''}`"
+      v-if="!imgError && photoSrc"
+      :src="photoSrc"
       :alt="props.name"
       height="250"
       width="240"
