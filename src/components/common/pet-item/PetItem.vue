@@ -43,9 +43,9 @@ const router = useRouter()
 
 const imgError = ref(false)
 
-function onImgError() {
-  imgError.value = true
-}
+// function onImgError() {
+//   imgError.value = true
+// }
 
 const { submitMetric } = useMetrics()
 
@@ -69,7 +69,7 @@ const imgBaseUrl = import.meta.env.VITE_R2_PUBLIC_URL;
       width="240"
       :style="{ viewTransitionName: 'pet-' + props.id }"
       :fetchpriority="priority ? 'high' : 'auto'"
-      @error="onImgError"
+
       @click="handleAdopt"
     />
     <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
