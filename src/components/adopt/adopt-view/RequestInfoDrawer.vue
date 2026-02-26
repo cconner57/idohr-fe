@@ -80,7 +80,7 @@ const submitForm = async () => {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
+          stroke-width="2.5"
           stroke-linecap="round"
           stroke-linejoin="round"
           class="success__icon"
@@ -179,7 +179,7 @@ textarea {
   border: 1px solid var(--border-color);
   font-size: 1rem;
   font-family: inherit;
-  resize: vertical;
+  resize: none;
   background-color: #fff;
   color: var(--text-primary);
   box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
@@ -215,7 +215,7 @@ textarea:focus {
 
   &__icon-wrapper {
     color: var(--color-primary);
-    background-color: color-mix(in srgb, var(--color-primary) 10%, #fff);
+    background-color: color-mix(in srgb, var(--color-primary) 20%, #fff);
     width: 100px;
     height: 100px;
     border-radius: 50%;

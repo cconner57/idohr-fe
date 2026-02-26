@@ -44,8 +44,8 @@ const submitForm = () => {
       in setting up a meet and greet. You’re welcome to visit our shelter during these hours:
     </p>
     <ul>
-      <li><strong>Monday through Friday</strong>: 10am to 12pm and 6pm to 8pm</li>
-      <li><strong>Weekends</strong>: 12pm to 4pm</li>
+      <li><strong>Monday through Friday</strong><br>10am to 12pm and 6pm to 8pm</li>
+      <li><strong>Weekends</strong><br>12pm to 4pm</li>
     </ul>
     <p>
       If these times don’t work for you, no problem! Simply fill out the form below, and one of our
