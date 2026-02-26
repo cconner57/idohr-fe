@@ -157,8 +157,8 @@ function handleAdopt() {
       display: flex;
       align-items: center;
       gap: 0.3rem;
-      background-color: hsl(43 96% 50%);
-      color: hsl(43 96% 15%);
+      background-color: hsl(43deg 96% 50%);
+      color: hsl(43deg 96% 15%);
       font-size: 0.7rem;
       font-weight: 800;
       letter-spacing: 0.05em;

@@ -146,7 +146,7 @@ onUnmounted(() => {
   .signature-label {
     margin-bottom: 10px;
     font-size: 16px;
-    font-weight: normal;
+    font-weight: 400;
     color: var(--text-primary);
   }
 

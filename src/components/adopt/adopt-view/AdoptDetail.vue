@@ -10,6 +10,7 @@ import Capsules from '../../common/ui/Capsules.vue'
 import AdditionalInfo from '../additional-info/AdditionalInfo.vue'
 import AdoptionFAQ from '../adopt-faq/AdoptionFAQ.vue'
 import AdoptionProcess from '../adopt-process/AdoptionProcess.vue'
+import VaccinationItem from '../vaccination-item/VaccinationItem.vue'
 import AdoptDrawer from './AdoptDrawer.vue'
 
 const props = defineProps<{
@@ -134,43 +135,13 @@ const petPhotoUrl = computed(() => {
         <h2>Medical History</h2>
         <h3>Vaccinations</h3>
         <ul>
-          <VaccinationItem
-            name="Rabies"
-            :date-administered="pet.medical?.vaccinations?.rabies?.dateAdministered"
-          />
-          <VaccinationItem
-            name="Bordetella"
-            :date-administered="pet.medical?.vaccinations?.bordetella?.dateAdministered"
-          />
-          <VaccinationItem
-            name="Canine Distemper"
-            :round1="pet.medical?.vaccinations?.canineDistemper?.round1?.dateAdministered"
-            :round2="pet.medical?.vaccinations?.canineDistemper?.round2?.dateAdministered"
-            :round3="pet.medical?.vaccinations?.canineDistemper?.round3?.dateAdministered"
-            :isComplete="pet.medical?.vaccinations?.canineDistemper?.isComplete"
-          />
-          <VaccinationItem
-            name="Feline Distemper"
-            :round1="pet.medical?.vaccinations?.felineDistemper?.round1?.dateAdministered"
-            :round2="pet.medical?.vaccinations?.felineDistemper?.round2?.dateAdministered"
-            :round3="pet.medical?.vaccinations?.felineDistemper?.round3?.dateAdministered"
-            :isComplete="pet.medical?.vaccinations?.felineDistemper?.isComplete"
-          />
-          <VaccinationItem
-            name="Feline Leukemia"
-            :round1="pet.medical?.vaccinations?.felineLeukemia?.round1?.dateAdministered"
-            :round2="pet.medical?.vaccinations?.felineLeukemia?.round2?.dateAdministered"
-            :round3="pet.medical?.vaccinations?.felineLeukemia?.round3?.dateAdministered"
-            :isComplete="pet.medical?.vaccinations?.felineLeukemia?.isComplete"
-          />
-          <VaccinationItem
-            name="Leptospira"
-            :round1="pet.medical?.vaccinations?.leptospira?.round1?.dateAdministered"
-            :round2="pet.medical?.vaccinations?.leptospira?.round2?.dateAdministered"
-            :round3="pet.medical?.vaccinations?.leptospira?.round3?.dateAdministered"
-            :isComplete="pet.medical?.vaccinations?.leptospira?.isComplete"
-          />
-          <VaccinationItem name="Other" :otherRounds="pet.medical?.vaccinations?.other" />
+          <VaccinationItem name="rabies" :pet="pet" />
+          <VaccinationItem name="bordetella" :pet="pet" />
+          <VaccinationItem name="canineDistemper" :pet="pet" />
+          <VaccinationItem name="felineDistemper" :pet="pet" />
+          <VaccinationItem name="felineLeukemia" :pet="pet" />
+          <VaccinationItem name="leptospira" :pet="pet" />
+          <VaccinationItem name="other" :pet="pet" />
         </ul>
 
         <h3 v-if="pet.medical?.surgeries?.length">Surgeries</h3>
@@ -212,7 +183,7 @@ const petPhotoUrl = computed(() => {
       min-width: 0;
       height: 600px;
       object-fit: cover;
-      object-position: top center;
+      object-position: center center;
       border-radius: 16px;
       box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
     }
@@ -377,7 +348,6 @@ const petPhotoUrl = computed(() => {
   @media (width <= 430px) {
     padding: 0;
   }
-}
 
   .adopt-detail__info__main {
     h1 {
@@ -406,16 +376,16 @@ const petPhotoUrl = computed(() => {
       display: flex;
       align-items: flex-start;
       gap: 0.625rem;
-      background-color: hsl(43 96% 95%);
-      border: 1px solid hsl(43 96% 70%);
+      background-color: hsl(43deg 96% 95%);
+      border: 1px solid hsl(43deg 96% 70%);
       border-radius: 10px;
       padding: 0.75rem 1rem;
-      color: hsl(43 60% 25%);
+      color: hsl(43deg 60% 25%);
 
       svg {
         flex-shrink: 0;
         margin-top: 0.125rem;
-        color: hsl(43 96% 45%);
+        color: hsl(43deg 96% 45%);
       }
 
       span {
@@ -440,9 +410,7 @@ const petPhotoUrl = computed(() => {
       grid-template-columns: 1fr 1fr;
       gap: 14px;
       flex-wrap: wrap;
-    }
 
-    .adopt-detail__actions {
       @media (width <= 440px) {
         display: flex;
         flex-direction: column;

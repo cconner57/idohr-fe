@@ -129,7 +129,7 @@ const houseTrainedText = () => {
     width: 300px;
 
     &.sponsored-fee {
-      color: hsl(43 60% 25%);
+      color: hsl(43deg 60% 25%);
     }
 
     @media (width <= 440px) {

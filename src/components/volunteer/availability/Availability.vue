@@ -230,7 +230,7 @@ const selected = computed({
   font-weight: 600;
   color: var(--text-secondary);
   margin-top: 4px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .sub-header.mt-2 {
