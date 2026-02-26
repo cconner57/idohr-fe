@@ -72,7 +72,25 @@ const submitForm = async () => {
     :header="'Request Information'"
   >
     <div v-if="isSubmitted" class="success">
-      <p>Thank you! Your message has been sent. We'll get back to you as soon as possible.</p>
+      <div class="success__icon-wrapper">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="success__icon"
+        >
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+      </div>
+      <h3 class="success__title">Message Sent!</h3>
+      <p class="success__message">Thank you! We'll get back to you as soon as possible.</p>
     </div>
 
     <template v-else>
@@ -187,16 +205,57 @@ textarea:focus {
 
 .success {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
   padding: 2rem;
   text-align: center;
+  animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
-  p {
-    font-size: 1.1rem;
-    font-weight: 400;
+  &__icon-wrapper {
+    color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary) 10%, #fff);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both;
   }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  &__message {
+    color: var(--color-neutral-strong);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 300px;
+    margin: 0;
+    font-weight: 300;
+  }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .actions {

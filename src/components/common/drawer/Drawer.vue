@@ -87,7 +87,7 @@ function closeDrawer() {
     flex-direction: column;
 
     .drawer-header {
-      padding: 1rem;
+      padding: 1rem 1rem 1rem 2rem;
       border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
