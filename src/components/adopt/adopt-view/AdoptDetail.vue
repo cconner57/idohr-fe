@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import type { IPet } from '../../../models/common.ts'
 import { calculateAge } from '../../../utils/date'
@@ -48,14 +48,23 @@ const imgError = ref(false)
 function onImgError() {
   imgError.value = true
 }
+
+const r2BaseUrl = import.meta.env.VITE_R2_PUBLIC_URL as string ?? ''
+
+const petPhotoUrl = computed(() => {
+  const photos = props.pet.photos
+  if (!photos || photos.length === 0) return ''
+  const primary = photos.find((p) => p.isPrimary) ?? photos[0]
+  return `${r2BaseUrl}/${primary.url.replace(/^pets\//, '')}`
+})
 </script>
 
 <template>
   <div class="adopt-detail">
     <div class="adopt-detail__main">
       <img
-        v-if="!imgError"
-        :src="`/pet-photos/${pet.photos?.find((p) => p.isPrimary)?.url ?? ''}`"
+        v-if="petPhotoUrl && !imgError"
+        :src="petPhotoUrl"
         :alt="pet.name"
         :style="{ viewTransitionName: 'pet-' + pet.id }"
         @error="onImgError"
