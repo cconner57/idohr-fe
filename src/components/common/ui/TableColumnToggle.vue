@@ -55,6 +55,10 @@ const updateCol = (key: string, val: boolean) => {
 .settings-dropdown-wrapper {
   position: relative;
   display: inline-block;
+
+  @media (width <= 768px) {
+    display: none;
+  }
 }
 
 .overlay {
