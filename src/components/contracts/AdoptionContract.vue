@@ -289,7 +289,6 @@ defineExpose({ form, validate })
           </div>
         </div>
 
-        <AdoptionWaiver :cat-name="cat.name" :signature="form.signature" :date="form.date" />
       </footer>
     </div>
   </div>

@@ -25,6 +25,9 @@ export const useAuthStore = defineStore('auth', () => {
     isCheckingAuth.value = true
     try {
       const response = await fetch(API_ENDPOINTS.USERS_ME, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
         credentials: 'include',
       })
       if (response.ok) {
@@ -36,10 +39,13 @@ export const useAuthStore = defineStore('auth', () => {
       } else {
         user.value = null
         localStorage.removeItem('user')
+        localStorage.removeItem('token')
       }
     } catch (error) {
       console.error('Check auth error:', error)
       user.value = null
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
     } finally {
       isCheckingAuth.value = false
     }
@@ -82,6 +88,9 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await fetch(API_ENDPOINTS.LOGOUT, {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
         credentials: 'include',
       })
     } catch (error) {
@@ -97,6 +106,13 @@ export const useAuthStore = defineStore('auth', () => {
   const initialized = ref(false)
   const initialize = async () => {
     if (initialized.value) return
+
+    // Skip API call for guests — prevents 401 noise on public pages
+    if (!user.value) {
+      initialized.value = true
+      return
+    }
+
     await checkAuth()
     initialized.value = true
   }
@@ -113,7 +129,11 @@ export const useAuthStore = defineStore('auth', () => {
     updateProfile: async (data: { name: string; email: string; password?: string }) => {
       const res = await fetch(API_ENDPOINTS.USERS, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        credentials: 'include',
         body: JSON.stringify(data),
       })
       if (!res.ok) throw new Error('Failed to update')
