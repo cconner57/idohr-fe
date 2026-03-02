@@ -40,6 +40,7 @@ const submitForm = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         fax_number: '',
+        source: 'request_info',
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -139,7 +140,7 @@ const submitForm = async () => {
       <p class="footer-note">We look forward to helping you find your new best friend!</p>
 
       <div class="actions">
-        <Button title="Submit" color="green" @click="submitForm()" :disabled="isSubmitting" :fullWidth="true" />
+        <Button title="Submit" color="green" @click="submitForm()" :loading="isSubmitting" :fullWidth="true" />
       </div>
     </template>
   </Drawer>
