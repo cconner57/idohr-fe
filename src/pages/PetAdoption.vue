@@ -24,7 +24,7 @@ const router = useRouter()
 const adoptionStore = useAdoptionStore()
 const petStore = usePetStore()
 
-const { formState, step, isSubmitted, hasAttemptedSubmit, validationErrors, submissionError } =
+const { formState, step, isSubmitting, isSubmitted, hasAttemptedSubmit, validationErrors, submissionError } =
   storeToRefs(adoptionStore)
 const { selectedPet } = storeToRefs(petStore)
 
@@ -174,7 +174,8 @@ const handleReset = async () => {
           :title="step < 7 ? 'Next' : 'Submit Application'"
           color="green"
           size="large"
-          :disabled="isSubmitted"
+          :loading="step === 7 && isSubmitting"
+          :disabled="isSubmitted || isSubmitting"
         />
       </div>
     </section>

@@ -10,6 +10,7 @@ import { usePetStore } from './pets'
 export const useAdoptionStore = defineStore('adoption', () => {
   const { isDemoMode } = useDemoMode()
   const step = ref(0)
+  const isSubmitting = ref(false)
   const isSubmitted = ref(false)
   const hasAttemptedSubmit = ref(false)
   const submissionError = ref<string | null>(null)
@@ -265,6 +266,9 @@ export const useAdoptionStore = defineStore('adoption', () => {
   }
 
   const submitApplication = async () => {
+    if (isSubmitting.value || isSubmitted.value) return false
+
+    isSubmitting.value = true
     try {
       if (isDemoMode.value) {
         // Simulate API call for Demo Mode
@@ -380,12 +384,15 @@ export const useAdoptionStore = defineStore('adoption', () => {
       const message = error instanceof Error ? error.message : String(error)
       submissionError.value = message
       return false
+    } finally {
+      isSubmitting.value = false
     }
   }
 
   return {
     formState,
     step,
+    isSubmitting,
     isSubmitted,
     hasAttemptedSubmit,
     validationErrors,
