@@ -91,7 +91,6 @@ export const useAdoptionStore = defineStore('adoption', () => {
     agreementSignature2: null,
     agreementSignature3: null,
     signatureData: null,
-    homeTourSubmitted: null,
   })
 
   const validationErrors = computed(() => {
@@ -192,10 +191,6 @@ export const useAdoptionStore = defineStore('adoption', () => {
     }
 
     if (step.value === 6) {
-      if (formState.homeTourSubmitted === null) errors.push('Home Tour Confirmation')
-    }
-
-    if (step.value === 7) {
       if (!formState.agreementSignature1) errors.push('Commitment Signature')
       if (!formState.agreementSignature2) errors.push('Homecheck Consent')
       if (!formState.signatureData) errors.push('Final Signature')
@@ -206,11 +201,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
 
   const isStepValid = computed(() => {
     if (isDemoMode.value) return true
-    const basicValid = validationErrors.value.length === 0
-    if (step.value === 6) {
-      return basicValid && formState.homeTourSubmitted === true
-    }
-    return basicValid
+    return validationErrors.value.length === 0
   })
 
   const STORAGE_KEY = 'adoption_form_state'
@@ -351,9 +342,6 @@ export const useAdoptionStore = defineStore('adoption', () => {
         agreementSignature2: formState.agreementSignature2,
         agreementSignature3: formState.agreementSignature3,
         signatureData: formState.signatureData,
-
-        // homeTourSubmitted is frontend only validation mostly, or could be passed in data json blob
-        homeTourSubmitted: formState.homeTourSubmitted,
 
         fax_number: formState.fax_number, // Honeypot
       }

@@ -9,7 +9,6 @@ import AdoptionSteps from '@/components/pet-adoption/adoption-steps/AdoptionStep
 import CurrentPetsSection from '@/components/pet-adoption/cat-adoption/CurrentPetsSection.vue'
 import GeneralSection from '@/components/pet-adoption/cat-adoption/GeneralSection.vue'
 import HomeSection from '@/components/pet-adoption/cat-adoption/HomeSection.vue'
-import HomeTourSection from '@/components/pet-adoption/cat-adoption/HomeTourSection.vue'
 import NewCatSection from '@/components/pet-adoption/cat-adoption/NewCatSection.vue'
 import OtherSection from '@/components/pet-adoption/cat-adoption/OtherSection.vue'
 import PastPetsSection from '@/components/pet-adoption/cat-adoption/PastPetsSection.vue'
@@ -56,7 +55,7 @@ const handleSubmit = async () => {
     return
   }
 
-  if (step.value < 7) {
+  if (step.value < 6) {
     adoptionStore.nextStep()
     globalThis.scrollTo({ top: 0, behavior: 'smooth' })
   } else {
@@ -133,14 +132,8 @@ const handleReset = async () => {
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
       />
-      <HomeTourSection
-        v-show="step === 6"
-        :touched="touched"
-        :handleBlur="handleBlur"
-        :hasAttemptedSubmit="hasAttemptedSubmit"
-      />
       <SummarySection
-        v-show="step === 7"
+        v-show="step === 6"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
@@ -171,10 +164,10 @@ const handleReset = async () => {
         <Button
           @click="handleSubmit"
           type="submit"
-          :title="step < 7 ? 'Next' : 'Submit Application'"
+          :title="step < 6 ? 'Next' : 'Submit Application'"
           color="green"
           size="large"
-          :loading="step === 7 && isSubmitting"
+          :loading="step === 6 && isSubmitting"
           :disabled="isSubmitted || isSubmitting"
         />
       </div>
