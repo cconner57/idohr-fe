@@ -2,11 +2,9 @@
 import dns from 'node:dns'
 import { fileURLToPath, URL } from 'node:url'
 
+import { cloudflare } from "@cloudflare/vite-plugin";
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
-
-
-import { cloudflare } from "@cloudflare/vite-plugin";
 
 
 dns.setDefaultResultOrder('ipv4first')
