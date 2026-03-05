@@ -6,13 +6,16 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
 
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
+
 dns.setDefaultResultOrder('ipv4first')
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
-    plugins: [vue()],
+    plugins: [vue(), cloudflare()],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -72,5 +75,5 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-  }
+  };
 })
