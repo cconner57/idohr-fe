@@ -2,13 +2,14 @@ const observers = new Map<string, IntersectionObserver>()
 
 function getObserver(className: string, threshold: number): IntersectionObserver {
   const key = `${className}-${threshold}`
-  if (!observers.has(key)) {
-    const obs = new IntersectionObserver(
+  let obs = observers.get(key)
+  if (!obs) {
+    obs = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('active')
-            obs.unobserve(entry.target)
+            obs?.unobserve(entry.target)
           }
         })
       },
@@ -19,7 +20,7 @@ function getObserver(className: string, threshold: number): IntersectionObserver
     )
     observers.set(key, obs)
   }
-  return observers.get(key)!
+  return obs
 }
 
 export function useScrollReveal(className = 'reveal', threshold = 0.1) {

@@ -197,7 +197,7 @@ function handleAgreementUpdate(val: string | number | boolean | null) {
             :key="index"
             class="dynamic-input-row"
           >
-            <div class="flex-grow">
+            <div class="grow">
               <InputField
                 :modelValue="formState.roommatesNames[index]"
                 @update:modelValue="(val) => (formState.roommatesNames[index] = sanitizeName(val))"
@@ -240,7 +240,7 @@ function handleAgreementUpdate(val: string | number | boolean | null) {
             :key="index"
             class="dynamic-input-row"
           >
-            <div class="flex-grow">
+            <div class="grow">
               <InputField
                 :modelValue="child.name"
                 @update:modelValue="(val) => (child.name = sanitizeName(val))"
@@ -376,7 +376,7 @@ function handleAgreementUpdate(val: string | number | boolean | null) {
     }
   }
 
-  .flex-grow {
+  .grow {
     flex-grow: 1;
   }
 
@@ -418,7 +418,7 @@ function handleAgreementUpdate(val: string | number | boolean | null) {
     .children .dynamic-input-row {
       flex-wrap: wrap;
 
-      .flex-grow {
+      .grow {
         flex-basis: 100%;
         width: 100%;
         min-width: 100%;
