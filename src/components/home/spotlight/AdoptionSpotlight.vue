@@ -4,7 +4,7 @@ import { computed, ref, watch } from 'vue'
 import type { IPet } from '../../../models/common.ts'
 import { useIsMobile } from '../../../utils/useIsMobile.ts'
 import PetItem from '../../common/pet-item/PetItem.vue'
-import { Spinner } from '../../common/ui'
+import Spinner from '../../common/ui/Spinner.vue'
 
 const props = defineProps<{
   pets: IPet[]
@@ -85,7 +85,7 @@ const displayedPets = computed((): IPet[] => {
 
 .adoption-spotlight {
   background-color: var(--text-inverse);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
   display: flex;
   flex-direction: column;

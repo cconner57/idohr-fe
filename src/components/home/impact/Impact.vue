@@ -1,47 +1,26 @@
 <script setup lang="ts">
-import { onMounted,ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted } from 'vue'
+
+import { usePetStore } from '@/stores/pets'
 
 import Candid from '../../common/candid-award/Candid.vue'
-import { Spinner } from '../../common/ui'
+import Spinner from '../../common/ui/Spinner.vue'
 
 const currentYear = new Date().getFullYear()
 const previousYear = currentYear - 1
 
-const countCurrent = ref(0)
-const countPrevious = ref(0)
-const isLoadingCurrent = ref(true)
-const isLoadingPrevious = ref(true)
+const petStore = usePetStore()
+const { adoptedCounts, countsLoaded } = storeToRefs(petStore)
 
-import { API_ENDPOINTS } from '../../../constants/api'
-
-const fetchCount = async (year: number) => {
-  try {
-    const response = await fetch(`${API_ENDPOINTS.ADOPTED_PETS_COUNT}?year=${year}`)
-    const json = await response.json()
-
-    if (json.data && typeof json.data.count === 'number') {
-      return json.data.count
-    }
-
-    return json.count || 0
-  } catch (error) {
-    console.error(`Error fetching count for ${year}:`, error)
-    return 0
-  }
-}
+const countCurrent = computed(() => adoptedCounts.value[currentYear] ?? 0)
+const countPrevious = computed(() => adoptedCounts.value[previousYear] ?? 0)
+const isLoading = computed(() => !countsLoaded.value)
 
 const getLabel = (count: number) => (count === 1 ? 'pet' : 'pets')
 
 onMounted(() => {
-  fetchCount(previousYear).then((prev) => {
-    countPrevious.value = prev
-    isLoadingPrevious.value = false
-  })
-
-  fetchCount(currentYear).then((curr) => {
-    countCurrent.value = curr
-    isLoadingCurrent.value = false
-  })
+  petStore.fetchAdoptedCounts()
 })
 </script>
 
@@ -57,7 +36,7 @@ onMounted(() => {
       <div class="divider"></div>
       <div class="stats">
         <span>
-          <div v-if="isLoadingPrevious" class="loader-container">
+          <div v-if="isLoading" class="loader-container">
             <Spinner />
           </div>
           <template v-else>
@@ -66,7 +45,7 @@ onMounted(() => {
           </template>
         </span>
         <span>
-          <div v-if="isLoadingCurrent" class="loader-container">
+          <div v-if="isLoading" class="loader-container">
             <Spinner />
           </div>
           <template v-else>
@@ -96,7 +75,7 @@ onMounted(() => {
   flex-direction: column;
   gap: 16px;
   padding: 24px 50px 40px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   margin-top: -200px;
   box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
   container-type: inline-size;

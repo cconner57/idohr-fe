@@ -2,6 +2,13 @@
 import { storeToRefs } from 'pinia'
 
 import { useAdoptionStore } from '../../../stores/adoption'
+import {
+  formatPhoneNumber,
+  sanitizeAddress,
+  sanitizeCity,
+  sanitizeName,
+  sanitizeZip,
+} from '../../../utils/validators'
 import ButtonToggle from '../../common/ui/ButtonToggle.vue'
 import InputField from '../../common/ui/InputField.vue'
 
@@ -14,33 +21,6 @@ defineProps<{
 
 const adoptionStore = useAdoptionStore()
 const { formState } = storeToRefs(adoptionStore)
-
-type TSanitizableValue = string | number | null
-
-const formatPhoneNumber = (value: TSanitizableValue): string => {
-  if (!value) return ''
-  const digits = String(value).replace(/\D/g, '').substring(0, 10)
-  if (digits.length === 0) return ''
-  if (digits.length <= 3) return digits
-  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6, 10)}`
-}
-const sanitizeName = (value: TSanitizableValue): string => {
-  if (!value) return ''
-  return String(value).replace(/[^a-zA-Z0-9 -]/g, '')
-}
-const sanitizeCity = (value: TSanitizableValue): string => {
-  if (!value) return ''
-  return String(value).replace(/[^a-zA-Z0-9 -]/g, '')
-}
-const sanitizeZip = (value: TSanitizableValue): string => {
-  if (!value) return ''
-  return String(value).replace(/\D/g, '').substring(0, 5)
-}
-const sanitizeAddress = (value: TSanitizableValue): string => {
-  if (!value) return ''
-  return String(value).replace(/[^a-zA-Z0-9 -]/g, '')
-}
 
 function addRoommate() {
   formState.value.roommatesNames.push('')
@@ -420,7 +400,7 @@ function handleAgreementUpdate(val: string | number | boolean | null) {
     padding: 0;
     flex-shrink: 0;
     margin-top: 0;
-    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    box-shadow: var(--shadow-md);
 
     &:hover {
       color: var(--color-secondary);

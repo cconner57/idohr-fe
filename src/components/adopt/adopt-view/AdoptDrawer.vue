@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 
-import { API_ENDPOINTS } from '../../../constants/api.ts'
-import type { IPet } from '../../../models/common.ts'
+import { usePetInquiry } from '@/composables/usePetInquiry'
+import type { IPet } from '@/models/common'
+
 import Drawer from '../../common/drawer/Drawer.vue'
 import Button from '../../common/ui/Button.vue'
 import InputField from '../../common/ui/InputField.vue'
@@ -14,56 +15,22 @@ const { pet, isDrawerOpen } = defineProps<{
 
 const emit = defineEmits(['update:isDrawerOpen'])
 
-const isSubmitting = ref(false)
-const isSubmitted = ref(false)
-const apiError = ref<string | null>(null)
+const { formData, isSubmitting, isSubmitted, apiError, submitInquiry } = usePetInquiry(
+  pet,
+  'schedule_meet',
+)
 
-const formData = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
-  phone: '',
-  preferredDate: '',
-  preferredTime: '',
-})
+const preferredDate = ref('')
+const preferredTime = ref('')
 
 const closeDrawer = () => {
   emit('update:isDrawerOpen', false)
 }
 
 const submitForm = async () => {
-  apiError.value = null
-  isSubmitting.value = true
-
-  try {
-    const response = await fetch(API_ENDPOINTS.PET_INQUIRY, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fax_number: '',
-        source: 'schedule_meet',
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        petId: pet.id,
-        petName: pet.name,
-        message: `Preferred Date: ${formData.preferredDate || 'Not specified'}\nPreferred Time: ${formData.preferredTime || 'Not specified'}`,
-      }),
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      apiError.value = errorData.error || 'Something went wrong. Please try again.'
-      return
-    }
-
-    isSubmitted.value = true
-  } catch {
-    apiError.value = 'Network error. Please try again later.'
-  } finally {
-    isSubmitting.value = false
-  }
+  await submitInquiry({
+    message: `Preferred Date: ${preferredDate.value || 'Not specified'}\nPreferred Time: ${preferredTime.value || 'Not specified'}`,
+  })
 }
 </script>
 
@@ -139,13 +106,13 @@ const submitForm = async () => {
           label="Preferred Date:"
           placeholder="Select a preferred date"
           type="date"
-          v-model="formData.preferredDate"
+          v-model="preferredDate"
         />
         <InputField
           label="Preferred Time:"
           placeholder="Select a preferred time"
           type="time"
-          v-model="formData.preferredTime"
+          v-model="preferredTime"
         />
       </form>
 

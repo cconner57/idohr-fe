@@ -24,6 +24,9 @@ export const usePetStore = defineStore('pets', () => {
 
   const adoptedPets = ref<IPet[]>([])
 
+  const adoptedCounts = ref<Record<number, number>>({})
+  const countsLoaded = ref(false)
+
   const error = ref<string | null>(null)
 
   const fetchPets = async (forceRefresh = false) => {
@@ -103,6 +106,37 @@ export const usePetStore = defineStore('pets', () => {
     }
   }
 
+  const fetchAdoptedCounts = async () => {
+    if (countsLoaded.value) return
+
+    const currentYear = new Date().getFullYear()
+    const previousYear = currentYear - 1
+
+    const fetchCount = async (year: number): Promise<number> => {
+      try {
+        const response = await fetch(`${API_ENDPOINTS.ADOPTED_PETS_COUNT}?year=${year}`)
+        const json = await response.json()
+
+        if (json.data && typeof json.data.count === 'number') {
+          return json.data.count as number
+        }
+
+        return (json.count as number) || 0
+      } catch (err) {
+        console.error(`Error fetching count for ${year}:`, err)
+        return 0
+      }
+    }
+
+    const [current, previous] = await Promise.all([
+      fetchCount(currentYear),
+      fetchCount(previousYear),
+    ])
+
+    adoptedCounts.value = { [currentYear]: current, [previousYear]: previous }
+    countsLoaded.value = true
+  }
+
   const updatePet = async (pet: IPet) => {
     // Optimistic update
     const updateInList = (list: Ref<IPet[]>) => {
@@ -178,12 +212,15 @@ export const usePetStore = defineStore('pets', () => {
     currentPets,
     adminPets,
     adoptedPets,
+    adoptedCounts,
+    countsLoaded,
     selectedPet,
     isFetching,
 
     fetchPets,
     fetchAdminPets,
     fetchAdoptedPets,
+    fetchAdoptedCounts,
     updatePet,
     selectPet,
     clearSelectedPet,

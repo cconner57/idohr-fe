@@ -2,11 +2,12 @@
 import { storeToRefs } from 'pinia'
 
 import { useAdoptionStore } from '../../../stores/adoption'
+import { formatPhoneNumber, sanitizeName } from '../../../utils/validators'
 import ButtonToggle from '../../common/ui/ButtonToggle.vue'
 import InputField from '../../common/ui/InputField.vue'
 import InputSelectGroup from '../../common/ui/InputSelectGroup.vue'
 
-  defineProps<{
+defineProps<{
   touched: Record<string, boolean>
   // eslint-disable-next-line no-unused-vars
   handleBlur: (_field: string) => void
@@ -15,19 +16,6 @@ import InputSelectGroup from '../../common/ui/InputSelectGroup.vue'
 
 const adoptionStore = useAdoptionStore()
 const { formState } = storeToRefs(adoptionStore)
-
-const formatPhoneNumber = (value: string | number | null): string => {
-  if (!value) return ''
-  const digits = String(value).replace(/\D/g, '').substring(0, 10)
-  if (digits.length === 0) return ''
-  if (digits.length <= 3) return digits
-  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6, 10)}`
-}
-const sanitizeName = (value: string | number | null): string => {
-  if (!value) return ''
-  return String(value).replace(/[^a-zA-Z0-9 ]/g, '')
-}
 </script>
 
 <template>
