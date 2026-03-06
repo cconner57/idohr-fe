@@ -82,7 +82,7 @@ fieldset.field {
   flex-wrap: wrap;
   gap: 8px;
   border: 1px solid transparent;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 4px;
 
   @media (width <= 440px) {
@@ -104,16 +104,16 @@ fieldset.field {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid #e7ebf0;
-  background-color: #fff;
+  background-color: var(--color-white);
   cursor: pointer;
   user-select: none;
   transition:
     background 0.2s,
     border-color 0.2s,
     box-shadow 0.2s;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-md);
 
   span {
     font-weight: 500;
@@ -172,7 +172,7 @@ fieldset.field {
 @supports not (selector(:has(*))) {
   .chip > input:checked + span {
     background: #e8f1ff;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     padding: 6px 10px;
     margin: -6px -10px;
     box-shadow: 0 0 0 2px #bfd0ff inset;

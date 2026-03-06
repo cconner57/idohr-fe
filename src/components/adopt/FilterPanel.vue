@@ -127,7 +127,7 @@ const applyFilters = () => {
 .filter-panel {
   width: 100%;
   max-width: 800px;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 24px;
   padding: 24px;
   margin-bottom: 32px;
@@ -181,7 +181,7 @@ section {
     font-size: 0.9rem;
     color: #444;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-normal);
 
     &:hover {
       background: #eee;
@@ -189,7 +189,7 @@ section {
 
     &.active {
       background: var(--color-primary);
-      color: #fff;
+      color: var(--color-white);
       border-color: var(--color-primary);
     }
   }

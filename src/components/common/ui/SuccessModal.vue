@@ -52,7 +52,7 @@ const emit = defineEmits(['close'])
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: var(--z-dropdown);
   backdrop-filter: blur(4px);
   animation: fadeIn 0.3s ease-out;
 }

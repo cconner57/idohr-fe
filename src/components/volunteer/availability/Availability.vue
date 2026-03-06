@@ -239,7 +239,7 @@ const selected = computed({
 
 .times-grid.has-error {
   border: 1px solid var(--color-danger);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 8px;
 }
 
@@ -249,8 +249,8 @@ const selected = computed({
   flex-direction: column;
   padding: 16px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: #fff;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
   cursor: pointer;
   user-select: none;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -290,15 +290,15 @@ const selected = computed({
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  transition: all 0.2s;
-  background: #fff;
+  color: var(--color-white);
+  transition: all var(--transition-normal);
+  background: var(--color-white);
 }
 
 .check-icon svg {
   opacity: 0;
   transform: scale(0.5);
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .time-card:has(> input:checked) {

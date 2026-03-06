@@ -61,8 +61,8 @@ onUnmounted(() => {
   bottom: 24px;
   right: 24px;
   padding: 16px 24px;
-  border-radius: 12px;
-  background: #fff;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
   box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
   display: flex;
   align-items: center;

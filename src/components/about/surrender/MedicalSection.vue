@@ -273,9 +273,9 @@ watch(
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid #e7ebf0;
-  background-color: #fff;
+  background-color: var(--color-white);
   cursor: pointer;
   user-select: none;
   font-size: 1rem;
@@ -318,7 +318,7 @@ watch(
 @supports not (selector(:has(*))) {
   .chip > input:checked + span {
     background: #e8f1ff;
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     padding: 6px 10px;
     margin: -6px -10px;
     box-shadow: 0 0 0 2px #bfd0ff inset;

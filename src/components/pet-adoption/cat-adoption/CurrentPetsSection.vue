@@ -220,13 +220,13 @@ const removePet = (index: number) => {
   height: 40px;
   background: none;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--color-primary);
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .add-btn:hover {
@@ -238,15 +238,15 @@ const removePet = (index: number) => {
 .remove-btn:hover {
   color: var(--color-danger);
   border-color: var(--color-danger);
-  background: #fff5f5;
+  background: var(--color-white)5f5;
 }
 
 .add-btn-large {
   padding: 12px 24px;
   background-color: var(--color-primary);
-  color: #fff;
+  color: var(--color-white);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-weight: 600;
 }

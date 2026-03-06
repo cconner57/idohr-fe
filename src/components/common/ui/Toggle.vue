@@ -82,7 +82,7 @@ function toggle() {
   width: 44px; 
   height: 24px;
   background-color: var(--color-neutral-border-strong);
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   padding: 2px;
   transition: background-color 0.2s ease;
   position: relative;
@@ -95,7 +95,7 @@ function toggle() {
 .toggle-thumb {
   width: 20px;
   height: 20px;
-  background-color: #fff;
+  background-color: var(--color-white);
   border-radius: 50%;
   box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);

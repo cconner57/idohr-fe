@@ -58,7 +58,7 @@ const emit = defineEmits(['update:modelValue'])
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -92,7 +92,7 @@ const emit = defineEmits(['update:modelValue'])
   color: var(--color-neutral-text-soft);
   font-size: 0.75rem;
   padding: 2px 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   font-weight: 600;
 }
 </style>

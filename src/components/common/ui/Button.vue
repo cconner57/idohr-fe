@@ -82,8 +82,8 @@ button {
   align-items: center;
   gap: 6px;
   font-weight: 600;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
   white-space: nowrap;
   border: 1px solid transparent;
   font-family: inherit;
@@ -91,7 +91,7 @@ button {
   &:hover:not(:disabled) {
     cursor: pointer;
     transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgb(0 0 0 / 5%);
+    box-shadow: var(--shadow-lg);
   }
 
   &:active:not(:disabled) {
@@ -138,7 +138,7 @@ button {
 }
 
 .variant-primary {
-  color: #fff;
+  color: var(--color-white);
   border: none;
 }
 
@@ -171,7 +171,7 @@ button {
 }
 
 .variant-secondary {
-  background-color: #fff;
+  background-color: var(--color-white);
   border: 1px solid currentcolor;
 }
 
@@ -205,7 +205,7 @@ button {
 }
 
 .variant-tertiary {
-  background-color: #fff;
+  background-color: var(--color-white);
   border: 1px solid #cbd5e1;
   color: var(--text-primary);
 }

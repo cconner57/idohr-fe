@@ -156,9 +156,9 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   padding: 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  color: #fff;
+  color: var(--color-white);
   transition: background-color 0.2s;
 }
 
@@ -223,7 +223,7 @@ svg[data-open='true'] .hx-bot {
   inset: 0;
   background: rgb(0 0 0 / 40%);
   backdrop-filter: blur(4px);
-  z-index: 9998;
+  z-index: var(--z-toast);
 }
 
 .slide-in-right-enter-from,
@@ -241,7 +241,7 @@ svg[data-open='true'] .hx-bot {
   top: 0;
   right: 0;
   height: 100dvh;
-  z-index: 9999;
+  z-index: var(--z-overlay);
   background: var(--text-inverse);
   color: var(--text-primary);
   box-shadow: -8px 0 32px rgb(0 0 0 / 12%);
@@ -272,7 +272,7 @@ svg[data-open='true'] .hx-bot {
 .drawer-logo {
   height: 40px;
   width: auto;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .drawer-title {
@@ -315,12 +315,12 @@ svg[data-open='true'] .hx-bot {
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   text-decoration: none;
   color: var(--text-primary);
   font-weight: 600;
   font-size: 1.1rem;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
 }
 
 .nav-link:hover,

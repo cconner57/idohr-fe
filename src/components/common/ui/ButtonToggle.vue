@@ -97,8 +97,8 @@ const displayFalseLabel = computed(() => {
 .toggle-container {
   display: flex;
   align-items: stretch;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background: var(--color-gray-100);
+  border: 1px solid var(--color-gray-200);
   border-radius: 9px;
   padding: 2px;
   min-height: 48px;
@@ -117,9 +117,9 @@ const displayFalseLabel = computed(() => {
   flex: 1;
   border: 1px solid transparent;
   background: transparent;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-gray-500);
   cursor: pointer;
   padding: 8px 10px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -132,8 +132,8 @@ const displayFalseLabel = computed(() => {
   min-height: 44px;
 
   &.active {
-    background: #fff;
-    border-color: #e5e7eb;
+    background: var(--color-white);
+    border-color: var(--color-gray-200);
     box-shadow: 0 2px 4px rgb(0 0 0 / 5%);
     color: var(--color-primary);
     font-weight: 700;

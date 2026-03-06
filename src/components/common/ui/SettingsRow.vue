@@ -47,8 +47,8 @@ defineEmits(['click'])
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  background: #fff;
-  border-bottom: 1px solid #f3f4f6;
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-gray-100);
   min-height: 52px;
   transition: background 0.15s ease;
 }
@@ -62,13 +62,13 @@ defineEmits(['click'])
 }
 
 .settings-row.clickable:active {
-  background-color: #f9fafb;
+  background-color: var(--color-gray-50);
 }
 
 .row-icon {
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,7 +92,7 @@ defineEmits(['click'])
 
 .row-description {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: var(--color-gray-400);
   margin: 2px 0 0;
   line-height: 1.3;
 }
@@ -108,11 +108,11 @@ defineEmits(['click'])
 }
 
 .chevron {
-  color: #d1d5db;
+  color: var(--color-gray-300);
   display: flex;
 }
 
 .settings-row.clickable:hover .chevron {
-  color: #9ca3af;
+  color: var(--color-gray-400);
 }
 </style>

@@ -47,7 +47,7 @@ const imgSrcComputed = computed(() => (props.imgSrc && props.imgSrc.length ? pro
   align-items: center;
   gap: 12px;
   padding: 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   min-height: 160px;
   height: auto;
@@ -71,7 +71,7 @@ const imgSrcComputed = computed(() => (props.imgSrc && props.imgSrc.length ? pro
 }
 
 img {
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .button-color-blue img,

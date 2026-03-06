@@ -17,12 +17,12 @@ defineProps<{
   display: inline-flex;
   align-items: center;
   padding: 6px 14px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 600;
   line-height: 1.4;
   white-space: nowrap;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
   border: 1px solid transparent;
 }
 

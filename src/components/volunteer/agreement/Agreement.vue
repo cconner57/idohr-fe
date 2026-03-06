@@ -166,12 +166,12 @@ const emit = defineEmits<{
 
 .waiver {
   color: #000;
-  background: #fff;
+  background: var(--color-white);
   border: 1px dashed #cfe2ff;
   padding: 12px;
   border-radius: 10px;
   font-size: 1rem;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-md);
   line-height: 1.4;
   margin-bottom: 12px;
   width: 100%;

@@ -357,7 +357,7 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
       gap: 16px;
       background: var(--color-neutral-surface);
       padding: 16px;
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       border: 1px solid var(--border-color);
 
       @media (width <= 640px) {
@@ -400,7 +400,7 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
       display: flex;
       background: var(--text-inverse);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       padding: 4px;
       height: 48px;
 
@@ -408,12 +408,12 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
         flex: 1;
         border: none;
         background: transparent;
-        border-radius: 6px;
+        border-radius: var(--radius-sm);
         font-weight: 500;
         color: var(--color-neutral-text-soft);
         cursor: pointer;
         padding: 0 4px;
-        transition: all 0.2s;
+        transition: all var(--transition-normal);
 
         &.active {
           background: color-mix(in srgb, var(--color-primary) 10%, #fff);
@@ -438,9 +438,9 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
       border: 1px solid var(--color-danger-light);
       background: var(--text-inverse);
       color: var(--color-danger);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all var(--transition-normal);
       flex-shrink: 0;
       margin-top: 29px;
 
@@ -463,11 +463,11 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
       padding: 12px 20px;
       background: var(--text-inverse);
       border: 1px dashed var(--border-color);
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       color: var(--color-neutral-text-soft);
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all var(--transition-normal);
 
       &:hover {
         border: 1px solid var(--color-primary);
@@ -483,7 +483,7 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
 fieldset.has-error .chips {
   outline: 2px solid var(--color-danger);
   border-color: var(--color-danger);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 8px;
 }
 </style>

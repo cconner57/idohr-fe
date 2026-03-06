@@ -101,13 +101,13 @@ function onBlur(e: Event) {
 input {
   width: 100%;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   font-size: 1rem;
-  transition: all 0.2s;
-  background-color: #fff;
+  transition: all var(--transition-normal);
+  background-color: var(--color-white);
   caret-color: var(--text-primary);
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-md);
   color: var(--text-primary);
   flex: 1;
   min-height: 48px;

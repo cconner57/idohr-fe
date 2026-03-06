@@ -148,7 +148,7 @@ function handleClick(item: NavItem) {
     width: 100%;
 
     /* border-bottom handled by parent container */
-    background: #fff;
+    background: var(--color-white);
 
     /* Hide scrollbar for cleaner look */
     scrollbar-width: none;

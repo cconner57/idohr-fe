@@ -109,7 +109,7 @@ function handleAdopt() {
   flex-direction: column;
   gap: 12px;
   width: 280px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background-color: var(--text-inverse);
   color: var(--text-primary);
@@ -127,7 +127,7 @@ function handleAdopt() {
       height: 100%;
       object-fit: cover;
       object-position: center center;
-      background-color: #f9fafb;
+      background-color: var(--color-gray-50);
       cursor: pointer;
       display: block;
     }
@@ -143,7 +143,7 @@ function handleAdopt() {
         content: '';
         position: absolute;
         inset: 0;
-        background-color: #fff;
+        background-color: var(--color-white);
         mask: url('/images/paw.svg') no-repeat;
         mask-position: 90px 60px;
         mask-size: 100px 100px;
@@ -164,7 +164,7 @@ function handleAdopt() {
       letter-spacing: 0.05em;
       text-transform: uppercase;
       padding: 0.25rem 0.5rem;
-      border-radius: 999px;
+      border-radius: var(--radius-full);
       box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
       pointer-events: none;
     }

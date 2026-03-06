@@ -38,7 +38,7 @@ const colorClass = computed(() => {
 
 <style scoped lang="css">
 .capsule {
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   font-weight: 700;
   line-height: 1;
   display: inline-flex;
@@ -84,7 +84,7 @@ const colorClass = computed(() => {
 }
 
 .capsule--white {
-  background-color: #fff;
+  background-color: var(--color-white);
   color: var(--color-neutral-text-soft);
   border: 1px solid var(--border-color);
 }

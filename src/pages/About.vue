@@ -266,7 +266,7 @@ const { vScrollReveal } = useScrollReveal()
   }
 
   img {
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
   }
 

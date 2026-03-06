@@ -154,10 +154,10 @@ onUnmounted(() => {
     border: 1px solid var(--border-color);
     border-radius: 4px;
     cursor: crosshair;
-    background-color: #fff;
+    background-color: var(--color-white);
     width: 100%;
     height: 200px;
-    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    box-shadow: var(--shadow-md);
     touch-action: none;
   }
 

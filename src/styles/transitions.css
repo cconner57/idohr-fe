@@ -1,0 +1,25 @@
+/* Shared Vue transition classes */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity var(--transition-normal);
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+}
+
+.slide-enter-from {
+  transform: translateY(8px);
+  opacity: 0;
+}
+
+.slide-leave-to {
+  transform: translateY(-8px);
+  opacity: 0;
+}

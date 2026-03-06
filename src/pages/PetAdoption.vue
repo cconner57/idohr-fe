@@ -266,10 +266,10 @@ const handleReset = async () => {
     }
 
     .validation-summary {
-      background-color: #fff1f2;
+      background-color: var(--color-white)1f2;
       border: 1px solid #e11d48;
       color: #9f1239;
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       padding: 1.5rem;
       margin: 2rem 0;
       text-align: center;
@@ -292,7 +292,7 @@ const handleReset = async () => {
         background-color: #fce7f3;
         color: #9f1239;
         padding: 0.5rem 1rem;
-        border-radius: 999px;
+        border-radius: var(--radius-full);
         font-size: 0.9rem;
         font-weight: 600;
       }

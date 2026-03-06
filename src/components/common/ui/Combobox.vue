@@ -192,16 +192,16 @@ onUnmounted(() => {
 .combobox-wrapper {
   position: relative;
   border: 1px solid var(--border-color);
-  background: #fff;
-  border-radius: 8px;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
   min-height: 48px;
   padding: 4px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
-  transition: all 0.2s;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
 }
 
 .combobox-wrapper:focus-within {
@@ -224,7 +224,7 @@ onUnmounted(() => {
   color: var(--text-primary);
   border: 1px solid var(--color-primary-border-strong);
   padding: 2px 8px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   font-size: 0.85rem;
   font-weight: 500;
 }
@@ -278,13 +278,13 @@ onUnmounted(() => {
   top: 100%;
   left: 0;
   right: 0;
-  background: #fff;
+  background: var(--color-white);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-top: 4px;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 1000;
+  z-index: var(--z-dropdown);
   box-shadow: 0 10px 30px rgb(0 0 0 / 15%);
 }
 

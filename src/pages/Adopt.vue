@@ -208,7 +208,7 @@ const pet = computed(() => {
     color: var(--text-inverse);
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-normal);
     border: 2px solid transparent;
     display: flex;
     align-items: center;

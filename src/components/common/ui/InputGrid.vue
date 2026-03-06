@@ -153,7 +153,7 @@ const toggleSelection = (row: string, col: string) => {
 
 .grid-container {
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   margin-top: 8px;
   overflow-x: auto;

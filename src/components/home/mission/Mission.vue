@@ -52,7 +52,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 4px 6px rgb(0 0 0 / 5%);
+      box-shadow: var(--shadow-lg);
     }
 
     & img {

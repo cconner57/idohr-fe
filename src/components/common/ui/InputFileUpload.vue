@@ -214,13 +214,13 @@ const formatSize = (bytes: number) => {
 
 .upload-container {
   border: 1px dashed var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   background-color: var(--text-inverse);
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-md);
   padding: 24px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
   min-height: 120px;
   display: flex;
   align-items: center;
@@ -295,7 +295,7 @@ const formatSize = (bytes: number) => {
   justify-content: space-between;
   background: var(--text-inverse);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   padding: 8px 12px;
 }
 

@@ -166,7 +166,7 @@ const isTablet = useIsTablet()
       & .nav-logo img {
         height: 40px;
         width: auto;
-        border-radius: 8px;
+        border-radius: var(--radius-md);
       }
 
       & .nav-logo h1 {

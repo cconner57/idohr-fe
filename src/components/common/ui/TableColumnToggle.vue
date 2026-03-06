@@ -72,9 +72,9 @@ const updateCol = (key: string, val: boolean) => {
   top: 100%;
   right: 0;
   margin-top: 8px;
-  background: #fff;
+  background: var(--color-white);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
   width: 280px;
   padding: 8px 0;

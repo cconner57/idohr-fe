@@ -70,8 +70,8 @@ h2 {
   gap: 10px;
   padding: 12px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: #fff;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
   box-shadow: 0 2px 8px rgb(0 0 0 / 4%);
   cursor: pointer;
   user-select: none;

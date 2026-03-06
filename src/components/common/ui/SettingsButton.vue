@@ -32,18 +32,18 @@ const emit = defineEmits<{
 
 <style scoped>
 .settings-btn {
-  background: #fff;
+  background: var(--color-white);
   border: 1px solid var(--border-color);
   box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
   width: 48px;
   height: 48px;
   font-size: 1.1rem;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
   color: var(--color-neutral-text-soft);
 
   &:hover {

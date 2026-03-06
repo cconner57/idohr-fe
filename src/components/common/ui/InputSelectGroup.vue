@@ -121,13 +121,13 @@ const toggleOption = (value: string) => {
   align-items: center;
   gap: 8px;
   padding: 8px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   border: 1px solid var(--border-color);
-  background-color: #fff;
+  background-color: var(--color-white);
   cursor: pointer;
   user-select: none;
   font-size: 1rem;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-md);
   transition:
     background 0.2s,
     border-color 0.2s,
@@ -172,7 +172,7 @@ const toggleOption = (value: string) => {
 @supports not (selector(:has(*))) {
   .chip > input:checked + span {
     background: var(--color-primary-weak);
-    border-radius: 999px;
+    border-radius: var(--radius-full);
     padding: 6px 10px;
     margin: -6px -10px;
     box-shadow: 0 0 0 2px var(--color-primary-border-strong) inset;
@@ -186,7 +186,7 @@ const toggleOption = (value: string) => {
 .field.has-error .chips {
   outline: 2px solid var(--color-danger);
   border-color: var(--color-danger);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: 8px;
 }
 </style>

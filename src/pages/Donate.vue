@@ -222,7 +222,7 @@ import Footer from '@/components/common/footer/Footer.vue'
   font-weight: 600;
   font-size: 1.1rem;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-  color: #fff;
+  color: var(--color-white);
   box-shadow:
     0 4px 6px rgb(50 50 93 / 11%),
     0 1px 3px rgb(0 0 0 / 8%);

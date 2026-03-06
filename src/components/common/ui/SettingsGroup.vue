@@ -31,16 +31,16 @@ defineProps<{
 }
 
 .settings-group {
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid #f3f4f6;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-gray-100);
   overflow: hidden;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 2%);
+  box-shadow: var(--shadow-sm);
 }
 
 .group-description {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: var(--color-gray-500);
   margin-top: 8px;
   margin-left: 16px;
   margin-right: 16px;

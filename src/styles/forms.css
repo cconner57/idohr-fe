@@ -24,7 +24,7 @@
   transition:
     box-shadow 0.15s,
     border-color 0.15s;
-  background: #fff;
+  background: var(--color-white);
   color: var(--text-primary);
 }
 

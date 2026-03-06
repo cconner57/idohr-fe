@@ -35,8 +35,8 @@ withDefaults(
 <style scoped>
 .skeleton-table-container {
   width: 100%;
-  background: #fff;
-  border-radius: 12px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 

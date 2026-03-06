@@ -1,17 +1,6 @@
-@media (width >= 0) and (width <= 320px) {
-}
-
-@media (width >= 321px) and (width <= 430px) {
-}
-
-@media (width >= 431px) and (width <= 768px) {
-}
-
-@media (width >= 769px) and (width <= 1024px) {
-}
-
-@media (width >= 1025px) and (width <= 1440px) {
-}
-
-@media (width >= 1441px) {
-}
+/*
+  Breakpoint custom media queries (used as reference for consistent breakpoints).
+  Use these values with @media (width >= var) in component styles.
+  Small phone: 320px | Phone: 430px | Tablet: 768px | Landscape tablet: 1024px | Desktop: 1280px | Large desktop: 1440px.
+  Breakpoint values are defined as CSS variables in base.css: --viewport-small-phone through --viewport-large-desktop.
+*/

@@ -236,6 +236,6 @@ main {
   padding: 0 24px;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
 }
 </style>
