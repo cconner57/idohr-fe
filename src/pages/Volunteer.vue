@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { nextTick,onMounted, reactive } from 'vue'
+import { nextTick,onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
@@ -15,9 +15,17 @@ import {
   Availability,
   PositionPreferences,
 } from '@/components/volunteer/index'
+import { useFormState } from '@/composables/useFormState'
 import { useMetrics } from '@/composables/useMetrics'
 import { useScrollReveal } from '@/composables/useScrollReveal'
 import { useVolunteerStore } from '@/stores/volunteer'
+import {
+  formatPhoneNumber,
+  sanitizeAddress,
+  sanitizeCity,
+  sanitizeName,
+  sanitizeZip,
+} from '@/utils/validators'
 
 const { submitMetric } = useMetrics()
 const { vScrollReveal } = useScrollReveal()
@@ -25,33 +33,6 @@ const { vScrollReveal } = useScrollReveal()
 onMounted(() => {
   submitMetric('form_start', { form: 'volunteer' })
 })
-
-type FormInput = string | number | null
-
-const formatPhoneNumber = (value: FormInput): string => {
-  if (!value) return ''
-  const digits = String(value).replace(/\D/g, '').substring(0, 10)
-  if (digits.length === 0) return ''
-  if (digits.length <= 3) return digits
-  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`
-  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6, 10)}`
-}
-const sanitizeName = (value: FormInput): string => {
-  if (!value) return ''
-  return String(value).replace(/[^a-zA-Z0-9 ]/g, '')
-}
-const sanitizeCity = (value: FormInput): string => {
-  if (!value) return ''
-  return String(value).replace(/[^a-zA-Z0-9 -]/g, '')
-}
-const sanitizeZip = (value: FormInput): string => {
-  if (!value) return ''
-  return String(value).replace(/\D/g, '').substring(0, 5)
-}
-const sanitizeAddress = (value: FormInput): string => {
-  if (!value) return ''
-  return String(value).replace(/[^a-zA-Z0-9 -]/g, '')
-}
 
 const volunteerStore = useVolunteerStore()
 const {
@@ -65,15 +46,33 @@ const {
 } = storeToRefs(volunteerStore)
 const { submit, resetForm } = volunteerStore
 
-const touched = reactive<Record<string, boolean>>({})
-
-const handleBlur = (field: string) => {
-  touched[field] = true
-}
+const { touched, handleBlur, touchAll } = useFormState([
+  'firstName',
+  'lastName',
+  'address',
+  'city',
+  'zip',
+  'phoneNumber',
+  'birthday',
+  'age',
+  'email',
+  'allergies',
+  'emergencyContactName',
+  'emergencyContactPhone',
+  'interestReason',
+  'positionPreferences',
+  'availability',
+  'nameFull',
+  'signatureDate',
+  'signatureData',
+  'parentName',
+  'parentSignatureDate',
+  'parentSignatureData',
+])
 
 const handleSubmit = async () => {
   if (!isFormValid.value) {
-    Object.keys(formState.value).forEach((key) => (touched[key] = true))
+    touchAll()
     await nextTick()
     const errorSummary = document.querySelector('.validation-summary') as HTMLElement
     if (errorSummary) {
@@ -99,7 +98,7 @@ const handleReset = async () => {
 <template>
   <section class="page-shell">
     <div v-if="!isSubmitted" class="form-container">
-      <form class="form-card" aria-labelledby="form-title" @submit.prevent="handleSubmit">
+      <form class="form-card" aria-label="Volunteer Application" @submit.prevent="handleSubmit">
         <ApplicationHeader
           header-title="Volunteer"
           header-text="I Dream of Home Rescue (IDOHR) is an all-volunteer, nonprofit dedicated to helping homeless cats
@@ -414,7 +413,7 @@ const handleReset = async () => {
   .validation-summary {
     background-color: var(--color-danger-surface);
     border: 1px solid var(--color-danger);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 16px;
     margin: 24px 0;
     text-align: center;

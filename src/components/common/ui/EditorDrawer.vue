@@ -101,7 +101,7 @@ onUnmounted(() => {
   inset: 0;
   background: rgb(0 0 0 / 50%);
   backdrop-filter: blur(2px);
-  z-index: 1000;
+  z-index: var(--z-dropdown);
   cursor: pointer;
 }
 
@@ -110,13 +110,13 @@ onUnmounted(() => {
   top: 0;
   right: 0;
   bottom: 0;
-  background: #fff;
+  background: var(--color-white);
   width: var(--drawer-width);
   max-width: 95vw;
   box-shadow: -4px 0 24px rgb(0 0 0 / 15%);
   display: flex;
   flex-direction: column;
-  z-index: 1001;
+  z-index: var(--z-sticky);
 }
 
 /* Header */
@@ -126,7 +126,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #fff;
+  background: var(--color-white);
   flex-shrink: 0;
 }
 
@@ -171,7 +171,7 @@ onUnmounted(() => {
   flex: 1;
   padding: 32px;
   overflow-y: auto;
-  background: #fff;
+  background: var(--color-white);
 }
 
 /* Footer */
@@ -181,7 +181,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  background: #fff;
+  background: var(--color-white);
   flex-shrink: 0;
 
   /* Ensure footer respects bottom safe area */
@@ -259,7 +259,7 @@ onUnmounted(() => {
 
     /* Let the child component handle scrolling if needed */
     overflow-x: hidden;
-    background: #fff;
+    background: var(--color-white);
   }
 
   .editor-content {

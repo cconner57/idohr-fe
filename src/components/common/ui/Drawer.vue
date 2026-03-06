@@ -88,9 +88,12 @@ const transitionName = computed(() => {
         v-if="isOpen"
         class="drawer-panel"
         :class="[`placement-${effectivePlacement}`]"
+        role="dialog"
+        aria-labelledby="drawer-title"
+        aria-modal="true"
       >
         <header class="drawer-header">
-          <h3>{{ title }}</h3>
+          <h3 id="drawer-title">{{ title }}</h3>
           <button class="close-btn" @click="emit('close')" aria-label="Close drawer">
             <Icon name="x" size="24" />
           </button>
@@ -114,14 +117,14 @@ const transitionName = computed(() => {
   inset: 0;
   background: rgb(0 0 0 / 50%);
   backdrop-filter: blur(4px);
-  z-index: 9998;
+  z-index: var(--z-toast);
 }
 
 .drawer-panel {
   position: fixed;
   background: var(--text-inverse);
   box-shadow: -4px 0 24px rgb(0 0 0 / 15%);
-  z-index: 9999;
+  z-index: var(--z-overlay);
   display: flex;
   flex-direction: column;
 }
@@ -184,7 +187,7 @@ const transitionName = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all var(--transition-normal);
 
   &:hover {
     background: var(--color-neutral-weak);

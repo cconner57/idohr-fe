@@ -2,15 +2,15 @@ import { nextTick } from 'vue'
 import { createRouter, createWebHistory, START_LOCATION } from 'vue-router'
 
 import { useMetrics } from '../composables/useMetrics'
-import About from '../pages/About.vue'
-import Adopt from '../pages/Adopt.vue'
-import Contract from '../pages/Contract.vue'
-import Donate from '../pages/Donate.vue'
 import Home from '../pages/Home.vue'
-import NotFound from '../pages/NotFound.vue'
-import PetAdoption from '../pages/PetAdoption.vue'
-import SurrenderPet from '../pages/SurrenderPet.vue'
-import Volunteer from '../pages/Volunteer.vue'
+
+const About = () => import('../pages/About.vue')
+const Adopt = () => import('../pages/Adopt.vue')
+const Donate = () => import('../pages/Donate.vue')
+const NotFound = () => import('../pages/NotFound.vue')
+const PetAdoption = () => import('../pages/PetAdoption.vue')
+const SurrenderPet = () => import('../pages/SurrenderPet.vue')
+const Volunteer = () => import('../pages/Volunteer.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,12 +50,6 @@ const router = createRouter({
       path: '/:pathMatch(.*)*',
       name: 'not-found',
       component: NotFound,
-    },
-    {
-      path: '/contract/:token',
-      name: 'contract-sign',
-      component: Contract,
-      meta: { hideNavbar: true },
     },
   ],
   scrollBehavior(to, from, savedPosition) {

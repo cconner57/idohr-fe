@@ -27,9 +27,9 @@ function closeDrawer() {
 <template>
   <Transition name="drawer-fade">
     <div v-if="open" class="overlay" @click="closeDrawer">
-      <div class="drawer" @click.stop>
+      <div class="drawer" role="dialog" aria-labelledby="drawer-title" aria-modal="true" @click.stop>
         <div class="drawer-header">
-          <h2>{{ props.header }}</h2>
+          <h2 id="drawer-title">{{ props.header }}</h2>
           <button
             class="hx-btn"
             type="button"
@@ -69,7 +69,7 @@ function closeDrawer() {
   width: 100dvw;
   height: 100dvh;
   background-color: rgb(0 0 0 / 50%);
-  z-index: 3000;
+  z-index: var(--z-drawer);
 
   .drawer {
     position: fixed;
@@ -78,7 +78,7 @@ function closeDrawer() {
     width: 100dvw;
     max-width: 500px;
     height: 100dvh;
-    z-index: 3005;
+    z-index: var(--z-modal);
     background-color: var(--text-inverse);
     box-shadow: -2px 0 10px rgb(0 0 0 / 10%);
     border-top-left-radius: 1rem;
@@ -106,7 +106,7 @@ function closeDrawer() {
         align-items: center;
         justify-content: center;
         padding: 8px;
-        border-radius: 12px;
+        border-radius: var(--radius-lg);
         cursor: pointer;
         color: var(--text-inverse);
       }

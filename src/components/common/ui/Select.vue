@@ -139,6 +139,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('scroll', updateDropdownPosition, true)
+  window.removeEventListener('resize', updateDropdownPosition)
 })
 </script>
 
@@ -243,19 +245,19 @@ onUnmounted(() => {
 .select-trigger {
   width: 100%;
   padding: 12px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
   font-size: 1rem;
   font-family: inherit;
   text-align: left;
-  background-color: #fff;
+  background-color: var(--color-white);
   color: var(--text-primary);
-  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-shadow: var(--shadow-md);
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
   user-select: none;
 
   &:hover {
@@ -294,20 +296,20 @@ onUnmounted(() => {
 /* Global styles for teleported menu */
 .options-menu.teleported-menu {
   position: absolute;
-  background: #fff;
-  border: 1px solid var(--border-color, #e5e7eb);
-  border-radius: 8px;
+  background: var(--color-white);
+  border: 1px solid var(--border-color, var(--color-gray-200));
+  border-radius: var(--radius-md);
   box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
   max-height: 250px;
   overflow-y: auto;
-  z-index: 9999;
+  z-index: var(--z-overlay);
   padding: 4px;
   list-style: none;
   margin: 0;
 }
 
 .options-menu.teleported-menu.variant-borderless {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-gray-200);
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%);
 }
 
@@ -324,7 +326,7 @@ onUnmounted(() => {
 }
 
 .options-menu.teleported-menu .option-item:hover {
-  background-color: var(--color-neutral-weak, #f3f4f6);
+  background-color: var(--color-neutral-weak, var(--color-gray-100));
 }
 
 .options-menu.teleported-menu .option-item.is-selected {
@@ -383,7 +385,7 @@ onUnmounted(() => {
     width: 200px;
     right: 0;
     left: auto;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-gray-200);
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%);
   }
 }

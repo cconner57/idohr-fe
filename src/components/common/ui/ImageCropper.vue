@@ -117,6 +117,10 @@ function crop() {
 
 onUnmounted(() => {
   if (imageUrl.value) URL.revokeObjectURL(imageUrl.value)
+  globalThis.removeEventListener('mousemove', onMouseMove)
+  globalThis.removeEventListener('mouseup', onMouseUp)
+  globalThis.removeEventListener('touchmove', onMouseMove)
+  globalThis.removeEventListener('touchend', onMouseUp)
 })
 </script>
 
@@ -165,9 +169,9 @@ onUnmounted(() => {
 
 <style scoped>
 .cropper-container {
-  background: #fff;
+  background: var(--color-white);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 16px;
   margin-top: 16px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);
@@ -252,15 +256,15 @@ onUnmounted(() => {
 
 .btn {
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .btn-secondary {
-  background: #fff;
+  background: var(--color-white);
   border: 1px solid var(--border-color);
   color: var(--text-base);
 }
@@ -272,7 +276,7 @@ onUnmounted(() => {
 .btn-primary {
   background: var(--color-primary);
   border: 1px solid var(--color-primary);
-  color: #fff;
+  color: var(--color-white);
 }
 
 .btn-primary:hover {
