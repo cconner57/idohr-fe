@@ -51,6 +51,26 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: false,
         },
+        '/login': {
+          target: env.VITE_API_URL || 'http://127.0.0.1:8080',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/register': {
+          target: env.VITE_API_URL || 'http://127.0.0.1:8080',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/users': {
+          target: env.VITE_API_URL || 'http://127.0.0.1:8080',
+          changeOrigin: true,
+          secure: false,
+        },
+        '/validate-invite': {
+          target: env.VITE_API_URL || 'http://127.0.0.1:8080',
+          changeOrigin: true,
+          secure: false,
+        },
         '/healthz': {
           target: env.VITE_API_URL || 'http://127.0.0.1:8080',
           changeOrigin: true,

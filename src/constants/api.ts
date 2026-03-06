@@ -17,12 +17,12 @@ export const API_ENDPOINTS = {
   SHIFTS_META_ROLES: `${API_BASE_URL}/v1/shifts/meta/roles`,
 
   // Auth & Users
-  VALIDATE_INVITE: (token: string) => `${API_BASE_URL}/api/validate-invite/${token}`,
-  REGISTER: `${API_BASE_URL}/api/register`,
-  USERS_ME: `${API_BASE_URL}/api/users/me`,
-  LOGIN: `${API_BASE_URL}/api/login`,
-  LOGOUT: `${API_BASE_URL}/api/users/logout`,
-  USERS: `${API_BASE_URL}/api/users`,
+  VALIDATE_INVITE: (token: string) => `${API_BASE_URL}/validate-invite/${token}`,
+  REGISTER: `${API_BASE_URL}/register`,
+  USERS_ME: `${API_BASE_URL}/users/me`,
+  LOGIN: `${API_BASE_URL}/login`,
+  LOGOUT: `${API_BASE_URL}/users/logout`,
+  USERS: `${API_BASE_URL}/users`,
 
   // Notifications
   NOTIFICATIONS_PUBLIC_KEY: `${API_BASE_URL}/v1/notifications/public-key`,
