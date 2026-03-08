@@ -60,7 +60,7 @@ const { formState } = storeToRefs(adoptionStore)
         @update:modelValue="(val) => (formState.landlordPhoneNumber = formatPhoneNumber(val))"
         label="Landlord's Phone Number"
         name="landlordPhoneNumber"
-        placeholder="555-555-5555"
+        placeholder="123-456-7890"
         type="tel"
         maxlength="12"
         required

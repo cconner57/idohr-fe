@@ -163,7 +163,7 @@ function handleAgreementUpdate(val: string | number | boolean | null) {
           @update:modelValue="(val) => (formState.phoneNumber = formatPhoneNumber(val))"
           label="Phone Number"
           name="phoneNumber"
-          placeholder="555-555-5555"
+          placeholder="123-456-7890"
           required
           type="tel"
           maxlength="12"

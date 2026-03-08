@@ -25,7 +25,7 @@ const handleStartAdoption = () => {
   vibrate(50)
   sessionStorage.setItem(
     'adoption_pet',
-    JSON.stringify({ petId: props.pet.id, petName: props.pet.name, species: props.pet.species }),
+    JSON.stringify({ id: props.pet.id, petName: props.pet.name, species: props.pet.species }),
   )
   globalThis.location.href = `/pet-adoption/${props.pet.id}`
 }
