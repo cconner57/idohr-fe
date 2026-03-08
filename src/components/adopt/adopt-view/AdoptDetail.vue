@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import type { IPet } from '../../../models/common.ts'
 import { calculateAge } from '../../../utils/date'
@@ -18,6 +19,7 @@ const props = defineProps<{
   pet: IPet
 }>()
 
+const router = useRouter()
 const isDrawerOpen = ref(false)
 const isInfoDrawerOpen = ref(false)
 
@@ -27,7 +29,7 @@ const handleStartAdoption = () => {
     'adoption_pet',
     JSON.stringify({ id: props.pet.id, petName: props.pet.name, species: props.pet.species }),
   )
-  globalThis.location.href = `/pet-adoption/${props.pet.id}`
+  router.push(`/pet-adoption/${props.pet.id}`)
 }
 
 const handleScheduleMeet = () => {

@@ -12,6 +12,4 @@ app.use(router)
 
 setupFetchInterceptor()
 
-await router.isReady()
-
 app.mount('#app')
