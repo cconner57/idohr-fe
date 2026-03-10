@@ -272,7 +272,7 @@ const formattedAnimal = computed(() => {
   }
 
   .validation-summary {
-    background-color: var(--color-white)1f2;
+    background-color: #fff1f2;
     border: 1px solid #e11d48;
     color: #9f1239;
     border-radius: var(--radius-lg);
