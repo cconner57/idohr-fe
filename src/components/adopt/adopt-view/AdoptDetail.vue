@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { IPet } from '../../../models/common.ts'
+import { usePetStore } from '../../../stores/pets'
 import { calculateAge } from '../../../utils/date'
 import { formatDate } from '../../../utils/dateUtils'
 import { vibrate } from '../../../utils/haptics.ts'
@@ -20,15 +21,13 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const petStore = usePetStore()
 const isDrawerOpen = ref(false)
 const isInfoDrawerOpen = ref(false)
 
 const handleStartAdoption = () => {
   vibrate(50)
-  sessionStorage.setItem(
-    'adoption_pet',
-    JSON.stringify({ id: props.pet.id, petName: props.pet.name, species: props.pet.species }),
-  )
+  petStore.selectPet({ id: props.pet.id, petName: props.pet.name, species: props.pet.species })
   router.push(`/pet-adoption/${props.pet.id}`)
 }
 

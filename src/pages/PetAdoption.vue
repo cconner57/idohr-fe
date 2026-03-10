@@ -85,7 +85,7 @@ const handleReset = async () => {
             : 'This application is intended as a means to match the right dog with the right home. The more detail you provide, the better. Most adoptable pets are spayed/neutered, vaccinated, and microchipped. Typical adoption fees are $450 for puppies, $400 for adults, and $350 for seniors. Adoption fees are tax-deductible donations, not purchase prices. Thank you for considering adoption!'
         "
       />
-      <AdoptionSteps :formStep="step" selectedAnimal="cat" />
+      <AdoptionSteps :formStep="step" :selectedAnimal="selectedPet?.species ?? 'cat'" />
       <div class="cat-name-display">
         <h2>Adopting Pet:</h2>
         <p>{{ selectedPet?.petName }}</p>
