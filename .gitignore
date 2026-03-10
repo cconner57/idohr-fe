@@ -15,8 +15,11 @@ coverage
 .env
 *.local
 
-/cypress/videos/
-/cypress/screenshots/
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # Editor directories and files
 .vscode/*

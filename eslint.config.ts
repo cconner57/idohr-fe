@@ -15,7 +15,15 @@ export default defineConfigWithVueTs(
     files: ['**/*.{ts,mts,tsx,vue}'],
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '**/.wrangler/**']),
+  globalIgnores([
+    '**/dist/**',
+    '**/dist-ssr/**',
+    '**/coverage/**',
+    '**/.wrangler/**',
+    '**/test-results/**',
+    '**/playwright-report/**',
+    '**/blob-report/**',
+  ]),
 
   vueTsConfigs.recommended,
 

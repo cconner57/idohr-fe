@@ -1,0 +1,332 @@
+[
+  {
+    "id": "pet-001",
+    "slug": "luna",
+    "createdAt": "2025-01-15T10:00:00Z",
+    "updatedAt": "2025-01-20T10:00:00Z",
+    "name": "Luna",
+    "species": "cat",
+    "sex": "female",
+    "physical": {
+      "ageGroup": "young",
+      "breed": "Domestic Shorthair",
+      "coatLength": "short",
+      "color": "black",
+      "size": "medium",
+      "currentWeight": 8
+    },
+    "behavior": {
+      "energyLevel": "medium",
+      "isGoodWithCats": true,
+      "isGoodWithDogs": false,
+      "isGoodWithKids": true,
+      "isHouseTrained": true,
+      "personalityTags": ["playful", "curious"],
+      "prefersToBeAlone": false
+    },
+    "medical": {
+      "microchip": { "microchipped": true },
+      "spayedOrNeutered": true,
+      "surgeries": [],
+      "vaccinations": {},
+      "vaccinationsUpToDate": true
+    },
+    "descriptions": {
+      "primary": "Luna is a sweet and playful young cat looking for her forever home."
+    },
+    "details": {
+      "status": "available"
+    },
+    "adoption": {},
+    "foster": {},
+    "returned": { "isReturned": false, "history": [] },
+    "sponsored": { "isSponsored": false },
+    "photos": [
+      {
+        "isPrimary": true,
+        "url": "/images/placeholder-cat.jpg",
+        "uploadedAt": "2025-01-15T10:00:00Z"
+      }
+    ],
+    "profileSettings": {
+      "isSpotlightFeatured": true,
+      "showAdditionalInformation": true,
+      "showMedicalHistory": true
+    }
+  },
+  {
+    "id": "pet-002",
+    "slug": "buddy",
+    "createdAt": "2025-02-01T10:00:00Z",
+    "updatedAt": "2025-02-10T10:00:00Z",
+    "name": "Buddy",
+    "species": "dog",
+    "sex": "male",
+    "physical": {
+      "ageGroup": "adult",
+      "breed": "Labrador Retriever",
+      "coatLength": "short",
+      "color": "golden",
+      "size": "large",
+      "currentWeight": 65
+    },
+    "behavior": {
+      "energyLevel": "high",
+      "isGoodWithCats": false,
+      "isGoodWithDogs": true,
+      "isGoodWithKids": true,
+      "isHouseTrained": true,
+      "personalityTags": ["playful", "affectionate"],
+      "prefersToBeAlone": false
+    },
+    "medical": {
+      "microchip": { "microchipped": true },
+      "spayedOrNeutered": true,
+      "surgeries": [],
+      "vaccinations": {},
+      "vaccinationsUpToDate": true
+    },
+    "descriptions": {
+      "primary": "Buddy is an energetic and loving dog who gets along great with kids."
+    },
+    "details": {
+      "status": "available"
+    },
+    "adoption": {},
+    "foster": {},
+    "returned": { "isReturned": false, "history": [] },
+    "sponsored": { "isSponsored": false },
+    "photos": [
+      {
+        "isPrimary": true,
+        "url": "/images/placeholder-dog.jpg",
+        "uploadedAt": "2025-02-01T10:00:00Z"
+      }
+    ],
+    "profileSettings": {
+      "isSpotlightFeatured": false,
+      "showAdditionalInformation": true,
+      "showMedicalHistory": true
+    }
+  },
+  {
+    "id": "pet-003",
+    "slug": "whiskers",
+    "createdAt": "2025-01-10T10:00:00Z",
+    "updatedAt": "2025-01-18T10:00:00Z",
+    "name": "Whiskers",
+    "species": "cat",
+    "sex": "male",
+    "physical": {
+      "ageGroup": "senior",
+      "breed": "Persian",
+      "coatLength": "long",
+      "color": "white",
+      "size": "medium",
+      "currentWeight": 10
+    },
+    "behavior": {
+      "energyLevel": "low",
+      "isGoodWithCats": true,
+      "isGoodWithDogs": true,
+      "isGoodWithKids": false,
+      "isHouseTrained": true,
+      "personalityTags": ["laid-back", "independent"],
+      "prefersToBeAlone": false
+    },
+    "medical": {
+      "microchip": { "microchipped": false },
+      "spayedOrNeutered": true,
+      "surgeries": [],
+      "vaccinations": {},
+      "vaccinationsUpToDate": true
+    },
+    "descriptions": {
+      "primary": "Whiskers is a calm senior cat who loves a quiet lap to sit on."
+    },
+    "details": {
+      "status": "available"
+    },
+    "adoption": {},
+    "foster": {},
+    "returned": { "isReturned": false, "history": [] },
+    "sponsored": { "isSponsored": false },
+    "photos": [
+      {
+        "isPrimary": true,
+        "url": "/images/placeholder-cat.jpg",
+        "uploadedAt": "2025-01-10T10:00:00Z"
+      }
+    ],
+    "profileSettings": {
+      "isSpotlightFeatured": true,
+      "showAdditionalInformation": true,
+      "showMedicalHistory": true
+    }
+  },
+  {
+    "id": "pet-004",
+    "slug": "daisy",
+    "createdAt": "2025-02-05T10:00:00Z",
+    "updatedAt": "2025-02-12T10:00:00Z",
+    "name": "Daisy",
+    "species": "dog",
+    "sex": "female",
+    "physical": {
+      "ageGroup": "baby",
+      "breed": "Beagle",
+      "coatLength": "short",
+      "color": "tricolor",
+      "size": "small",
+      "currentWeight": 12
+    },
+    "behavior": {
+      "energyLevel": "high",
+      "isGoodWithCats": true,
+      "isGoodWithDogs": true,
+      "isGoodWithKids": true,
+      "isHouseTrained": false,
+      "personalityTags": ["curious", "playful"],
+      "prefersToBeAlone": false
+    },
+    "medical": {
+      "microchip": { "microchipped": false },
+      "spayedOrNeutered": false,
+      "surgeries": [],
+      "vaccinations": {},
+      "vaccinationsUpToDate": false
+    },
+    "descriptions": {
+      "primary": "Daisy is an adorable puppy full of energy and love."
+    },
+    "details": {
+      "status": "available"
+    },
+    "adoption": {},
+    "foster": {},
+    "returned": { "isReturned": false, "history": [] },
+    "sponsored": { "isSponsored": false },
+    "photos": [
+      {
+        "isPrimary": true,
+        "url": "/images/placeholder-dog.jpg",
+        "uploadedAt": "2025-02-05T10:00:00Z"
+      }
+    ],
+    "profileSettings": {
+      "isSpotlightFeatured": false,
+      "showAdditionalInformation": true,
+      "showMedicalHistory": false
+    }
+  },
+  {
+    "id": "pet-005",
+    "slug": "oliver",
+    "createdAt": "2025-01-25T10:00:00Z",
+    "updatedAt": "2025-02-01T10:00:00Z",
+    "name": "Oliver",
+    "species": "cat",
+    "sex": "male",
+    "physical": {
+      "ageGroup": "adult",
+      "breed": "Tabby",
+      "coatLength": "short",
+      "color": "orange",
+      "size": "large",
+      "currentWeight": 14
+    },
+    "behavior": {
+      "energyLevel": "medium",
+      "isGoodWithCats": false,
+      "isGoodWithDogs": false,
+      "isGoodWithKids": true,
+      "isHouseTrained": true,
+      "personalityTags": ["affectionate", "vocal"],
+      "prefersToBeAlone": true
+    },
+    "medical": {
+      "microchip": { "microchipped": true },
+      "spayedOrNeutered": true,
+      "surgeries": [],
+      "vaccinations": {},
+      "vaccinationsUpToDate": true
+    },
+    "descriptions": {
+      "primary": "Oliver is a chatty orange tabby who loves being the center of attention."
+    },
+    "details": {
+      "status": "available"
+    },
+    "adoption": {},
+    "foster": {},
+    "returned": { "isReturned": false, "history": [] },
+    "sponsored": { "isSponsored": false },
+    "photos": [
+      {
+        "isPrimary": true,
+        "url": "/images/placeholder-cat.jpg",
+        "uploadedAt": "2025-01-25T10:00:00Z"
+      }
+    ],
+    "profileSettings": {
+      "isSpotlightFeatured": false,
+      "showAdditionalInformation": true,
+      "showMedicalHistory": true
+    }
+  },
+  {
+    "id": "pet-006",
+    "slug": "max",
+    "createdAt": "2025-02-08T10:00:00Z",
+    "updatedAt": "2025-02-15T10:00:00Z",
+    "name": "Max",
+    "species": "dog",
+    "sex": "male",
+    "physical": {
+      "ageGroup": "young",
+      "breed": "German Shepherd",
+      "coatLength": "medium",
+      "color": "black and tan",
+      "size": "large",
+      "currentWeight": 55
+    },
+    "behavior": {
+      "energyLevel": "high",
+      "isGoodWithCats": false,
+      "isGoodWithDogs": true,
+      "isGoodWithKids": true,
+      "isHouseTrained": true,
+      "personalityTags": ["playful", "curious"],
+      "prefersToBeAlone": false
+    },
+    "medical": {
+      "microchip": { "microchipped": true },
+      "spayedOrNeutered": true,
+      "surgeries": [],
+      "vaccinations": {},
+      "vaccinationsUpToDate": true
+    },
+    "descriptions": {
+      "primary": "Max is an intelligent young shepherd looking for an active family."
+    },
+    "details": {
+      "status": "available"
+    },
+    "adoption": {},
+    "foster": {},
+    "returned": { "isReturned": false, "history": [] },
+    "sponsored": { "isSponsored": false },
+    "photos": [
+      {
+        "isPrimary": true,
+        "url": "/images/placeholder-dog.jpg",
+        "uploadedAt": "2025-02-08T10:00:00Z"
+      }
+    ],
+    "profileSettings": {
+      "isSpotlightFeatured": true,
+      "showAdditionalInformation": true,
+      "showMedicalHistory": true
+    }
+  }
+]
