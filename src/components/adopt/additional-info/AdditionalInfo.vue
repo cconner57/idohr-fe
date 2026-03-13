@@ -73,7 +73,7 @@ const houseTrainedText = () => {
     <div class="adopt-detail__additional-info__item">
       <p>Adoption Fee</p>
       <p v-if="pet.sponsored?.isSponsored" class="sponsored-fee">Sponsored — $0</p>
-      <p v-else>{{ pet?.adoption?.fee !== undefined ? '$' + pet?.adoption?.fee : 'N/A' }}</p>
+      <p v-else>{{ pet?.adoption?.fee != null ? '$' + pet.adoption.fee : '—' }}</p>
     </div>
   </div>
 </template>
