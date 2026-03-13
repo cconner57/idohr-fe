@@ -29,7 +29,10 @@ export function useScrollReveal(className = 'reveal', threshold = 0.1) {
   const vScrollReveal = {
     mounted: (el: HTMLElement) => {
       el.classList.add(className)
-      observer.observe(el)
+      // Delay observe to next frame so View Transitions API completes first
+      requestAnimationFrame(() => {
+        observer.observe(el)
+      })
     },
     unmounted: (el: HTMLElement) => {
       observer.unobserve(el)

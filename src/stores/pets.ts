@@ -41,8 +41,9 @@ export const usePetStore = defineStore('pets', () => {
       const response = await fetch(`${API_ENDPOINTS.PETS}?status=available&sort=age`)
       if (!response.ok) throw new Error('Failed to fetch pets')
 
-      const data = await response.json()
-      currentPets.value = Array.isArray(data) ? data : data.data || []
+      const json = await response.json()
+      const payload = json.data ?? json
+      currentPets.value = Array.isArray(payload) ? payload : payload.data || []
       lastFetched.value = Date.now()
     } catch (err: unknown) {
       console.error('Error fetching pets:', err)
@@ -72,8 +73,9 @@ export const usePetStore = defineStore('pets', () => {
       })
 
       if (!response.ok) throw new Error('Failed to fetch admin pets')
-      const data = await response.json()
-      adminPets.value = Array.isArray(data) ? data : data.data || []
+      const json = await response.json()
+      const payload = json.data ?? json
+      adminPets.value = Array.isArray(payload) ? payload : payload.data || []
       lastAdminFetched.value = Date.now()
       lastAdminParams.value = paramsString
     } catch (err) {
@@ -96,8 +98,9 @@ export const usePetStore = defineStore('pets', () => {
       })
 
       if (!response.ok) throw new Error('Failed to fetch adopted pets')
-      const data = await response.json()
-      adoptedPets.value = Array.isArray(data) ? data : data.data || []
+      const json = await response.json()
+      const payload = json.data ?? json
+      adoptedPets.value = Array.isArray(payload) ? payload : payload.data || []
     } catch (err) {
       console.error('Error fetching adopted pets:', err)
       throw err
