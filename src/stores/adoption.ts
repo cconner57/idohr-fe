@@ -147,11 +147,89 @@ export const useAdoptionStore = defineStore('adoption', () => {
     }
   }
 
+  const clearFormData = () => {
+    formState.fax_number = ''
+    formState.firstName = ''
+    formState.lastName = ''
+    formState.age = null
+    formState.spouseFirstName = null
+    formState.spouseLastName = null
+    formState.roommatesNames = ['']
+    formState.childrenNamesAges = [{ name: '', age: '' }]
+    formState.currentPets = [
+      { name: '', speciesBreedSize: '', age: '', source: '', spayedNeutered: '', likesDogs: '' },
+    ]
+    formState.currentlyHavePets = null
+    formState.pastPets = [
+      {
+        name: '',
+        speciesBreedSize: '',
+        age: '',
+        source: '',
+        spayedNeutered: '',
+        passedAwayReason: '',
+      },
+    ]
+    formState.ownPetsBefore = null
+    formState.email = null
+    formState.address = null
+    formState.addressLine2 = null
+    formState.city = null
+    formState.state = null
+    formState.zip = null
+    formState.phoneNumber = null
+    formState.cellPhoneNumber = null
+    formState.adultMembersAgreed = null
+    formState.homeType = null
+    formState.homeOwnership = null
+    formState.landlordName = null
+    formState.landlordPhoneNumber = null
+    formState.allowPets = null
+    formState.breedRestrictionsWeightLimit = null
+    formState.monthlyFee = null
+    formState.allergies = null
+    formState.primaryOwner = null
+    formState.yearsAtAddress = null
+    formState.previousAddress = null
+    formState.expectToMove = null
+    formState.travelPlan = null
+    formState.catAccess = []
+    formState.catIndoorOutdoor = null
+    formState.catPreferenceBreed = null
+    formState.catPreferencePhysical = null
+    formState.catPreferencePersonality = null
+    formState.catPreferenceNotWant = null
+    formState.whyInterested = null
+    formState.adoptionReason = null
+    formState.ownCatBefore = null
+    formState.ownKittenBefore = null
+    formState.alreadyHaveVeterinarian = null
+    formState.catAllowedHomeArea = null
+    formState.catHomeAloneHours = null
+    formState.catDisciplineType = null
+    formState.catEscapeSteps = null
+    formState.bredAnimalDescription = null
+    formState.ownedDeclawedOrDebarked = null
+    formState.movedWithPet = null
+    formState.ownedSpecialNeedsPet = null
+    formState.mobilityDevice = null
+    formState.surrenderConditions = []
+    formState.surrenderPlan = null
+    formState.foodTypeBrand = null
+    formState.affordVetCare = null
+    formState.affordEmergencyCost = null
+    formState.agreementSignature1 = null
+    formState.agreementSignature2 = null
+    formState.agreementSignature3 = null
+    formState.signatureData = null
+  }
+
   const resetForm = () => {
     step.value = 0
     isSubmitted.value = false
     hasAttemptedSubmit.value = false
     submissionError.value = null
+    clearFormData()
     sessionStorage.removeItem(STORAGE_KEY)
   }
 
@@ -164,6 +242,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
         // Simulate API call for Demo Mode
         await new Promise((resolve) => setTimeout(resolve, 1500))
         isSubmitted.value = true
+        clearFormData()
         sessionStorage.removeItem(STORAGE_KEY)
         return true
       }
@@ -264,6 +343,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
 
       isSubmitted.value = true
       submissionError.value = null
+      clearFormData()
       sessionStorage.removeItem(STORAGE_KEY)
       return true
     } catch (error: unknown) {

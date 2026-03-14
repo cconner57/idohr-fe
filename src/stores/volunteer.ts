@@ -5,6 +5,7 @@ import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
 import { API_ENDPOINTS } from '../constants/api'
 import type { IVolunteerFormState } from '../models/volunteer-form'
+import { getVolunteerValidationErrors } from './validation/volunteerValidation'
 
 export const useVolunteerStore = defineStore('volunteer', () => {
   const { isDemoMode } = useDemoMode()
@@ -39,59 +40,7 @@ export const useVolunteerStore = defineStore('volunteer', () => {
   })
 
   const validationErrors = computed(() => {
-    const errors: string[] = []
-
-    if (!formState.firstName) errors.push('First Name')
-    if (!formState.lastName) errors.push('Last Name')
-    if (!formState.email) errors.push('Email')
-    if (formState.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email))
-      errors.push('Valid Email')
-    if (!formState.address) errors.push('Address')
-    if (!formState.city) errors.push('City')
-    if (!formState.zip) errors.push('Zip Code')
-    if (!formState.phoneNumber) errors.push('Phone Number')
-    if (!formState.birthday) errors.push('Birthday')
-
-    let isUnder21 = false
-    if (formState.birthday) {
-      let birthDate: Date
-      if (formState.birthday.includes('-')) {
-        birthDate = new Date(`${formState.birthday}T00:00:00`)
-      } else {
-        birthDate = new Date(formState.birthday)
-      }
-
-      if (!isNaN(birthDate.getTime())) {
-        const today = new Date()
-        let calculatedAge = today.getFullYear() - birthDate.getFullYear()
-        const m = today.getMonth() - birthDate.getMonth()
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-          calculatedAge--
-        }
-        if (calculatedAge < 21) {
-          isUnder21 = true
-        }
-      }
-    }
-
-    if (isUnder21 && formState.age === null) errors.push('Age')
-
-    if (!formState.emergencyContactName) errors.push('Emergency Contact Name')
-    if (!formState.emergencyContactPhone) errors.push('Emergency Contact Phone')
-    if (!formState.interestReason) errors.push('Interest Reason')
-    if (formState.positionPreferences.length === 0) errors.push('Position Preferences')
-    if (formState.availability.length === 0) errors.push('Availability')
-    if (!formState.nameFull) errors.push('Agreement Name')
-    if (!formState.signatureDate) errors.push('Agreement Date')
-    if (!formState.signatureData) errors.push('Signature')
-
-    if (formState.age !== null && formState.age < 21) {
-      if (!formState.parentName) errors.push('Parent Name')
-      if (!formState.parentSignatureDate) errors.push('Parent Date')
-      if (!formState.parentSignatureData) errors.push('Parent Signature')
-    }
-
-    return errors
+    return getVolunteerValidationErrors(formState)
   })
 
   const isFormValid = computed(() => {
@@ -102,6 +51,8 @@ export const useVolunteerStore = defineStore('volunteer', () => {
   const isSubmitting = ref(false)
 
   const clearFormData = () => {
+    formState.fax_number = ''
+    formState.email = ''
     formState.firstName = ''
     formState.lastName = ''
     formState.address = ''

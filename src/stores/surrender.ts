@@ -5,6 +5,7 @@ import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
 import { API_ENDPOINTS } from '../constants/api'
 import type { SurrenderFormState } from '../models/surrender-form'
+import { getSurrenderValidationErrors } from './validation/surrenderValidation'
 
 export const useSurrenderStore = defineStore('surrender', () => {
   const { isDemoMode } = useDemoMode()
@@ -102,41 +103,11 @@ export const useSurrenderStore = defineStore('surrender', () => {
   })
 
   const validationErrors = computed(() => {
-    const errors: string[] = []
-
-    if (step.value === 0 && !selectedAnimal.value) {
-      errors.push('Animal Type (Dog or Cat)')
-    }
-
-    if (step.value === 1) {
-      if (!formState.firstName) errors.push('First Name')
-      if (!formState.lastName) errors.push('Last Name')
-      if (!formState.phoneNumber) errors.push('Phone Number')
-      if (!formState.email) errors.push('Email')
-      if (!formState.streetAddress) errors.push('Street Address')
-      if (!formState.city) errors.push('City')
-      if (!formState.state) errors.push('State')
-      if (!formState.zipCode) errors.push('Zip Code')
-      if (!formState.whenToSurrenderAnimal) errors.push('When do you need to surrender your animal')
-      if (!formState.animalName) errors.push("Animal's Name")
-      if (!formState.animalAge) errors.push('Age')
-      if (!formState.animalSex) errors.push('Sex')
-      if (!formState.animalOwnershipDuration) errors.push('How long have you had your animal?')
-      if (!formState.animalLocationFound) errors.push('Where did you get your animal?')
-      if (!formState.animalWhySurrendered) errors.push('Why are you surrendering your animal?')
-      if (!formState.otherPetsInHousehold) errors.push('Other pets in household')
-
-      let hasAgeError = false
-      let hasQtyError = false
-      formState.householdMembers.forEach((member) => {
-        if (!member.age) hasAgeError = true
-        if (!member.count || member.count < 1) hasQtyError = true
-      })
-      if (hasAgeError) errors.push('Household - Age')
-      if (hasQtyError) errors.push('Household - Quantity')
-    }
-
-    return errors
+    return getSurrenderValidationErrors({
+      step: step.value,
+      selectedAnimal: selectedAnimal.value,
+      formState,
+    })
   })
 
   const isStepValid = computed(() => {
@@ -174,11 +145,89 @@ export const useSurrenderStore = defineStore('surrender', () => {
     }
   }
 
+  const clearFormData = () => {
+    formState.fax_number = ''
+    formState.firstName = ''
+    formState.lastName = ''
+    formState.phoneNumber = ''
+    formState.email = ''
+    formState.streetAddress = ''
+    formState.city = ''
+    formState.state = ''
+    formState.zipCode = ''
+    formState.whenToSurrenderAnimal = ''
+    formState.animalName = ''
+    formState.animalSex = ''
+    formState.animalAge = ''
+    formState.animalOwnershipDuration = ''
+    formState.animalLocationFound = ''
+    formState.animalWhySurrendered = ''
+    formState.householdMembers = [{ age: '', gender: 'Female', count: 1 }]
+    formState.otherPetsInHousehold = ''
+    formState.animalsBehaviorTowardsKnownPeople = ''
+    formState.animalsBehaviorTowardsStrangers = ''
+    formState.animalsBehaviorTowardsKnownAnimals = ''
+    formState.commentsOnBehavior = ''
+    formState.animalsReactionToNewPeople = ''
+    formState.animalHouseTrained = ''
+    formState.animalSpendMajorityOfTime = ''
+    formState.animalLeftAloneDuration = ''
+    formState.animalWhenLeftAlone = ''
+    formState.animalLeftAloneBehaviors = ''
+    formState.animalHowItPlays = ''
+    formState.animalToysItLikes = ''
+    formState.animalGamesItLikes = ''
+    formState.animalScaredOfAnything = ''
+    formState.animalScaredOfAnythingExplanation = ''
+    formState.animalBadHabits = ''
+    formState.animalAllowedOnFurniture = ''
+    formState.animalSleepAtNight = ''
+    formState.animalBehaviorFoodOthers = ''
+    formState.animalBehaviorToysOthers = ''
+    formState.animalProblemsRidingInCar = ''
+    formState.animalProblemsRidingInCarExplanation = ''
+    formState.animalEscapedBefore = ''
+    formState.animalEscapedBeforeExplanation = ''
+    formState.animalEverAttackedPeople = ''
+    formState.animalEverAttackedPeopleExplanation = ''
+    formState.animalEverAttackedOtherCats = ''
+    formState.animalEverAttackedOtherCatsExplanation = ''
+    formState.animalEverAttackedOtherDogs = ''
+    formState.animalEverAttackedOtherDogsExplanation = ''
+    formState.animalVeterinarianList = ''
+    formState.animalVeterinarianYearlyVisits = ''
+    formState.animalSpayedNeutered = ''
+    formState.animalVaccinationHistory = ''
+    formState.animalVaccinationsCurrent = ''
+    formState.animalTestedHeartworm = ''
+    formState.animalTestedHeartwormExplanation = ''
+    formState.animalHeartwormPrevention = ''
+    formState.animalHeartwormPreventionExplanation = ''
+    formState.animalMicrochipped = ''
+    formState.animalMicrochippedExplanation = ''
+    formState.animalVetOrGroomerBehavior = ''
+    formState.animalVetMuzzled = ''
+    formState.animalPastOrPresentHealthProblems = ''
+    formState.animalPastOrPresentHealthProblemsExplanation = ''
+    formState.animalCurrentMedications = ''
+    formState.animalCurrentMedicationsExplanation = ''
+    formState.animalTypeOfFood = ''
+    formState.animalEatingFrequency = ''
+    formState.animalAmountOfFood = ''
+    formState.animalFoodTreats = ''
+    formState.animalFoodTreatsExplanation = ''
+    formState.additionalInformation = ''
+    formState.fullBodyPhotoOfAnimal = ''
+    formState.closeUpPhotoOfAnimalFace = ''
+    formState.copiesOfRecords = ''
+  }
+
   const resetForm = () => {
     step.value = 0
     isSubmitted.value = false
     hasAttemptedSubmit.value = false
     selectedAnimal.value = null
+    clearFormData()
   }
 
   const submitApplication = async () => {
