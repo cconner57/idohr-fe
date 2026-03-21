@@ -3,7 +3,7 @@ import InputField from '../../common/ui/InputField.vue'
 import InputSelectGroup from '../../common/ui/InputSelectGroup.vue'
 import InputTextArea from '../../common/ui/InputTextArea.vue'
 
-const { modelValue } = defineProps<{
+const { modelValue, animalLabel = 'cat' } = defineProps<{
   modelValue: {
     catPreferenceBreed: string | null
     catPreferencePhysical: string | null
@@ -23,6 +23,7 @@ const { modelValue } = defineProps<{
   // eslint-disable-next-line no-unused-vars
   handleBlur: (_field: string) => void
   hasAttemptedSubmit?: boolean
+  animalLabel?: string
 }>()
 </script>
 
@@ -77,7 +78,7 @@ const { modelValue } = defineProps<{
       @blur="handleBlur?.('catPreferenceNotWant')"
     />
     <InputTextArea
-      label="Why are you interested in adopting a new cat?"
+      :label="`Why are you interested in adopting a new ${animalLabel}?`"
       placeholder="Share your motivation..."
       :modelValue="modelValue.whyInterested"
       @update:modelValue="(val) => (modelValue.whyInterested = val)"
@@ -107,7 +108,7 @@ const { modelValue } = defineProps<{
       @blur="handleBlur?.('adoptionReason')"
     />
     <InputSelectGroup
-      label="Have you owned a cat before?"
+      :label="`Have you owned a ${animalLabel} before?`"
       :options="['Yes', 'No', 'Not as an adult']"
       :modelValue="modelValue.ownCatBefore"
       @update:modelValue="(val) => (modelValue.ownCatBefore = val as string)"
@@ -118,7 +119,7 @@ const { modelValue } = defineProps<{
       @blur="handleBlur?.('ownCatBefore')"
     />
     <InputSelectGroup
-      label="Have you owned a kitten before?"
+      :label="`Have you owned a ${animalLabel === 'dog' ? 'puppy' : 'kitten'} before?`"
       :options="['Yes', 'No', 'Not as an adult']"
       :modelValue="modelValue.ownKittenBefore"
       @update:modelValue="(val) => (modelValue.ownKittenBefore = val as string)"
@@ -140,7 +141,7 @@ const { modelValue } = defineProps<{
       @blur="handleBlur?.('alreadyHaveVeterinarian')"
     />
     <InputTextArea
-      label="Where in the house will the cat be allowed?"
+      :label="`Where in the house will the ${animalLabel} be allowed?`"
       placeholder="e.g. Everywhere, Bedrooms only..."
       :modelValue="modelValue.catAllowedHomeArea"
       @update:modelValue="(val) => (modelValue.catAllowedHomeArea = val)"
@@ -151,7 +152,7 @@ const { modelValue } = defineProps<{
       :spanFull="false"
     />
     <InputTextArea
-      label="How many hours a day will the cat be alone?"
+      :label="`How many hours a day will the ${animalLabel} be alone?`"
       placeholder="Please include typical work schedule..."
       :modelValue="modelValue.catHomeAloneHours"
       @update:modelValue="(val) => (modelValue.catHomeAloneHours = val)"
@@ -173,7 +174,7 @@ const { modelValue } = defineProps<{
       :spanFull="false"
     />
     <InputTextArea
-      label="If the cat escapes, what will you do?"
+      :label="`If the ${animalLabel} escapes, what will you do?`"
       placeholder="Search plan..."
       :modelValue="modelValue.catEscapeSteps"
       @update:modelValue="(val) => (modelValue.catEscapeSteps = val)"

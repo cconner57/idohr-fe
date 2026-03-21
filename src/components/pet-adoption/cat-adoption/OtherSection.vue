@@ -1,15 +1,46 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import type { FormState } from '../../../models/adopt-form.ts'
 import InputField from '../../common/ui/InputField.vue'
 import InputSelectGroup from '../../common/ui/InputSelectGroup.vue'
 
-const { modelValue } = defineProps<{
+const { modelValue, animalLabel = 'cat' } = defineProps<{
   modelValue: FormState
   touched?: Record<string, boolean>
   // eslint-disable-next-line no-unused-vars
   handleBlur: (_field: string) => void
   hasAttemptedSubmit?: boolean
+  animalLabel?: string
 }>()
+
+const capitalLabel = computed(() => animalLabel.charAt(0).toUpperCase() + animalLabel.slice(1))
+
+const surrenderOptions = computed(() => {
+  const label = capitalLabel.value
+  return [
+    'Moved to a place that didn\'t allow pets',
+    'Move out of state',
+    'Sheds too much',
+    animalLabel === 'dog' ? 'Housetraining problem' : 'Litterbox problem',
+    'Kids ignored pet',
+    'Required prescription food or medication',
+    `${label} has seizures`,
+    `${label} whines/cries/plays loudly at night`,
+    `${label} chews clothing/shoes`,
+    'New baby',
+    'Allergy',
+    'Pets didn\'t get along',
+    'Scratches/chews furniture',
+    'Pees on furniture',
+    'Bit or snapped at another animal',
+    'Bit or snapped at a person',
+    'Escapes from yard/house',
+    'Divorce/Separation',
+    'Unemployment or financial hardship',
+    'None of the above',
+  ]
+})
 </script>
 
 <template>
@@ -76,7 +107,7 @@ const { modelValue } = defineProps<{
     />
     <InputField
       v-model="modelValue.foodTypeBrand"
-      label="What type and brand of food do you plan on feeding your new cat?"
+      :label="`What type and brand of food do you plan on feeding your new ${animalLabel}?`"
       name="foodTypeBrand"
       placeholder="Type and Brand"
       required
@@ -89,28 +120,7 @@ const { modelValue } = defineProps<{
     <InputSelectGroup
       class="full-width"
       label="Check all that apply. Under what conditions would you NOT KEEP your new pet?"
-      :options="[
-        'Moved to a place that didn\'t allow pets',
-        'Move out of state',
-        'Sheds too much',
-        'Litterbox problem',
-        'Kids ignored pet',
-        'Required prescription food or medication',
-        'Cat has seizures',
-        'Cat whines/cries/plays loudly at night',
-        'Cat chews clothing/shoes',
-        'New baby',
-        'Allergy',
-        'Pets didn\'t get along',
-        'Scratches/chews furniture',
-        'Pees on furniture',
-        'Bit or snapped at another animal',
-        'Bit or snapped at a person',
-        'Escapes from yard/house',
-        'Divorce/Separation',
-        'Unemployment or financial hardship',
-        'None of the above',
-      ]"
+      :options="surrenderOptions"
       multiple
       :modelValue="modelValue.surrenderConditions"
       @update:modelValue="(val) => (modelValue.surrenderConditions = val as string[])"
@@ -123,7 +133,7 @@ const { modelValue } = defineProps<{
     <InputField
       class="full-width"
       v-model="modelValue.surrenderPlan"
-      label="What would you do with your cat if you could not keep it for the above reason(s)?"
+      :label="`What would you do with your ${animalLabel} if you could not keep it for the above reason(s)?`"
       name="surrenderPlan"
       placeholder="Details"
       required
@@ -136,7 +146,7 @@ const { modelValue } = defineProps<{
 
     <InputField
       v-model="modelValue.affordVetCare"
-      label="Can you afford regular veterinary care for this cat - including yearly vaccinations, annual physical exams, dental care, etc. ($300 or more per year)?"
+      :label="`Can you afford regular veterinary care for this ${animalLabel} - including yearly vaccinations, annual physical exams, dental care, etc. ($300 or more per year)?`"
       name="affordVetCare"
       placeholder="Yes/No"
       required

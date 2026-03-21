@@ -7,11 +7,12 @@ import ButtonToggle from '../../common/ui/ButtonToggle.vue'
 import InputField from '../../common/ui/InputField.vue'
 import InputSelectGroup from '../../common/ui/InputSelectGroup.vue'
 
-defineProps<{
+const { animalLabel = 'cat' } = defineProps<{
   touched: Record<string, boolean>
   // eslint-disable-next-line no-unused-vars
   handleBlur: (_field: string) => void
   hasAttemptedSubmit?: boolean
+  animalLabel?: string
 }>()
 
 const adoptionStore = useAdoptionStore()
@@ -108,7 +109,7 @@ const { formState } = storeToRefs(adoptionStore)
     />
     <InputField
       v-model="formState.allergies"
-      label="Does anyone in the household have cat allergies?"
+      :label="`Does anyone in the household have ${animalLabel} allergies?`"
       name="allergies"
       placeholder="Yes/No"
       required
@@ -166,7 +167,7 @@ const { formState } = storeToRefs(adoptionStore)
     />
     <InputField
       v-model="formState.travelPlan"
-      label="Do you travel a great deal? What do you plan to do with your cat when you do travel?"
+      :label="`Do you travel a great deal? What do you plan to do with your ${animalLabel} when you do travel?`"
       name="travelPlan"
       placeholder="Travel Plan"
       required
@@ -177,7 +178,7 @@ const { formState } = storeToRefs(adoptionStore)
       @blur="handleBlur('travelPlan')"
     />
     <InputSelectGroup
-      label="Check all that apply. Will the cat have access to:"
+      :label="`Check all that apply. Will the ${animalLabel} have access to:`"
       :options="['Balcony', 'Patio', 'Garage', 'Yard', 'Doggie Door', 'None of these']"
       :modelValue="formState.catAccess"
       @update:modelValue="(val) => (formState.catAccess = val as string[])"
@@ -189,7 +190,7 @@ const { formState } = storeToRefs(adoptionStore)
       @blur="handleBlur('catAccess')"
     />
     <InputSelectGroup
-      label="This cat will be:"
+      :label="`This ${animalLabel} will be:`"
       :options="['Indoor Only', 'Mostly Indoor', 'Mostly Outdoor', 'Outdoor Only']"
       :modelValue="formState.catIndoorOutdoor"
       @update:modelValue="(val) => (formState.catIndoorOutdoor = val as string)"

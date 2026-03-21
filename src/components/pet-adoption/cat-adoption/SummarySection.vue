@@ -3,12 +3,13 @@ import type { FormState } from '../../../models/adopt-form.ts'
 import InputField from '../../common/ui/InputField.vue'
 import InputSignature from '../../common/ui/InputSignature.vue'
 
-defineProps<{
+const { animalLabel = 'cat' } = defineProps<{
   modelValue: FormState
   touched: Record<string, boolean>
   // eslint-disable-next-line no-unused-vars
   handleBlur: (_field: string) => void
   hasAttemptedSubmit?: boolean
+  animalLabel?: string
 }>()
 </script>
 
@@ -21,14 +22,18 @@ defineProps<{
       on a first-come-first-served basis. We reserve the right not to adopt. Please remember that we
       are all volunteers and work regular full-time jobs like everyone else. We will reply to your
       application as soon as it has been processed (normally 3-4 days). Thank you for considering a
-      rescue cat!
+      rescue {{ animalLabel }}!
     </p>
 
     <p>
-      You are making a major commitment when you adopt any pet. Please remember that cats can live
-      for up to 20 or more years. Thousands of cats are killed at animals shelters each year because
-      their owners did not plan for the future. Cats can get sick and require expensive medical
-      treatment during the course of their life. Cats need affection, attention and understanding.
+      You are making a major commitment when you adopt any pet. Please remember that
+      {{ animalLabel === 'dog' ? 'dogs' : 'cats' }} can live for up to
+      {{ animalLabel === 'dog' ? '15' : '20' }} or more years. Thousands of
+      {{ animalLabel === 'dog' ? 'dogs' : 'cats' }} are killed at animal shelters each year because
+      their owners did not plan for the future.
+      {{ animalLabel === 'dog' ? 'Dogs' : 'Cats' }} can get sick and require expensive medical
+      treatment during the course of their life.
+      {{ animalLabel === 'dog' ? 'Dogs' : 'Cats' }} need affection, attention and understanding.
       You may have to adjust your lifestyle to accommodate a new pet. If you are ready to make this
       commitment, please type your name below:
     </p>

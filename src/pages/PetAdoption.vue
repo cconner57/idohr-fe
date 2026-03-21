@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { onMounted,reactive } from 'vue'
+import { computed, onMounted,reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
@@ -30,6 +30,9 @@ const { selectedPet } = storeToRefs(petStore)
 const { prevStep, resetForm } = adoptionStore
 
 const { submitMetric } = useMetrics()
+
+const species = computed(() => selectedPet.value?.species ?? 'cat')
+const animalLabel = computed(() => species.value === 'dog' ? 'dog' : 'cat')
 
 onMounted(() => {
   if (selectedPet.value) {
@@ -103,6 +106,7 @@ const handleReset = async () => {
         :touched="touched"
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
+        :animalLabel="animalLabel"
       />
       <NewCatSection
         v-show="step === 2"
@@ -110,6 +114,7 @@ const handleReset = async () => {
         :touched="touched"
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
+        :animalLabel="animalLabel"
       />
       <CurrentPetsSection
         v-show="step === 3"
@@ -131,6 +136,7 @@ const handleReset = async () => {
         :touched="touched"
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
+        :animalLabel="animalLabel"
       />
       <SummarySection
         v-show="step === 6"
@@ -138,6 +144,7 @@ const handleReset = async () => {
         :touched="touched"
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
+        :animalLabel="animalLabel"
       />
 
       <div v-if="hasAttemptedSubmit && validationErrors.length > 0" class="validation-summary">
