@@ -242,12 +242,14 @@ export const useSurrenderStore = defineStore('surrender', () => {
   const serializableTextFields = () => {
     const { fullBodyPhotoOfAnimal, closeUpPhotoOfAnimalFace, copiesOfRecords, ...textFields } =
       formState
-    return {
-      ...textFields,
-      otherPetsInHousehold: Array.isArray(textFields.otherPetsInHousehold)
-        ? textFields.otherPetsInHousehold.join(', ')
-        : textFields.otherPetsInHousehold,
+    // Join any string[] values into comma-separated strings for the backend
+    const serialized: Record<string, unknown> = {}
+    for (const [key, value] of Object.entries(textFields)) {
+      serialized[key] = Array.isArray(value) && value.every((v) => typeof v === 'string')
+        ? value.join(', ')
+        : value
     }
+    return serialized
   }
 
   const buildFormData = () => {
