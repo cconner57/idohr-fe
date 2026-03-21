@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, toRaw } from 'vue'
 
 import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
@@ -234,14 +234,19 @@ export const useSurrenderStore = defineStore('surrender', () => {
     clearFormData()
   }
 
-  const hasFiles = () =>
-    formState.fullBodyPhotoOfAnimal instanceof File ||
-    formState.closeUpPhotoOfAnimalFace instanceof File ||
-    (Array.isArray(formState.copiesOfRecords) && formState.copiesOfRecords.some((f) => f instanceof File))
+  const isFile = (val: unknown): val is File =>
+    val instanceof File || (val != null && typeof val === 'object' && 'name' in val && 'size' in val && 'type' in val)
+
+  const hasFiles = () => {
+    const raw = toRaw(formState)
+    return isFile(raw.fullBodyPhotoOfAnimal) ||
+      isFile(raw.closeUpPhotoOfAnimalFace) ||
+      (Array.isArray(raw.copiesOfRecords) && raw.copiesOfRecords.some((f) => isFile(f)))
+  }
 
   const serializableTextFields = () => {
-    const { fullBodyPhotoOfAnimal, closeUpPhotoOfAnimalFace, copiesOfRecords, ...textFields } =
-      formState
+    const raw = toRaw(formState)
+    const { fullBodyPhotoOfAnimal, closeUpPhotoOfAnimalFace, copiesOfRecords, ...textFields } = raw
     // Join any string[] values into comma-separated strings for the backend
     const serialized: Record<string, unknown> = {}
     for (const [key, value] of Object.entries(textFields)) {
@@ -253,20 +258,26 @@ export const useSurrenderStore = defineStore('surrender', () => {
   }
 
   const buildFormData = () => {
+    const raw = toRaw(formState)
     const fd = new FormData()
     fd.append('data', JSON.stringify(serializableTextFields()))
 
-    // Append file fields
-    if (formState.fullBodyPhotoOfAnimal instanceof File) {
-      fd.append('fullBodyPhoto', formState.fullBodyPhotoOfAnimal)
+    // Append file fields — use toRaw to unwrap reactive proxy before appending
+    const fullBody = toRaw(raw.fullBodyPhotoOfAnimal)
+    const closeUp = toRaw(raw.closeUpPhotoOfAnimalFace)
+    const records = toRaw(raw.copiesOfRecords)
+
+    if (isFile(fullBody)) {
+      fd.append('fullBodyPhoto', fullBody)
     }
-    if (formState.closeUpPhotoOfAnimalFace instanceof File) {
-      fd.append('closeUpPhoto', formState.closeUpPhotoOfAnimalFace)
+    if (isFile(closeUp)) {
+      fd.append('closeUpPhoto', closeUp)
     }
-    if (Array.isArray(formState.copiesOfRecords)) {
-      for (const file of formState.copiesOfRecords) {
-        if (file instanceof File) {
-          fd.append('records', file)
+    if (Array.isArray(records)) {
+      for (const file of records) {
+        const rawFile = toRaw(file)
+        if (isFile(rawFile)) {
+          fd.append('records', rawFile)
         }
       }
     }
