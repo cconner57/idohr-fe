@@ -255,14 +255,14 @@ export const useSurrenderStore = defineStore('surrender', () => {
     fd.append('data', JSON.stringify(serializableTextFields()))
 
     // Append file fields
-    if (fullBodyPhotoOfAnimal instanceof File) {
-      fd.append('fullBodyPhoto', fullBodyPhotoOfAnimal)
+    if (formState.fullBodyPhotoOfAnimal instanceof File) {
+      fd.append('fullBodyPhoto', formState.fullBodyPhotoOfAnimal)
     }
-    if (closeUpPhotoOfAnimalFace instanceof File) {
-      fd.append('closeUpPhoto', closeUpPhotoOfAnimalFace)
+    if (formState.closeUpPhotoOfAnimalFace instanceof File) {
+      fd.append('closeUpPhoto', formState.closeUpPhotoOfAnimalFace)
     }
-    if (Array.isArray(copiesOfRecords)) {
-      for (const file of copiesOfRecords) {
+    if (Array.isArray(formState.copiesOfRecords)) {
+      for (const file of formState.copiesOfRecords) {
         if (file instanceof File) {
           fd.append('records', file)
         }
