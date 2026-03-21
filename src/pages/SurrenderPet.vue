@@ -35,7 +35,7 @@ const {
   validationErrors,
   isStepValid,
 } = storeToRefs(surrenderStore)
-const { nextStep, prevStep, resetForm } = surrenderStore
+const { nextStep, prevStep, resetForm, submitApplication } = surrenderStore
 
 const touched = reactive<Record<string, boolean>>({})
 
@@ -45,10 +45,19 @@ const handleBlur = (field: string) => {
 
 const formError = computed(() => hasAttemptedSubmit.value && !isStepValid.value)
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
+  if (step.value === 6) {
+    hasAttemptedSubmit.value = true
+    if (!isStepValid.value) {
+      globalThis.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+      return
+    }
+    await submitApplication()
+    return
+  }
+
   if (!nextStep()) {
     globalThis.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-
     return
   }
   globalThis.scrollTo({ top: 0, behavior: 'smooth' })
