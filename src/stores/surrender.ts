@@ -12,6 +12,8 @@ export const useSurrenderStore = defineStore('surrender', () => {
   const step = ref(0)
 
   const isSubmitted = ref(false)
+  const isSubmitting = ref(false)
+  const submissionError = ref<string | null>(null)
   const hasAttemptedSubmit = ref(false)
   const selectedAnimal = ref<'dog' | 'cat' | null>(null)
 
@@ -225,6 +227,8 @@ export const useSurrenderStore = defineStore('surrender', () => {
   const resetForm = () => {
     step.value = 0
     isSubmitted.value = false
+    isSubmitting.value = false
+    submissionError.value = null
     hasAttemptedSubmit.value = false
     selectedAnimal.value = null
     clearFormData()
@@ -235,13 +239,20 @@ export const useSurrenderStore = defineStore('surrender', () => {
     formState.closeUpPhotoOfAnimalFace instanceof File ||
     (Array.isArray(formState.copiesOfRecords) && formState.copiesOfRecords.some((f) => f instanceof File))
 
-  const buildFormData = () => {
-    const fd = new FormData()
-
-    // Serialize all non-file fields as a JSON "data" part
+  const serializableTextFields = () => {
     const { fullBodyPhotoOfAnimal, closeUpPhotoOfAnimalFace, copiesOfRecords, ...textFields } =
       formState
-    fd.append('data', JSON.stringify(textFields))
+    return {
+      ...textFields,
+      otherPetsInHousehold: Array.isArray(textFields.otherPetsInHousehold)
+        ? textFields.otherPetsInHousehold.join(', ')
+        : textFields.otherPetsInHousehold,
+    }
+  }
+
+  const buildFormData = () => {
+    const fd = new FormData()
+    fd.append('data', JSON.stringify(serializableTextFields()))
 
     // Append file fields
     if (fullBodyPhotoOfAnimal instanceof File) {
@@ -262,6 +273,11 @@ export const useSurrenderStore = defineStore('surrender', () => {
   }
 
   const submitApplication = async () => {
+    if (isSubmitting.value) return
+
+    isSubmitting.value = true
+    submissionError.value = null
+
     try {
       if (isDemoMode.value) {
         console.log('Demo Mode: Simulating submission success')
@@ -280,7 +296,7 @@ export const useSurrenderStore = defineStore('surrender', () => {
           ? { body: buildFormData() }
           : {
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(formState),
+              body: JSON.stringify(serializableTextFields()),
             }),
       })
 
@@ -294,7 +310,9 @@ export const useSurrenderStore = defineStore('surrender', () => {
       resetForm()
     } catch (error) {
       console.error('Error submitting form:', error)
-      alert('There was an error submitting your application. Please try again.')
+      submissionError.value = 'There was an error submitting your application. Please try again.'
+    } finally {
+      isSubmitting.value = false
     }
   }
 
@@ -302,6 +320,8 @@ export const useSurrenderStore = defineStore('surrender', () => {
     formState,
     step,
     isSubmitted,
+    isSubmitting,
+    submissionError,
     hasAttemptedSubmit,
     selectedAnimal,
     validationErrors,

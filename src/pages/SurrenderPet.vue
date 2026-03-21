@@ -30,6 +30,8 @@ const {
   formState,
   step,
   isSubmitted,
+  isSubmitting,
+  submissionError,
   hasAttemptedSubmit,
   selectedAnimal,
   validationErrors,
@@ -169,6 +171,15 @@ const formattedAnimal = computed(() => {
         </div>
       </div>
 
+      <div
+        v-if="submissionError"
+        class="validation-summary"
+        role="alert"
+        aria-live="polite"
+      >
+        <p class="summary-title">{{ submissionError }}</p>
+      </div>
+
       <div class="actions">
         <Button
           v-if="step > 0"
@@ -176,13 +187,15 @@ const formattedAnimal = computed(() => {
           title="Back"
           color="white"
           size="large"
+          :disabled="isSubmitting"
           style="border: 1px solid var(--color-primary); color: var(--color-primary)"
         />
         <Button
           @click="handleSubmit"
           type="submit"
-          :title="step === 6 ? 'Submit' : 'Next'"
+          :title="isSubmitting ? 'Submitting...' : step === 6 ? 'Submit' : 'Next'"
           color="green"
+          :disabled="isSubmitting"
           size="large"
         />
       </div>
