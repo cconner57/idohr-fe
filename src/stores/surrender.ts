@@ -285,7 +285,6 @@ export const useSurrenderStore = defineStore('surrender', () => {
         console.log('Demo Mode: Simulating submission success')
         await new Promise((resolve) => setTimeout(resolve, 1000))
         isSubmitted.value = true
-        resetForm()
         return
       }
 
@@ -309,7 +308,6 @@ export const useSurrenderStore = defineStore('surrender', () => {
       submitMetric('form_submit', { form: 'surrender' })
 
       isSubmitted.value = true
-      resetForm()
     } catch (error) {
       console.error('Error submitting form:', error)
       submissionError.value = 'There was an error submitting your application. Please try again.'
