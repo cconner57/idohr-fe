@@ -89,15 +89,11 @@ const formattedAnimal = computed(() => {
           v-if="selectedAnimal === 'cat' && step > 0"
           src="/images/cat.png"
           alt="cat"
-          height="50"
-          width="100"
         />
         <img
           v-if="selectedAnimal === 'dog' && step > 0"
           src="/images/dog.png"
-          alt="cat"
-          height="50"
-          width="100"
+          alt="dog"
         />
         <h1>{{ headerText }}</h1>
       </div>
@@ -238,6 +234,7 @@ const formattedAnimal = computed(() => {
 
       img {
         width: 100px;
+        height: auto;
       }
 
       @container shell (max-width: 800px) {
@@ -253,7 +250,7 @@ const formattedAnimal = computed(() => {
 
         img {
           width: 60px;
-          height: 60px;
+          height: auto;
         }
       }
 

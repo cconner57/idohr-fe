@@ -230,6 +230,37 @@ export const useSurrenderStore = defineStore('surrender', () => {
     clearFormData()
   }
 
+  const hasFiles = () =>
+    formState.fullBodyPhotoOfAnimal instanceof File ||
+    formState.closeUpPhotoOfAnimalFace instanceof File ||
+    (Array.isArray(formState.copiesOfRecords) && formState.copiesOfRecords.some((f) => f instanceof File))
+
+  const buildFormData = () => {
+    const fd = new FormData()
+
+    // Serialize all non-file fields as a JSON "data" part
+    const { fullBodyPhotoOfAnimal, closeUpPhotoOfAnimalFace, copiesOfRecords, ...textFields } =
+      formState
+    fd.append('data', JSON.stringify(textFields))
+
+    // Append file fields
+    if (fullBodyPhotoOfAnimal instanceof File) {
+      fd.append('fullBodyPhoto', fullBodyPhotoOfAnimal)
+    }
+    if (closeUpPhotoOfAnimalFace instanceof File) {
+      fd.append('closeUpPhoto', closeUpPhotoOfAnimalFace)
+    }
+    if (Array.isArray(copiesOfRecords)) {
+      for (const file of copiesOfRecords) {
+        if (file instanceof File) {
+          fd.append('records', file)
+        }
+      }
+    }
+
+    return fd
+  }
+
   const submitApplication = async () => {
     try {
       if (isDemoMode.value) {
@@ -242,12 +273,15 @@ export const useSurrenderStore = defineStore('surrender', () => {
 
       isSubmitted.value = false
 
+      const useMultipart = hasFiles()
       const response = await fetch(API_ENDPOINTS.SURRENDER_APPLICATION, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formState),
+        ...(useMultipart
+          ? { body: buildFormData() }
+          : {
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formState),
+            }),
       })
 
       if (!response.ok) {
