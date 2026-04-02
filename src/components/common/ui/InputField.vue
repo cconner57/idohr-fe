@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { nextTick,ref, useAttrs, watch } from 'vue'
+import { nextTick, ref, useAttrs, watch } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
 })
+
+type TInputValue = string | number | null
 
 const props = defineProps<{
   id?: string
@@ -11,16 +13,17 @@ const props = defineProps<{
   label?: string
   placeholder: string
   type?: string
-  modelValue: string | number | null
+  modelValue: TInputValue
   fullWidth?: boolean
   required?: boolean
   hasError?: boolean
   maxlength?: string | number
   inputmode?: 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'
+  openPickerOnFocus?: boolean
 }>()
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number | null]
+  'update:modelValue': [value: TInputValue]
   blur: [event: Event]
 }>()
 
@@ -35,7 +38,7 @@ function onInput(e: Event) {
 
   if (props.type === 'number' && val !== null && val !== '') {
     const num = Number(val)
-    if (!isNaN(num)) {
+    if (!Number.isNaN(num)) {
       val = num
     }
   }
@@ -60,6 +63,18 @@ watch(
 function onBlur(e: Event) {
   emit('blur', e)
 }
+
+function openPicker() {
+  if (!props.openPickerOnFocus || !inputRef.value) {
+    return
+  }
+
+  const pickerInput = inputRef.value as HTMLInputElement & {
+    showPicker?: () => void
+  }
+
+  pickerInput.showPicker?.()
+}
 </script>
 
 <template>
@@ -78,6 +93,8 @@ function onBlur(e: Event) {
       :value="props.modelValue"
       :aria-invalid="props.hasError"
       @input="onInput"
+      @focus="openPicker"
+      @click="openPicker"
       @blur="onBlur"
       :required="props.required"
       :maxlength="props.maxlength"
@@ -125,5 +142,4 @@ input:focus {
   border-color: var(--color-danger);
   outline: 1px solid var(--color-danger);
 }
-
 </style>

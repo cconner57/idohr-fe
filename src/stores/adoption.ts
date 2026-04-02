@@ -5,6 +5,7 @@ import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
 import { API_ENDPOINTS } from '../constants/api'
 import type { FormState } from '../models/adopt-form'
+import { getApiErrorMessage, withPublicOrgId } from '../utils/api'
 import { usePetStore } from './pets'
 import { getAdoptionValidationErrors } from './validation/adoptionValidation'
 
@@ -328,7 +329,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
       // Re-verifying struct: CatAccess *string `json:"catAccess"`
       // Frontend is string[]. Must join it. Done above.
 
-      const response = await fetch(API_ENDPOINTS.ADOPTION_APPLICATION, {
+      const response = await fetch(withPublicOrgId(API_ENDPOINTS.ADOPTION_APPLICATION), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -337,8 +338,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
       })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        throw new Error(errorData.error || errorData.message || 'Submission failed')
+        throw new Error(await getApiErrorMessage(response, 'Submission failed'))
       }
 
       isSubmitted.value = true

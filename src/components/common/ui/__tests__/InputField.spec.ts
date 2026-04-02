@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 import InputField from '../InputField.vue'
 
@@ -40,11 +40,11 @@ describe('InputField.vue', () => {
 
   it('validates numeric input', async () => {
     const wrapper = mount(InputField, {
-        props: {
-            type: 'number',
-            modelValue: null,
-            placeholder: 'Test',
-        }
+      props: {
+        type: 'number',
+        modelValue: null,
+        placeholder: 'Test',
+      },
     })
     // Simulate non-numeric input if browser allows it (programatically setting value)
     await wrapper.find('input').setValue('abc')
@@ -72,5 +72,27 @@ describe('InputField.vue', () => {
     })
     expect(wrapper.find('.control').classes()).toContain('has-error')
     expect(wrapper.find('input').attributes('aria-invalid')).toBe('true')
+  })
+
+  it('opens the native picker on focus when enabled', async () => {
+    const wrapper = mount(InputField, {
+      props: {
+        type: 'date',
+        modelValue: '',
+        placeholder: 'Select date',
+        openPickerOnFocus: true,
+      },
+    })
+
+    const input = wrapper.find('input').element as HTMLInputElement & {
+      showPicker?: () => void
+    }
+    const showPicker = vi.fn()
+
+    input.showPicker = showPicker
+
+    await wrapper.find('input').trigger('focus')
+
+    expect(showPicker).toHaveBeenCalledTimes(1)
   })
 })

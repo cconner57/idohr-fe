@@ -5,6 +5,7 @@ import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
 import { API_ENDPOINTS } from '../constants/api'
 import type { SurrenderFormState } from '../models/surrender-form'
+import { getApiErrorMessage, withPublicOrgId } from '../utils/api'
 import { getSurrenderValidationErrors } from './validation/surrenderValidation'
 
 export const useSurrenderStore = defineStore('surrender', () => {
@@ -235,13 +236,16 @@ export const useSurrenderStore = defineStore('surrender', () => {
   }
 
   const isFile = (val: unknown): val is File =>
-    val instanceof File || (val != null && typeof val === 'object' && 'name' in val && 'size' in val && 'type' in val)
+    val instanceof File ||
+    (val != null && typeof val === 'object' && 'name' in val && 'size' in val && 'type' in val)
 
   const hasFiles = () => {
     const raw = toRaw(formState)
-    return isFile(raw.fullBodyPhotoOfAnimal) ||
+    return (
+      isFile(raw.fullBodyPhotoOfAnimal) ||
       isFile(raw.closeUpPhotoOfAnimalFace) ||
       (Array.isArray(raw.copiesOfRecords) && raw.copiesOfRecords.some((f) => isFile(f)))
+    )
   }
 
   const serializableTextFields = () => {
@@ -250,9 +254,8 @@ export const useSurrenderStore = defineStore('surrender', () => {
     // Join any string[] values into comma-separated strings for the backend
     const serialized: Record<string, unknown> = {}
     for (const [key, value] of Object.entries(textFields)) {
-      serialized[key] = Array.isArray(value) && value.every((v) => typeof v === 'string')
-        ? value.join(', ')
-        : value
+      serialized[key] =
+        Array.isArray(value) && value.every((v) => typeof v === 'string') ? value.join(', ') : value
     }
     return serialized
   }
@@ -302,7 +305,7 @@ export const useSurrenderStore = defineStore('surrender', () => {
       isSubmitted.value = false
 
       const useMultipart = hasFiles()
-      const response = await fetch(API_ENDPOINTS.SURRENDER_APPLICATION, {
+      const response = await fetch(withPublicOrgId(API_ENDPOINTS.SURRENDER_APPLICATION), {
         method: 'POST',
         ...(useMultipart
           ? { body: buildFormData() }
@@ -313,7 +316,9 @@ export const useSurrenderStore = defineStore('surrender', () => {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to submit application')
+        throw new Error(
+          await getApiErrorMessage(response, 'There was an error submitting your application.'),
+        )
       }
 
       submitMetric('form_submit', { form: 'surrender' })
@@ -321,7 +326,10 @@ export const useSurrenderStore = defineStore('surrender', () => {
       isSubmitted.value = true
     } catch (error) {
       console.error('Error submitting form:', error)
-      submissionError.value = 'There was an error submitting your application. Please try again.'
+      submissionError.value =
+        error instanceof Error
+          ? error.message
+          : 'There was an error submitting your application. Please try again.'
     } finally {
       isSubmitting.value = false
     }

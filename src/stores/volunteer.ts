@@ -5,6 +5,7 @@ import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
 import { API_ENDPOINTS } from '../constants/api'
 import type { IVolunteerFormState } from '../models/volunteer-form'
+import { getApiErrorMessage, withPublicOrgId } from '../utils/api'
 import { getVolunteerValidationErrors } from './validation/volunteerValidation'
 
 export const useVolunteerStore = defineStore('volunteer', () => {
@@ -102,19 +103,19 @@ export const useVolunteerStore = defineStore('volunteer', () => {
     }
 
     try {
-      const response = await fetch(API_ENDPOINTS.VOLUNTEER_APPLICATION, {
+      const response = await fetch(withPublicOrgId(API_ENDPOINTS.VOLUNTEER_APPLICATION), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
 
       if (!response.ok) {
-        if (response.status === 400 || response.status >= 500) {
-          apiError.value = 'There was an error on the server. Please try again later.'
-        } else {
-          const errorData = await response.json().catch(() => ({}))
-          apiError.value = errorData.error || `Server Error (${response.status})`
-        }
+        const fallbackMessage =
+          response.status === 400 || response.status >= 500
+            ? 'There was an error on the server. Please try again later.'
+            : `Server Error (${response.status})`
+
+        apiError.value = await getApiErrorMessage(response, fallbackMessage)
         return false
       }
 

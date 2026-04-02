@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 
+import { getApiErrorMessage } from '@/utils/api'
+
 interface IApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
   body?: unknown
@@ -35,11 +37,7 @@ export function useApi() {
       })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        error.value =
-          (errorData as Record<string, string>).error ||
-          (errorData as Record<string, string>).message ||
-          `Request failed (${response.status})`
+        error.value = await getApiErrorMessage(response, `Request failed (${response.status})`)
         return null
       }
 

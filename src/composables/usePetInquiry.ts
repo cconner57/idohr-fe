@@ -2,6 +2,7 @@ import { reactive, ref } from 'vue'
 
 import { API_ENDPOINTS } from '@/constants/api'
 import type { IPet } from '@/models/common'
+import { getApiErrorMessage, withPublicOrgId } from '@/utils/api'
 
 type TInquirySource = 'schedule_meet' | 'request_info'
 
@@ -29,7 +30,7 @@ export function usePetInquiry(pet: IPet, source: TInquirySource) {
     isSubmitting.value = true
 
     try {
-      const response = await fetch(API_ENDPOINTS.PET_INQUIRY, {
+      const response = await fetch(withPublicOrgId(API_ENDPOINTS.PET_INQUIRY), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -46,10 +47,10 @@ export function usePetInquiry(pet: IPet, source: TInquirySource) {
       })
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}))
-        apiError.value =
-          (errorData as Record<string, string>).error ||
-          'Something went wrong. Please try again.'
+        apiError.value = await getApiErrorMessage(
+          response,
+          'Something went wrong. Please try again.',
+        )
         return false
       }
 

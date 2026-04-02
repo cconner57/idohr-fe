@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 import { usePetInquiry } from '@/composables/usePetInquiry'
 import type { IPet } from '@/models/common'
+import { formatPhoneNumber } from '@/utils/validators'
 
 import Drawer from '../../common/drawer/Drawer.vue'
 import Button from '../../common/ui/Button.vue'
@@ -23,6 +24,10 @@ const { formData, isSubmitting, isSubmitted, apiError, submitInquiry } = usePetI
 const preferredDate = ref('')
 const preferredTime = ref('')
 
+const updatePhone = (value: string | number | null) => {
+  formData.phone = formatPhoneNumber(value)
+}
+
 const closeDrawer = () => {
   emit('update:isDrawerOpen', false)
 }
@@ -35,11 +40,7 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <Drawer
-    :modelValue="isDrawerOpen"
-    @update:modelValue="closeDrawer"
-    :header="`Schedule a Meet`"
-  >
+  <Drawer :modelValue="isDrawerOpen" @update:modelValue="closeDrawer" :header="`Schedule a Meet`">
     <div v-if="isSubmitted" class="success">
       <div class="success__icon-wrapper">
         <svg
@@ -59,22 +60,25 @@ const submitForm = async () => {
         </svg>
       </div>
       <h3 class="success__title">Request Sent!</h3>
-      <p class="success__message">Thank you! One of our volunteers will reach out to schedule your meet and greet.</p>
+      <p class="success__message">
+        Thank you! One of our volunteers will reach out to schedule your meet and greet.
+      </p>
     </div>
 
     <template v-else>
       <p>
-        We’re excited to help you meet <strong>{{ pet.name }}</strong>! Our friendly volunteers are here to assist you
-        in setting up a meet and greet. You’re welcome to visit our shelter during these hours:
+        We’re excited to help you meet <strong>{{ pet.name }}</strong
+        >! Our friendly volunteers are here to assist you in setting up a meet and greet. You’re
+        welcome to visit our shelter during these hours:
       </p>
       <ul>
-        <li><strong>Monday through Friday</strong><br>10am to 12pm and 6pm to 8pm</li>
-        <li><strong>Weekends</strong><br>12pm to 4pm</li>
+        <li><strong>Monday through Friday</strong><br />10am to 12pm and 6pm to 8pm</li>
+        <li><strong>Weekends</strong><br />12pm to 4pm</li>
       </ul>
       <p>
-        If these times don’t work for you, no problem! Simply fill out the form below, and one of our
-        volunteers will get in touch with you as soon as possible to arrange a time that works best
-        for you.
+        If these times don’t work for you, no problem! Simply fill out the form below, and one of
+        our volunteers will get in touch with you as soon as possible to arrange a time that works
+        best for you.
       </p>
 
       <form @submit.prevent>
@@ -101,18 +105,22 @@ const submitForm = async () => {
           placeholder="Enter your phone number"
           type="tel"
           v-model="formData.phone"
+          inputmode="tel"
+          @update:modelValue="updatePhone"
         />
         <InputField
           label="Preferred Date:"
           placeholder="Select a preferred date"
           type="date"
           v-model="preferredDate"
+          openPickerOnFocus
         />
         <InputField
           label="Preferred Time:"
           placeholder="Select a preferred time"
           type="time"
           v-model="preferredTime"
+          openPickerOnFocus
         />
       </form>
 
@@ -121,7 +129,13 @@ const submitForm = async () => {
       <p class="footer-note">We look forward to helping you find your new best friend!</p>
 
       <div class="actions">
-        <Button title="Submit" color="green" @click="submitForm()" :loading="isSubmitting" :fullWidth="true" />
+        <Button
+          title="Submit"
+          color="green"
+          @click="submitForm()"
+          :loading="isSubmitting"
+          :fullWidth="true"
+        />
       </div>
     </template>
   </Drawer>
@@ -211,13 +225,25 @@ form {
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.5); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .actions {
