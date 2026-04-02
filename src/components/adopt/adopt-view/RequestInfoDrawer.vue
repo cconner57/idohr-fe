@@ -61,8 +61,9 @@ const submitForm = async () => {
 
     <template v-else>
       <p>
-        Have a question about <strong>{{ pet.name }}</strong>? Fill out the form below and one of our team members
-        will get back to you as soon as possible.
+        Have a question about <strong>{{ pet.name }}</strong
+        >? Fill out the form below and one of our team members will get back to you as soon as
+        possible.
       </p>
 
       <form @submit.prevent>
@@ -106,7 +107,13 @@ const submitForm = async () => {
       <p class="footer-note">We look forward to helping you find your new best friend!</p>
 
       <div class="actions">
-        <Button title="Submit" color="green" @click="submitForm()" :loading="isSubmitting" :fullWidth="true" />
+        <Button
+          title="Submit"
+          color="green"
+          @click="submitForm()"
+          :loading="isSubmitting"
+          :fullWidth="true"
+        />
       </div>
     </template>
   </Drawer>
@@ -218,13 +225,25 @@ textarea:focus {
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.5); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .actions {
