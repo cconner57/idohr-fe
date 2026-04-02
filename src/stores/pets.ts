@@ -38,7 +38,7 @@ export const usePetStore = defineStore('pets', () => {
     isFetching.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_ENDPOINTS.PETS}?status=available&sort=age`)
+      const response = await fetch(`${API_ENDPOINTS.PETS}?status=available&sort=age&orgId=idohr`)
       if (!response.ok) throw new Error('Failed to fetch pets')
 
       const json = await response.json()
@@ -65,7 +65,8 @@ export const usePetStore = defineStore('pets', () => {
 
     isFetching.value = true
     try {
-      const response = await fetch(`${API_ENDPOINTS.PETS}?${paramsString}`, {
+      const queryString = paramsString ? `${paramsString}&orgId=idohr` : 'orgId=idohr'
+      const response = await fetch(`${API_ENDPOINTS.PETS}?${queryString}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -90,7 +91,7 @@ export const usePetStore = defineStore('pets', () => {
     isFetching.value = true
     try {
       // Fetch specifically adopted pets, reasonable limit (e.g. 1000 to cover full year)
-      const response = await fetch(`${API_ENDPOINTS.PETS}?status=adopted&limit=1000`, {
+      const response = await fetch(`${API_ENDPOINTS.PETS}?status=adopted&limit=1000&orgId=idohr`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -117,7 +118,7 @@ export const usePetStore = defineStore('pets', () => {
 
     const fetchCount = async (year: number): Promise<number> => {
       try {
-        const response = await fetch(`${API_ENDPOINTS.ADOPTED_PETS_COUNT}?year=${year}`)
+        const response = await fetch(`${API_ENDPOINTS.ADOPTED_PETS_COUNT}?year=${year}&orgId=idohr`)
         const json = await response.json()
 
         if (json.data && typeof json.data.count === 'number') {
