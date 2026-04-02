@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { usePetInquiry } from '@/composables/usePetInquiry'
 import type { IPet } from '@/models/common'
@@ -23,6 +23,72 @@ const { formData, isSubmitting, isSubmitted, apiError, submitInquiry } = usePetI
 
 const preferredDate = ref('')
 const preferredTime = ref('')
+const hasAttemptedSubmit = ref(false)
+
+const isEmailValid = (value: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+const hasCompletePhone = computed(() => {
+  return formData.phone.replace(/\D/g, '').length === 10
+})
+
+const validationErrors = computed(() => {
+  const errors: string[] = []
+
+  if (!formData.firstName.trim()) {
+    errors.push('First name is required.')
+  }
+
+  if (!formData.lastName.trim()) {
+    errors.push('Last name is required.')
+  }
+
+  if (!formData.email.trim()) {
+    errors.push('Email is required.')
+  } else if (!isEmailValid(formData.email.trim())) {
+    errors.push('Enter a valid email address.')
+  }
+
+  if (!formData.phone.trim()) {
+    errors.push('Phone number is required.')
+  } else if (!hasCompletePhone.value) {
+    errors.push('Enter a complete phone number.')
+  }
+
+  if (!preferredDate.value) {
+    errors.push('Preferred date is required.')
+  }
+
+  if (!preferredTime.value) {
+    errors.push('Preferred time is required.')
+  }
+
+  return errors
+})
+
+const hasFieldError = (field: string) => {
+  if (!hasAttemptedSubmit.value) {
+    return false
+  }
+
+  switch (field) {
+    case 'firstName':
+      return !formData.firstName.trim()
+    case 'lastName':
+      return !formData.lastName.trim()
+    case 'email':
+      return !formData.email.trim() || !isEmailValid(formData.email.trim())
+    case 'phone':
+      return !formData.phone.trim() || !hasCompletePhone.value
+    case 'preferredDate':
+      return !preferredDate.value
+    case 'preferredTime':
+      return !preferredTime.value
+    default:
+      return false
+  }
+}
 
 const updatePhone = (value: string | number | null) => {
   formData.phone = formatPhoneNumber(value)
@@ -33,8 +99,14 @@ const closeDrawer = () => {
 }
 
 const submitForm = async () => {
+  hasAttemptedSubmit.value = true
+
+  if (validationErrors.value.length > 0) {
+    return
+  }
+
   await submitInquiry({
-    message: `Preferred Date: ${preferredDate.value || 'Not specified'}\nPreferred Time: ${preferredTime.value || 'Not specified'}`,
+    message: `Preferred Date: ${preferredDate.value}\nPreferred Time: ${preferredTime.value}`,
   })
 }
 </script>
@@ -81,24 +153,30 @@ const submitForm = async () => {
         best for you.
       </p>
 
-      <form @submit.prevent>
+      <form @submit.prevent="submitForm">
         <InputField
           label="Your First Name:"
           placeholder="Enter your first name"
           type="text"
           v-model="formData.firstName"
+          required
+          :hasError="hasFieldError('firstName')"
         />
         <InputField
           label="Your Last Name:"
           placeholder="Enter your last name"
           type="text"
           v-model="formData.lastName"
+          required
+          :hasError="hasFieldError('lastName')"
         />
         <InputField
           label="Your Email:"
           placeholder="Enter your email"
           type="email"
           v-model="formData.email"
+          required
+          :hasError="hasFieldError('email')"
         />
         <InputField
           label="Your Phone Number:"
@@ -106,6 +184,8 @@ const submitForm = async () => {
           type="tel"
           v-model="formData.phone"
           inputmode="tel"
+          required
+          :hasError="hasFieldError('phone')"
           @update:modelValue="updatePhone"
         />
         <InputField
@@ -113,6 +193,8 @@ const submitForm = async () => {
           placeholder="Select a preferred date"
           type="date"
           v-model="preferredDate"
+          required
+          :hasError="hasFieldError('preferredDate')"
           openPickerOnFocus
         />
         <InputField
@@ -120,9 +202,16 @@ const submitForm = async () => {
           placeholder="Select a preferred time"
           type="time"
           v-model="preferredTime"
+          required
+          :hasError="hasFieldError('preferredTime')"
           openPickerOnFocus
         />
       </form>
+
+      <div v-if="hasAttemptedSubmit && validationErrors.length > 0" class="validation-summary">
+        <p class="summary-title">Please complete all required fields:</p>
+        <p class="summary-copy">{{ validationErrors[0] }}</p>
+      </div>
 
       <p v-if="apiError" class="error">{{ apiError }}</p>
 
@@ -132,6 +221,7 @@ const submitForm = async () => {
         <Button
           title="Submit"
           color="green"
+          type="submit"
           @click="submitForm()"
           :loading="isSubmitting"
           :fullWidth="true"
@@ -172,6 +262,24 @@ form {
   color: var(--color-danger);
   font-weight: 400;
   margin-bottom: 1rem;
+}
+
+.validation-summary {
+  margin-bottom: 1rem;
+}
+
+.summary-title,
+.summary-copy {
+  color: var(--color-danger);
+  font-weight: 400;
+}
+
+.summary-title {
+  margin-bottom: 0.25rem;
+}
+
+.summary-copy {
+  margin-bottom: 0;
 }
 
 .footer-note {
