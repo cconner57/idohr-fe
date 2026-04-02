@@ -91,8 +91,9 @@ const submitForm = async () => {
           v-model="formData.phone"
         />
         <div class="field">
-          <label class="label">Message</label>
+          <label class="label" for="request-info-message">Message</label>
           <textarea
+            id="request-info-message"
             v-model="message"
             placeholder="Enter your question or message"
             rows="5"
@@ -180,8 +181,8 @@ textarea:focus {
   animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
   &__icon-wrapper {
-    color: var(--color-primary);
-    background-color: color-mix(in srgb, var(--color-primary) 20%, #fff);
+    color: var(--color-white);
+    background-color: var(--color-primary);
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -189,12 +190,14 @@ textarea:focus {
     align-items: center;
     justify-content: center;
     margin-bottom: 1.5rem;
+    box-shadow: 0 12px 30px oklch(from var(--color-primary) l c h / 25%);
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both;
   }
 
   &__icon {
     width: 48px;
     height: 48px;
+    color: inherit;
   }
 
   &__title {
