@@ -1,5 +1,9 @@
 import type { FormState } from '../../models/adopt-form'
 
+const normalizeTypedName = (value: string | null) => {
+  return (value ?? '').trim().replace(/\s+/g, ' ').toLowerCase()
+}
+
 export function getAdoptionValidationErrors(step: number, formState: FormState): string[] {
   const errors: string[] = []
 
@@ -100,6 +104,13 @@ export function getAdoptionValidationErrors(step: number, formState: FormState):
   if (step === 6) {
     if (!formState.agreementSignature1) errors.push('Commitment Signature')
     if (!formState.agreementSignature2) errors.push('Homecheck Consent')
+
+    const agreementSignature1 = normalizeTypedName(formState.agreementSignature1)
+    const agreementSignature2 = normalizeTypedName(formState.agreementSignature2)
+    if (agreementSignature1 && agreementSignature2 && agreementSignature1 !== agreementSignature2) {
+      errors.push('Typed names must match')
+    }
+
     if (!formState.signatureData) errors.push('Final Signature')
   }
 

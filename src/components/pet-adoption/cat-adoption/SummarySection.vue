@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import type { FormState } from '../../../models/adopt-form.ts'
 import InputField from '../../common/ui/InputField.vue'
 import InputSignature from '../../common/ui/InputSignature.vue'
@@ -11,6 +13,20 @@ const { animalLabel = 'cat' } = defineProps<{
   hasAttemptedSubmit?: boolean
   animalLabel?: string
 }>()
+
+const normalizeTypedName = (value: string | null) => {
+  return (value ?? '').trim().replace(/\s+/g, ' ').toLowerCase()
+}
+
+const typedNamesDoNotMatch = computed(() => {
+  const firstTypedName = normalizeTypedName(modelValue.agreementSignature1)
+  const secondTypedName = normalizeTypedName(modelValue.agreementSignature2)
+  return !!firstTypedName && !!secondTypedName && firstTypedName !== secondTypedName
+})
+
+const showTypedNameMismatch = computed(() => {
+  return typedNamesDoNotMatch.value && (!!hasAttemptedSubmit || !!touched.agreementSignature2)
+})
 </script>
 
 <template>
@@ -30,11 +46,10 @@ const { animalLabel = 'cat' } = defineProps<{
       {{ animalLabel === 'dog' ? 'dogs' : 'cats' }} can live for up to
       {{ animalLabel === 'dog' ? '15' : '20' }} or more years. Thousands of
       {{ animalLabel === 'dog' ? 'dogs' : 'cats' }} are killed at animal shelters each year because
-      their owners did not plan for the future.
-      {{ animalLabel === 'dog' ? 'Dogs' : 'Cats' }} can get sick and require expensive medical
-      treatment during the course of their life.
-      {{ animalLabel === 'dog' ? 'Dogs' : 'Cats' }} need affection, attention and understanding.
-      You may have to adjust your lifestyle to accommodate a new pet. If you are ready to make this
+      their owners did not plan for the future. {{ animalLabel === 'dog' ? 'Dogs' : 'Cats' }} can
+      get sick and require expensive medical treatment during the course of their life.
+      {{ animalLabel === 'dog' ? 'Dogs' : 'Cats' }} need affection, attention and understanding. You
+      may have to adjust your lifestyle to accommodate a new pet. If you are ready to make this
       commitment, please type your name below:
     </p>
     <InputField
@@ -63,10 +78,12 @@ const { animalLabel = 'cat' } = defineProps<{
       required
       :hasError="
         (touched.agreementSignature2 && !modelValue.agreementSignature2) ||
-        (hasAttemptedSubmit && !modelValue.agreementSignature2)
+        (hasAttemptedSubmit && !modelValue.agreementSignature2) ||
+        showTypedNameMismatch
       "
       @blur="handleBlur('agreementSignature2')"
     />
+    <p v-if="showTypedNameMismatch" class="field-error">Both typed names must match exactly.</p>
 
     <InputSignature
       label="Signature"
@@ -102,5 +119,12 @@ p:has(+ .field),
 p:last-of-type {
   font-weight: 400;
   margin-bottom: -1rem;
+}
+
+.field-error {
+  margin-top: -1.2rem;
+  color: var(--color-danger);
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 </style>
