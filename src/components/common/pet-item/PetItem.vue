@@ -53,6 +53,7 @@ const photoSrc = computed(() => {
 })
 
 const imgError = ref(false)
+const buttonTitle = computed(() => `Meet ${props.name}`)
 
 function onImgError() {
   imgError.value = true
@@ -97,7 +98,7 @@ function handleAdopt() {
       </div>
       <p v-if="props.description">{{ props.description }}</p>
       <div class="adopt-button">
-        <Button title="Adopt Me" color="blue" @click="handleAdopt" :fullWidth="true" />
+        <Button :title="buttonTitle" color="blue" @click="handleAdopt" :fullWidth="true" />
       </div>
     </div>
   </div>

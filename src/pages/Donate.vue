@@ -143,7 +143,7 @@ import Footer from '@/components/common/footer/Footer.vue'
   color: var(--text-inverse);
   font-size: 3rem;
   margin: 0;
-  line-height: 1.2; 
+  line-height: 1.2;
 }
 
 .header .mission-text {
@@ -195,7 +195,7 @@ import Footer from '@/components/common/footer/Footer.vue'
   font-size: 2rem;
   margin-bottom: 24px;
   font-weight: 700;
-  text-align: center; 
+  text-align: center;
 }
 
 .illustration img {
@@ -253,7 +253,7 @@ import Footer from '@/components/common/footer/Footer.vue'
   display: flex;
   justify-content: center;
   margin: 8px 0;
-  width: 100%; 
+  width: 100%;
 }
 
 .qr-placeholder {
@@ -292,7 +292,7 @@ import Footer from '@/components/common/footer/Footer.vue'
 .handle {
   font-size: 0.85rem;
   color: #666;
-  word-break: break-all; 
+  word-break: break-all;
 }
 
 .qr-icon {
@@ -302,9 +302,9 @@ import Footer from '@/components/common/footer/Footer.vue'
 }
 
 .real-qr {
-  width: 100%; 
-  max-width: 180px; 
-  height: auto; 
+  width: 100%;
+  max-width: 180px;
+  height: auto;
   object-fit: contain;
   border-radius: 4px;
 }
@@ -358,7 +358,7 @@ import Footer from '@/components/common/footer/Footer.vue'
   .donate-container {
     flex-direction: column;
     align-items: center;
-    padding-bottom: 60px; 
+    padding-bottom: 60px;
   }
 
   .header {
@@ -368,27 +368,27 @@ import Footer from '@/components/common/footer/Footer.vue'
 
 @media (width <= 480px) {
   .header {
-    padding: 110px 20px 30px; 
+    padding: 110px 20px 30px;
   }
 
   .header h1 {
-    font-size: 2rem; 
+    font-size: 2rem;
     margin-top: 10px;
   }
 
   .mission-text {
-    font-size: 1rem; 
-    padding: 0 10px; 
+    font-size: 1rem;
+    padding: 0 10px;
   }
 
   .donate-container {
-    padding: 0 16px 60px; 
+    padding: 0 16px 60px;
   }
 
   .donate-card {
-    padding: 24px 16px; 
+    padding: 24px 16px;
     border-radius: 16px;
-    min-width: 0; 
+    min-width: 0;
     width: 100%;
   }
 
@@ -397,13 +397,13 @@ import Footer from '@/components/common/footer/Footer.vue'
   }
 
   .illustration img {
-    height: 140px; 
+    height: 140px;
     width: 140px;
     margin-bottom: 20px;
   }
 
   .qr-placeholder {
-    min-height: 240px; 
+    min-height: 240px;
   }
 }
 </style>
