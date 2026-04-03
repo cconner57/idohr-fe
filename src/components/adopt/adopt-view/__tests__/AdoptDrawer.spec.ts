@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import { reactive, ref } from 'vue'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { reactive, ref } from 'vue'
 
 import type { IPet } from '@/models/common'
 

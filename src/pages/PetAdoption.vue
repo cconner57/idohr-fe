@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, onMounted,reactive } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
 import Button from '@/components/common/ui/Button.vue'
 import AdoptionSteps from '@/components/pet-adoption/adoption-steps/AdoptionSteps.vue'
+import CatAdoptionInfoSection from '@/components/pet-adoption/cat-adoption/CatAdoptionInfoSection.vue'
 import CurrentPetsSection from '@/components/pet-adoption/cat-adoption/CurrentPetsSection.vue'
 import GeneralSection from '@/components/pet-adoption/cat-adoption/GeneralSection.vue'
 import HomeSection from '@/components/pet-adoption/cat-adoption/HomeSection.vue'
@@ -23,8 +24,15 @@ const router = useRouter()
 const adoptionStore = useAdoptionStore()
 const petStore = usePetStore()
 
-const { formState, step, isSubmitting, isSubmitted, hasAttemptedSubmit, validationErrors, submissionError } =
-  storeToRefs(adoptionStore)
+const {
+  formState,
+  step,
+  isSubmitting,
+  isSubmitted,
+  hasAttemptedSubmit,
+  validationErrors,
+  submissionError,
+} = storeToRefs(adoptionStore)
 const { selectedPet } = storeToRefs(petStore)
 
 const { prevStep, resetForm } = adoptionStore
@@ -32,7 +40,11 @@ const { prevStep, resetForm } = adoptionStore
 const { submitMetric } = useMetrics()
 
 const species = computed(() => selectedPet.value?.species ?? 'cat')
-const animalLabel = computed(() => species.value === 'dog' ? 'dog' : 'cat')
+const animalLabel = computed(() => (species.value === 'dog' ? 'dog' : 'cat'))
+const isCatFlow = computed(() => species.value === 'cat')
+const isCatIntroStep = computed(() => isCatFlow.value && step.value === 0)
+const visibleStep = computed(() => (isCatFlow.value ? Math.max(step.value - 1, 0) : step.value))
+const finalStep = computed(() => (isCatFlow.value ? 7 : 6))
 
 onMounted(() => {
   if (selectedPet.value) {
@@ -58,7 +70,7 @@ const handleSubmit = async () => {
     return
   }
 
-  if (step.value < 6) {
+  if (step.value < finalStep.value) {
     adoptionStore.nextStep()
     globalThis.scrollTo({ top: 0, behavior: 'smooth' })
   } else {
@@ -88,20 +100,25 @@ const handleReset = async () => {
             : 'This application is intended as a means to match the right dog with the right home. The more detail you provide, the better. Most adoptable pets are spayed/neutered, vaccinated, and microchipped. Typical adoption fees are $450 for puppies, $400 for adults, and $350 for seniors. Adoption fees are tax-deductible donations, not purchase prices. Thank you for considering adoption!'
         "
       />
-      <AdoptionSteps :formStep="step" :selectedAnimal="selectedPet?.species ?? 'cat'" />
-      <div class="cat-name-display">
+      <AdoptionSteps
+        v-if="!isCatIntroStep"
+        :formStep="visibleStep"
+        :selectedAnimal="selectedPet?.species ?? 'cat'"
+      />
+      <div v-show="!isCatIntroStep" class="cat-name-display">
         <h2>Adopting Pet:</h2>
         <p>{{ selectedPet?.petName }}</p>
       </div>
+      <CatAdoptionInfoSection v-show="isCatIntroStep" />
       <GeneralSection
-        v-show="step === 0"
+        v-show="(!isCatFlow && step === 0) || (isCatFlow && step === 1)"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
       />
       <HomeSection
-        v-show="step === 1"
+        v-show="(!isCatFlow && step === 1) || (isCatFlow && step === 2)"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
@@ -109,7 +126,7 @@ const handleReset = async () => {
         :animalLabel="animalLabel"
       />
       <NewCatSection
-        v-show="step === 2"
+        v-show="(!isCatFlow && step === 2) || (isCatFlow && step === 3)"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
@@ -117,21 +134,21 @@ const handleReset = async () => {
         :animalLabel="animalLabel"
       />
       <CurrentPetsSection
-        v-show="step === 3"
+        v-show="(!isCatFlow && step === 3) || (isCatFlow && step === 4)"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
       />
       <PastPetsSection
-        v-show="step === 4"
+        v-show="(!isCatFlow && step === 4) || (isCatFlow && step === 5)"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
         :hasAttemptedSubmit="hasAttemptedSubmit"
       />
       <OtherSection
-        v-show="step === 5"
+        v-show="(!isCatFlow && step === 5) || (isCatFlow && step === 6)"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
@@ -139,7 +156,7 @@ const handleReset = async () => {
         :animalLabel="animalLabel"
       />
       <SummarySection
-        v-show="step === 6"
+        v-show="(!isCatFlow && step === 6) || (isCatFlow && step === 7)"
         v-model="formState"
         :touched="touched"
         :handleBlur="handleBlur"
@@ -171,10 +188,10 @@ const handleReset = async () => {
         <Button
           @click="handleSubmit"
           type="submit"
-          :title="step < 6 ? 'Next' : 'Submit Application'"
+          :title="step < finalStep ? 'Next' : 'Submit Application'"
           color="green"
           size="large"
-          :loading="step === 6 && isSubmitting"
+          :loading="step === finalStep && isSubmitting"
           :disabled="isSubmitted || isSubmitting"
         />
       </div>

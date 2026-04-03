@@ -11,6 +11,7 @@ import { getAdoptionValidationErrors } from './validation/adoptionValidation'
 
 export const useAdoptionStore = defineStore('adoption', () => {
   const { isDemoMode } = useDemoMode()
+  const petStore = usePetStore()
   const step = ref(0)
   const isSubmitting = ref(false)
   const isSubmitted = ref(false)
@@ -95,8 +96,17 @@ export const useAdoptionStore = defineStore('adoption', () => {
     signatureData: null,
   })
 
+  const validationStep = computed(() => {
+    if (petStore.selectedPet?.species === 'dog') {
+      return step.value
+    }
+
+    // Cat applications now start with an informational intro step.
+    return step.value === 0 ? -1 : step.value - 1
+  })
+
   const validationErrors = computed(() => {
-    return getAdoptionValidationErrors(step.value, formState)
+    return getAdoptionValidationErrors(validationStep.value, formState)
   })
 
   const isStepValid = computed(() => {
@@ -249,7 +259,6 @@ export const useAdoptionStore = defineStore('adoption', () => {
       }
 
       // Prepare payload matching backend AdoptionApplication struct
-      const petStore = usePetStore()
       const payload = {
         petId: petStore.selectedPet?.id || null,
         petName: petStore.selectedPet?.petName || null,
