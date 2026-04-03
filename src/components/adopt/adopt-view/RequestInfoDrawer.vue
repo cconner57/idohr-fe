@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { usePetInquiry } from '@/composables/usePetInquiry'
 import type { IPet } from '@/models/common'
+import { formatPhoneNumber } from '@/utils/validators'
 
 import Drawer from '../../common/drawer/Drawer.vue'
 import Button from '../../common/ui/Button.vue'
@@ -21,13 +22,81 @@ const { formData, isSubmitting, isSubmitted, apiError, submitInquiry } = usePetI
 )
 
 const message = ref('')
+const hasAttemptedSubmit = ref(false)
+
+const isEmailValid = (value: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+}
+
+const hasCompletePhone = computed(() => {
+  return formData.phone.replace(/\D/g, '').length === 10
+})
+
+const validationErrors = computed(() => {
+  const errors: string[] = []
+
+  if (!formData.firstName.trim()) {
+    errors.push('First name is required.')
+  }
+
+  if (!formData.lastName.trim()) {
+    errors.push('Last name is required.')
+  }
+
+  if (!formData.email.trim()) {
+    errors.push('Email is required.')
+  } else if (!isEmailValid(formData.email.trim())) {
+    errors.push('Enter a valid email address.')
+  }
+
+  if (formData.phone.trim() && !hasCompletePhone.value) {
+    errors.push('Enter a complete phone number.')
+  }
+
+  if (!message.value.trim()) {
+    errors.push('Message is required.')
+  }
+
+  return errors
+})
+
+const hasFieldError = (field: string) => {
+  if (!hasAttemptedSubmit.value) {
+    return false
+  }
+
+  switch (field) {
+    case 'firstName':
+      return !formData.firstName.trim()
+    case 'lastName':
+      return !formData.lastName.trim()
+    case 'email':
+      return !formData.email.trim() || !isEmailValid(formData.email.trim())
+    case 'phone':
+      return formData.phone.trim().length > 0 && !hasCompletePhone.value
+    case 'message':
+      return !message.value.trim()
+    default:
+      return false
+  }
+}
+
+const updatePhone = (value: string | number | null) => {
+  formData.phone = formatPhoneNumber(value)
+}
 
 const closeDrawer = () => {
   emit('update:isDrawerOpen', false)
 }
 
 const submitForm = async () => {
-  await submitInquiry({ message: message.value })
+  hasAttemptedSubmit.value = true
+
+  if (validationErrors.value.length > 0) {
+    return
+  }
+
+  await submitInquiry({ message: message.value.trim() })
 }
 </script>
 
@@ -72,35 +141,51 @@ const submitForm = async () => {
           placeholder="Enter your first name"
           type="text"
           v-model="formData.firstName"
+          required
+          :hasError="hasFieldError('firstName')"
         />
         <InputField
           label="Last Name"
           placeholder="Enter your last name"
           type="text"
           v-model="formData.lastName"
+          required
+          :hasError="hasFieldError('lastName')"
         />
         <InputField
           label="Email"
           placeholder="Enter your email"
           type="email"
           v-model="formData.email"
+          required
+          :hasError="hasFieldError('email')"
         />
         <InputField
           label="Phone (optional)"
           placeholder="Enter your phone number"
           type="tel"
           v-model="formData.phone"
+          inputmode="tel"
+          maxlength="12"
+          :hasError="hasFieldError('phone')"
+          @update:modelValue="updatePhone"
         />
         <div class="field">
           <label class="label" for="request-info-message">Message</label>
           <textarea
             id="request-info-message"
             v-model="message"
+            :class="{ 'has-error': hasFieldError('message') }"
             placeholder="Enter your question or message"
             rows="5"
           ></textarea>
         </div>
       </form>
+
+      <div v-if="hasAttemptedSubmit && validationErrors.length > 0" class="validation-summary">
+        <p class="summary-title">Please complete all required fields:</p>
+        <p class="summary-copy">{{ validationErrors[0] }}</p>
+      </div>
 
       <p v-if="apiError" class="error">{{ apiError }}</p>
 
@@ -166,10 +251,33 @@ textarea:focus {
   box-shadow: 0 0 0 3px oklch(from var(--color-primary) l c h / 20%);
 }
 
+textarea.has-error {
+  border-color: var(--color-danger);
+  outline: 1px solid var(--color-danger);
+}
+
 .error {
   color: var(--color-danger);
   font-weight: 400;
   margin-bottom: 1rem;
+}
+
+.validation-summary {
+  margin-bottom: 1rem;
+}
+
+.summary-title,
+.summary-copy {
+  color: var(--color-danger);
+  font-weight: 400;
+}
+
+.summary-title {
+  margin-bottom: 0.25rem;
+}
+
+.summary-copy {
+  margin-bottom: 0;
 }
 
 .footer-note {

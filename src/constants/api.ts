@@ -1,10 +1,13 @@
-const rawApiBaseUrl = import.meta.env.VITE_API_URL || ''
+export const normalizeApiBaseUrl = (value: string | undefined) => {
+  return (
+    value
+      ?.trim()
+      .replace(/\/+$/, '')
+      .replace(/\.(?=\/?$)/, '') || ''
+  )
+}
 
-// Temporary compatibility fallback: some deployments still use api.idohr.app,
-// which currently has no DNS record. Route to the active Adoption OS API host.
-const isLegacyInvalidApiHost = rawApiBaseUrl.includes('api.idohr.app')
-
-export const API_BASE_URL = isLegacyInvalidApiHost ? 'https://api.adoption-os.com' : rawApiBaseUrl
+export const API_BASE_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_URL)
 
 export const API_ENDPOINTS = {
   VOLUNTEER_APPLICATION: `${API_BASE_URL}/applications/volunteer`,
