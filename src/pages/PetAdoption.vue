@@ -45,6 +45,17 @@ const isCatFlow = computed(() => species.value === 'cat')
 const isCatIntroStep = computed(() => isCatFlow.value && step.value === 0)
 const visibleStep = computed(() => (isCatFlow.value ? Math.max(step.value - 1, 0) : step.value))
 const finalStep = computed(() => (isCatFlow.value ? 7 : 6))
+const headerText = computed(() => {
+  if (species.value === 'cat') {
+    if (!isCatIntroStep.value) {
+      return undefined
+    }
+
+    return 'This application is intended as a means to match the right cat with the right home. The more detail you provide, the better. Most adoptable pets are spayed/neutered, vaccinated, and microchipped. For younger kittens, we offer a foster-to-adopt program where you take them home now and return for scheduled vet care until they are ready for official adoption. Typical adoption fees are $300 for kittens and $250 for adults. Adoption fees are tax-deductible donations, not purchase prices. Thank you for considering adoption!'
+  }
+
+  return 'This application is intended as a means to match the right dog with the right home. The more detail you provide, the better. Most adoptable pets are spayed/neutered, vaccinated, and microchipped. Typical adoption fees are $450 for puppies, $400 for adults, and $350 for seniors. Adoption fees are tax-deductible donations, not purchase prices. Thank you for considering adoption!'
+})
 
 onMounted(() => {
   if (selectedPet.value) {
@@ -94,11 +105,7 @@ const handleReset = async () => {
     <section v-if="!isSubmitted" class="form-card" aria-labelledby="form-title">
       <ApplicationHeader
         :header-title="selectedPet?.species === 'cat' ? 'Cat' : 'Dog'"
-        :header-text="
-          selectedPet?.species === 'cat'
-            ? 'This application is intended as a means to match the right cat with the right home. The more detail you provide, the better. Most adoptable pets are spayed/neutered, vaccinated, and microchipped. For younger kittens, we offer a foster-to-adopt program where you take them home now and return for scheduled vet care until they are ready for official adoption. Typical adoption fees are $300 for kittens and $250 for adults. Adoption fees are tax-deductible donations, not purchase prices. Thank you for considering adoption!'
-            : 'This application is intended as a means to match the right dog with the right home. The more detail you provide, the better. Most adoptable pets are spayed/neutered, vaccinated, and microchipped. Typical adoption fees are $450 for puppies, $400 for adults, and $350 for seniors. Adoption fees are tax-deductible donations, not purchase prices. Thank you for considering adoption!'
-        "
+        :header-text="headerText"
       />
       <AdoptionSteps
         v-if="!isCatIntroStep"

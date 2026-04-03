@@ -30,7 +30,7 @@ const { headerTitle, headerText } = defineProps<{
     <h1 id="form-title">{{ headerTitle }} Application</h1>
   </header>
 
-  <p class="lede">
+  <p v-if="headerText" class="lede">
     {{ headerText }}
   </p>
 </template>
