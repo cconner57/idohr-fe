@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType,ref } from 'vue'
+import { computed, type PropType, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useMetrics } from '../../../composables/useMetrics'
@@ -45,7 +45,7 @@ const props = defineProps({
 })
 const router = useRouter()
 
-const r2BaseUrl = computed(() => import.meta.env.VITE_R2_PUBLIC_URL as string ?? '')
+const r2BaseUrl = computed(() => (import.meta.env.VITE_R2_PUBLIC_URL as string) ?? '')
 const photoSrc = computed(() => {
   if (!props.photo) return ''
   const r2Key = props.photo.replace(/^pets\//, '')
@@ -84,7 +84,9 @@ function handleAdopt() {
       <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
       <div v-if="props.isSponsored" class="sponsored-badge" aria-label="Adoption fee sponsored">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          <path
+            d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+          />
         </svg>
         Sponsored
       </div>
