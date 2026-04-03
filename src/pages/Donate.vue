@@ -105,12 +105,19 @@ import Footer from '@/components/common/footer/Footer.vue'
 
           <div class="qr-section">
             <div class="qr-placeholder">
-              <img src="/images/paw.svg" class="qr-icon" alt="QR Code" />
-              <span>Scan for Venmo</span>
+              <span class="username">idohrescue</span>
+              <img
+                src="/images/dog-zelle.jpeg"
+                class="real-qr"
+                alt="Zelle QR Code"
+                width="400"
+                height="400"
+              />
+              <span>Scan for Zelle</span>
             </div>
           </div>
 
-          <a href="#" class="donate-btn btn-venmo"> <i class="icon-venmo"></i> Donate via Venmo </a>
+          <a href="#" class="donate-btn btn-venmo"> <i class="icon-venmo"></i> Donate via Zelle </a>
         </div>
       </section>
     </main>
@@ -251,7 +258,7 @@ import Footer from '@/components/common/footer/Footer.vue'
 
 .qr-placeholder {
   width: 100%;
-  max-width: 240px;
+  max-width: 260px;
   height: auto;
   padding: 16px;
   background: transparent;
@@ -278,8 +285,8 @@ import Footer from '@/components/common/footer/Footer.vue'
 .username {
   font-weight: 700;
   color: #333;
-  font-size: 0.9rem;
-  word-break: break-word; 
+  font-size: 0.85rem;
+  white-space: nowrap;
 }
 
 .handle {
