@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { IPet } from '../../../models/common.ts'
+import { useAdoptionStore } from '../../../stores/adoption'
 import { usePetStore } from '../../../stores/pets'
 import { calculateAge } from '../../../utils/date'
 import { formatDate } from '../../../utils/dateUtils'
@@ -21,12 +22,14 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const adoptionStore = useAdoptionStore()
 const petStore = usePetStore()
 const isDrawerOpen = ref(false)
 const isInfoDrawerOpen = ref(false)
 
 const handleStartAdoption = () => {
   vibrate(50)
+  adoptionStore.resetForm()
   petStore.selectPet({ id: props.pet.id, petName: props.pet.name, species: props.pet.species })
   router.push(`/pet-adoption/${props.pet.id}`)
 }
@@ -61,7 +64,7 @@ function onImgError() {
   imgError.value = true
 }
 
-const r2BaseUrl = import.meta.env.VITE_R2_PUBLIC_URL as string ?? ''
+const r2BaseUrl = (import.meta.env.VITE_R2_PUBLIC_URL as string) ?? ''
 
 const petPhotoUrl = computed(() => {
   const photos = props.pet.photos
@@ -88,10 +91,10 @@ const petPhotoUrl = computed(() => {
           <div class="adopt-detail__traits">
             <Capsules v-if="pet?.species" :label="pet?.species" />
             <Capsules v-if="pet?.sex" :label="pet?.sex" />
-              <Capsules
-                v-if="pet?.physical?.dateOfBirth"
-                :label="calculateAge(pet?.physical?.dateOfBirth)"
-              />
+            <Capsules
+              v-if="pet?.physical?.dateOfBirth"
+              :label="calculateAge(pet?.physical?.dateOfBirth)"
+            />
           </div>
           <p>{{ pet?.descriptions?.fun }}</p>
           <div class="adopt-detail__actions">
@@ -119,11 +122,15 @@ const petPhotoUrl = computed(() => {
         <AdditionalInfo :pet="pet" />
         <output v-if="pet.sponsored?.isSponsored" class="sponsored-banner">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            <path
+              d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+            />
           </svg>
           <span>
             <strong>Adoption Fee Sponsored</strong>
-            <span class="sponsored-sub">A generous supporter has covered this pet's adoption fee.</span>
+            <span class="sponsored-sub"
+              >A generous supporter has covered this pet's adoption fee.</span
+            >
           </span>
         </output>
       </div>
@@ -277,7 +284,6 @@ const petPhotoUrl = computed(() => {
           opacity: 0.85;
         }
       }
-
     }
 
     @media (width <= 1024px) {

@@ -116,6 +116,11 @@ export const useAdoptionStore = defineStore('adoption', () => {
 
   const STORAGE_KEY = 'adoption_form_state'
 
+  const clearPersistedState = () => {
+    sessionStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(STORAGE_KEY)
+  }
+
   const persistState = () => {
     sessionStorage.setItem(
       STORAGE_KEY,
@@ -241,7 +246,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
     hasAttemptedSubmit.value = false
     submissionError.value = null
     clearFormData()
-    sessionStorage.removeItem(STORAGE_KEY)
+    clearPersistedState()
   }
 
   const submitApplication = async () => {
@@ -254,7 +259,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
         await new Promise((resolve) => setTimeout(resolve, 1500))
         isSubmitted.value = true
         clearFormData()
-        sessionStorage.removeItem(STORAGE_KEY)
+        clearPersistedState()
         return true
       }
 
@@ -353,7 +358,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
       isSubmitted.value = true
       submissionError.value = null
       clearFormData()
-      sessionStorage.removeItem(STORAGE_KEY)
+      clearPersistedState()
       return true
     } catch (error: unknown) {
       console.error('Error submitting application:', error)

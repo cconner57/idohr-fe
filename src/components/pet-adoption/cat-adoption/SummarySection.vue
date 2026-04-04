@@ -5,7 +5,13 @@ import type { FormState } from '../../../models/adopt-form.ts'
 import InputField from '../../common/ui/InputField.vue'
 import InputSignature from '../../common/ui/InputSignature.vue'
 
-const { animalLabel = 'cat' } = defineProps<{
+const {
+  modelValue,
+  touched,
+  handleBlur,
+  hasAttemptedSubmit = false,
+  animalLabel = 'cat',
+} = defineProps<{
   modelValue: FormState
   touched: Record<string, boolean>
   // eslint-disable-next-line no-unused-vars
