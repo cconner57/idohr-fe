@@ -50,6 +50,7 @@ const surrenderOptions = computed(() => {
       <InputTextArea
         label="Why did you select this dog(s)?"
         placeholder="Share your reasons..."
+        :spanFull="false"
         :modelValue="modelValue.dogWhySelected"
         @update:modelValue="(val) => (modelValue.dogWhySelected = val)"
         :hasError="
