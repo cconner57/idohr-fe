@@ -48,7 +48,6 @@ const surrenderOptions = computed(() => {
   <div class="other-section">
     <template v-if="animalLabel === 'dog'">
       <InputTextArea
-        class="full-width"
         label="Why did you select this dog(s)?"
         placeholder="Share your reasons..."
         :modelValue="modelValue.dogWhySelected"
@@ -59,7 +58,6 @@ const surrenderOptions = computed(() => {
         "
       />
       <InputSelectGroup
-        class="full-width"
         label="Where did you hear about this dog?"
         :options="[
           'Adoption Event',
@@ -113,7 +111,6 @@ const surrenderOptions = computed(() => {
         @blur="handleBlur?.('dogPoolFence')"
       />
       <InputSelectGroup
-        class="full-width"
         label="Please check all that apply"
         :options="[
           'Busy household (children, in and out a lot, visits by friends)',
@@ -132,7 +129,6 @@ const surrenderOptions = computed(() => {
         @blur="handleBlur?.('dogHouseholdDescription')"
       />
       <InputSelectGroup
-        class="full-width"
         label="Where will the dog be kept most of the time?"
         :options="['Crate', 'Indoors', 'Outdoors', 'Garage', 'Patio/Porch', 'Other']"
         multiple
@@ -145,7 +141,6 @@ const surrenderOptions = computed(() => {
         @blur="handleBlur?.('dogKeptLocation')"
       />
       <InputSelectGroup
-        class="full-width"
         label="Where will your dog be sleeping?"
         :options="[
           'Crate',
@@ -166,7 +161,6 @@ const surrenderOptions = computed(() => {
         @blur="handleBlur?.('dogSleepingLocation')"
       />
       <InputSelectGroup
-        class="full-width"
         label="Where will your pet be when you are not at home?"
         :options="['Outside', 'Inside', 'Crate', 'Other']"
         multiple
@@ -227,7 +221,6 @@ const surrenderOptions = computed(() => {
         @blur="handleBlur?.('dogTravelArrangements')"
       />
       <InputSelectGroup
-        class="full-width"
         label="We don't always know if a dog is potty trained. Are you willing to potty train your pet?"
         :options="['Yes', 'No']"
         :modelValue="modelValue.dogWillingToPottyTrain"
@@ -239,7 +232,6 @@ const surrenderOptions = computed(() => {
         @blur="handleBlur?.('dogWillingToPottyTrain')"
       />
       <InputSelectGroup
-        class="full-width"
         label="Do you have any experience with the following?"
         :options="[
           'Crate Training',
@@ -291,7 +283,6 @@ const surrenderOptions = computed(() => {
         @blur="handleBlur?.('dogBondingTime')"
       />
       <InputSelectGroup
-        class="full-width"
         label="Have you ever been denied pet ownership from a rescue organization?"
         :options="['Yes', 'No']"
         :modelValue="modelValue.dogDeniedOwnership"
@@ -389,7 +380,6 @@ const surrenderOptions = computed(() => {
       @blur="handleBlur?.('surrenderConditions')"
     />
     <InputField
-      class="full-width"
       v-model="modelValue.surrenderPlan"
       :label="`What would you do with your ${animalLabel} if you could not keep it for the above reason(s)?`"
       name="surrenderPlan"
