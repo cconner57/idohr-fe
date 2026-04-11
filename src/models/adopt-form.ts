@@ -86,4 +86,25 @@ export interface FormState {
   agreementSignature2: string | null
   agreementSignature3: string | null
   signatureData: string | null
+
+  // Dog-specific fields
+  dogWhySelected: string | null
+  dogHeardAbout: string[]
+  dogFencedBackyard: string | null
+  dogHasPool: string | null
+  dogPoolFence: string | null
+  dogHouseholdDescription: string[]
+  dogKeptLocation: string[]
+  dogSleepingLocation: string[]
+  dogAloneLocation: string[]
+  dogExercisePotty: string | null
+  dogCareResponsible: string | null
+  dogAnnualExpense: string | null
+  dogTravelArrangements: string | null
+  dogWillingToPottyTrain: string | null
+  dogTrainingExperience: string[]
+  dogWillingTrainingClass: string | null
+  dogConfinementTypes: string[]
+  dogBondingTime: string | null
+  dogDeniedOwnership: string | null
 }

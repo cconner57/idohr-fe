@@ -94,6 +94,25 @@ export const useAdoptionStore = defineStore('adoption', () => {
     agreementSignature2: null,
     agreementSignature3: null,
     signatureData: null,
+    dogWhySelected: null,
+    dogHeardAbout: [],
+    dogFencedBackyard: null,
+    dogHasPool: null,
+    dogPoolFence: null,
+    dogHouseholdDescription: [],
+    dogKeptLocation: [],
+    dogSleepingLocation: [],
+    dogAloneLocation: [],
+    dogExercisePotty: null,
+    dogCareResponsible: null,
+    dogAnnualExpense: null,
+    dogTravelArrangements: null,
+    dogWillingToPottyTrain: null,
+    dogTrainingExperience: [],
+    dogWillingTrainingClass: null,
+    dogConfinementTypes: [],
+    dogBondingTime: null,
+    dogDeniedOwnership: null,
   })
 
   const validationStep = computed(() => {
@@ -106,7 +125,11 @@ export const useAdoptionStore = defineStore('adoption', () => {
   })
 
   const validationErrors = computed(() => {
-    return getAdoptionValidationErrors(validationStep.value, formState)
+    return getAdoptionValidationErrors(
+      validationStep.value,
+      formState,
+      petStore.selectedPet?.species ?? 'cat',
+    )
   })
 
   const isStepValid = computed(() => {
@@ -238,6 +261,25 @@ export const useAdoptionStore = defineStore('adoption', () => {
     formState.agreementSignature2 = null
     formState.agreementSignature3 = null
     formState.signatureData = null
+    formState.dogWhySelected = null
+    formState.dogHeardAbout = []
+    formState.dogFencedBackyard = null
+    formState.dogHasPool = null
+    formState.dogPoolFence = null
+    formState.dogHouseholdDescription = []
+    formState.dogKeptLocation = []
+    formState.dogSleepingLocation = []
+    formState.dogAloneLocation = []
+    formState.dogExercisePotty = null
+    formState.dogCareResponsible = null
+    formState.dogAnnualExpense = null
+    formState.dogTravelArrangements = null
+    formState.dogWillingToPottyTrain = null
+    formState.dogTrainingExperience = []
+    formState.dogWillingTrainingClass = null
+    formState.dogConfinementTypes = []
+    formState.dogBondingTime = null
+    formState.dogDeniedOwnership = null
   }
 
   const resetForm = () => {
@@ -335,6 +377,26 @@ export const useAdoptionStore = defineStore('adoption', () => {
         agreementSignature2: formState.agreementSignature2,
         agreementSignature3: formState.agreementSignature3,
         signatureData: formState.signatureData,
+
+        dogWhySelected: formState.dogWhySelected,
+        dogHeardAbout: formState.dogHeardAbout,
+        dogFencedBackyard: formState.dogFencedBackyard,
+        dogHasPool: formState.dogHasPool,
+        dogPoolFence: formState.dogPoolFence,
+        dogHouseholdDescription: formState.dogHouseholdDescription,
+        dogKeptLocation: formState.dogKeptLocation,
+        dogSleepingLocation: formState.dogSleepingLocation,
+        dogAloneLocation: formState.dogAloneLocation,
+        dogExercisePotty: formState.dogExercisePotty,
+        dogCareResponsible: formState.dogCareResponsible,
+        dogAnnualExpense: formState.dogAnnualExpense,
+        dogTravelArrangements: formState.dogTravelArrangements,
+        dogWillingToPottyTrain: formState.dogWillingToPottyTrain,
+        dogTrainingExperience: formState.dogTrainingExperience,
+        dogWillingTrainingClass: formState.dogWillingTrainingClass,
+        dogConfinementTypes: formState.dogConfinementTypes,
+        dogBondingTime: formState.dogBondingTime,
+        dogDeniedOwnership: formState.dogDeniedOwnership,
 
         fax_number: formState.fax_number, // Honeypot
       }

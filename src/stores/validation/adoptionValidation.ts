@@ -4,7 +4,11 @@ const normalizeTypedName = (value: string | null) => {
   return (value ?? '').trim().replace(/\s+/g, ' ').toLowerCase()
 }
 
-export function getAdoptionValidationErrors(step: number, formState: FormState): string[] {
+export function getAdoptionValidationErrors(
+  step: number,
+  formState: FormState,
+  species = 'cat',
+): string[] {
   const errors: string[] = []
 
   if (step === 0) {
@@ -99,6 +103,28 @@ export function getAdoptionValidationErrors(step: number, formState: FormState):
     if (!formState.surrenderPlan) errors.push('Surrender Plan')
     if (!formState.affordVetCare) errors.push('Vet Care')
     if (!formState.affordEmergencyCost) errors.push('Emergency Cost')
+
+    if (species === 'dog') {
+      if (!formState.dogWhySelected) errors.push('Why Selected')
+      if (formState.dogHeardAbout.length === 0) errors.push('Where Heard About')
+      if (!formState.dogFencedBackyard) errors.push('Fenced Backyard')
+      if (!formState.dogHasPool) errors.push('Has Pool')
+      if (formState.dogHasPool === 'Yes' && !formState.dogPoolFence) errors.push('Pool Fence')
+      if (formState.dogHouseholdDescription.length === 0) errors.push('Household Description')
+      if (formState.dogKeptLocation.length === 0) errors.push('Dog Kept Location')
+      if (formState.dogSleepingLocation.length === 0) errors.push('Sleeping Location')
+      if (formState.dogAloneLocation.length === 0) errors.push('Alone Location')
+      if (!formState.dogExercisePotty) errors.push('Exercise & Potty Breaks')
+      if (!formState.dogCareResponsible) errors.push('Care Responsible Person')
+      if (!formState.dogAnnualExpense) errors.push('Annual Expense')
+      if (!formState.dogTravelArrangements) errors.push('Travel Arrangements')
+      if (!formState.dogWillingToPottyTrain) errors.push('Willing to Potty Train')
+      if (formState.dogTrainingExperience.length === 0) errors.push('Training Experience')
+      if (!formState.dogWillingTrainingClass) errors.push('Willing to Take Training Class')
+      if (formState.dogConfinementTypes.length === 0) errors.push('Confinement Types')
+      if (!formState.dogBondingTime) errors.push('Bonding Time')
+      if (!formState.dogDeniedOwnership) errors.push('Denied Pet Ownership')
+    }
   }
 
   if (step === 6) {
