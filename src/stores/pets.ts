@@ -47,14 +47,13 @@ export const usePetStore = defineStore('pets', () => {
         return Array.isArray(payload) ? payload : payload.data || []
       }
 
-      const [availablePets, intakePets, intakeProcessingPets] = await Promise.all([
+      const [availablePets, intakePets] = await Promise.all([
         fetchByStatus('available'),
         fetchByStatus('intake'),
-        fetchByStatus('intake-processing'),
       ])
 
       const dedupedPets = new Map<string, IPet>()
-      const allPets = [...availablePets, ...intakePets, ...intakeProcessingPets]
+      const allPets = [...availablePets, ...intakePets]
       allPets.forEach((pet: IPet) => {
         dedupedPets.set(pet.id, pet)
       })

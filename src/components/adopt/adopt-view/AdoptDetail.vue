@@ -26,8 +26,16 @@ const adoptionStore = useAdoptionStore()
 const petStore = usePetStore()
 const isDrawerOpen = ref(false)
 const isInfoDrawerOpen = ref(false)
+const isStartAdoptionDisabled = computed(() => {
+  const normalizedStatus = props.pet.details?.status?.trim().toLowerCase() ?? ''
+  return normalizedStatus === 'intake'
+})
 
 const handleStartAdoption = () => {
+  if (isStartAdoptionDisabled.value) {
+    return
+  }
+
   vibrate(50)
   adoptionStore.resetForm()
   petStore.selectPet({ id: props.pet.id, petName: props.pet.name, species: props.pet.species })
@@ -102,6 +110,7 @@ const petPhotoUrl = computed(() => {
               title="Start Adoption"
               color="blue"
               @click="handleStartAdoption"
+              :disabled="isStartAdoptionDisabled"
               :fullWidth="true"
             />
             <Button title="Share" color="green" @click="handleShare" :fullWidth="true" />
