@@ -42,6 +42,11 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  status: {
+    type: String,
+    required: false,
+    default: '',
+  },
 })
 const router = useRouter()
 
@@ -54,6 +59,14 @@ const photoSrc = computed(() => {
 
 const imgError = ref(false)
 const buttonTitle = computed(() => `Meet ${props.name}`)
+const isComingSoon = computed(() => {
+  const normalizedStatus = props.status.trim().toLowerCase()
+  return (
+    normalizedStatus === 'intake' ||
+    normalizedStatus === 'intake-processing' ||
+    normalizedStatus === 'intake processing'
+  )
+})
 
 function onImgError() {
   imgError.value = true
@@ -82,7 +95,19 @@ function handleAdopt() {
         @click="handleAdopt"
       />
       <div v-else class="img-fallback" aria-hidden="true" @click="handleAdopt"></div>
-      <div v-if="props.isSponsored" class="sponsored-badge" aria-label="Adoption fee sponsored">
+      <div
+        v-if="isComingSoon"
+        class="image-badge coming-soon-badge"
+        :class="{ 'with-sponsored': props.isSponsored }"
+        aria-label="Coming soon"
+      >
+        Coming soon
+      </div>
+      <div
+        v-if="props.isSponsored"
+        class="image-badge sponsored-badge"
+        aria-label="Adoption fee sponsored"
+      >
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path
             d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
@@ -153,7 +178,7 @@ function handleAdopt() {
       }
     }
 
-    .sponsored-badge {
+    .image-badge {
       position: absolute;
       top: 0.625rem;
       left: 0.625rem;
@@ -170,6 +195,20 @@ function handleAdopt() {
       border-radius: var(--radius-full);
       box-shadow: 0 2px 6px rgb(0 0 0 / 25%);
       pointer-events: none;
+    }
+
+    .sponsored-badge {
+      background-color: hsl(43deg 96% 50%);
+      color: hsl(43deg 96% 15%);
+    }
+
+    .coming-soon-badge {
+      background-color: hsl(180deg 70% 70%);
+      color: hsl(180deg 60% 16%);
+    }
+
+    .coming-soon-badge.with-sponsored {
+      top: 2.35rem;
     }
   }
 

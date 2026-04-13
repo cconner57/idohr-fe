@@ -38,12 +38,28 @@ export const usePetStore = defineStore('pets', () => {
     isFetching.value = true
     error.value = null
     try {
-      const response = await fetch(`${API_ENDPOINTS.PETS}?status=available&sort=age&orgId=idohr`)
-      if (!response.ok) throw new Error('Failed to fetch pets')
+      const fetchByStatus = async (status: string) => {
+        const response = await fetch(`${API_ENDPOINTS.PETS}?status=${status}&sort=age&orgId=idohr`)
+        if (!response.ok) throw new Error(`Failed to fetch pets with status: ${status}`)
 
-      const json = await response.json()
-      const payload = json.data ?? json
-      currentPets.value = Array.isArray(payload) ? payload : payload.data || []
+        const json = await response.json()
+        const payload = json.data ?? json
+        return Array.isArray(payload) ? payload : payload.data || []
+      }
+
+      const [availablePets, intakePets, intakeProcessingPets] = await Promise.all([
+        fetchByStatus('available'),
+        fetchByStatus('intake'),
+        fetchByStatus('intake-processing'),
+      ])
+
+      const dedupedPets = new Map<string, IPet>()
+      const allPets = [...availablePets, ...intakePets, ...intakeProcessingPets]
+      allPets.forEach((pet: IPet) => {
+        dedupedPets.set(pet.id, pet)
+      })
+
+      currentPets.value = Array.from(dedupedPets.values())
       lastFetched.value = Date.now()
     } catch (err: unknown) {
       console.error('Error fetching pets:', err)

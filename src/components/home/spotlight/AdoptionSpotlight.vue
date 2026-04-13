@@ -59,6 +59,7 @@ const displayedPets = computed((): IPet[] => {
         :photo="pet.photos?.find((p) => p.isPrimary)?.url || null"
         :description="pet.descriptions?.spotlight || ''"
         :size="isMobile ? 'large' : 'medium'"
+        :status="pet.details?.status ?? ''"
       />
     </div>
   </section>

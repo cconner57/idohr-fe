@@ -24,6 +24,7 @@ defineProps<{
       :photo="pet.photos?.find((p) => p.isPrimary)?.url"
       :priority="index === 0"
       :isSponsored="pet.sponsored?.isSponsored ?? false"
+      :status="pet.details?.status ?? ''"
     />
   </div>
 </template>
@@ -34,6 +35,5 @@ defineProps<{
   flex-wrap: wrap;
   gap: 30px 20px;
   justify-content: center;
-
 }
 </style>

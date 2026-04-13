@@ -1,7 +1,4 @@
-
 <script setup lang="ts">
-
-
 import type { IPet } from '../../../models/common'
 import { formatDate } from '../../../utils/common'
 import { useIsMobile } from '../../../utils/useIsMobile'
@@ -27,6 +24,7 @@ const isMobile = useIsMobile()
           formatDate((props.pet.physical?.ageGroup || '') as string),
         ]"
         :photo="props.pet.photos?.find((p) => p.isPrimary)?.url || props.pet.photos?.[0]?.url"
+        :status="props.pet.details?.status ?? ''"
       />
       <PetItem
         name="Crystal"
@@ -37,17 +35,7 @@ const isMobile = useIsMobile()
           formatDate((props.pet.physical?.ageGroup || '') as string),
         ]"
         :photo="props.pet.photos?.find((p) => p.isPrimary)?.url || props.pet.photos?.[0]?.url"
-      />
-      <PetItem
-        v-if="!isMobile"
-        :id="props.pet.id"
-        name="Crystal"
-        :capsules="[
-          props.pet.species || '',
-          (props.pet.sex as string) || '',
-          formatDate((props.pet.physical?.ageGroup || '') as string),
-        ]"
-        :photo="props.pet.photos?.find((p) => p.isPrimary)?.url || props.pet.photos?.[0]?.url"
+        :status="props.pet.details?.status ?? ''"
       />
       <PetItem
         v-if="!isMobile"
@@ -59,6 +47,19 @@ const isMobile = useIsMobile()
           formatDate((props.pet.physical?.ageGroup || '') as string),
         ]"
         :photo="props.pet.photos?.find((p) => p.isPrimary)?.url || props.pet.photos?.[0]?.url"
+        :status="props.pet.details?.status ?? ''"
+      />
+      <PetItem
+        v-if="!isMobile"
+        :id="props.pet.id"
+        name="Crystal"
+        :capsules="[
+          props.pet.species || '',
+          (props.pet.sex as string) || '',
+          formatDate((props.pet.physical?.ageGroup || '') as string),
+        ]"
+        :photo="props.pet.photos?.find((p) => p.isPrimary)?.url || props.pet.photos?.[0]?.url"
+        :status="props.pet.details?.status ?? ''"
       />
     </div>
   </div>
