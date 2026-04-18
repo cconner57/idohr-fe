@@ -199,13 +199,14 @@ export const usePetStore = defineStore('pets', () => {
   }
 
   const initFromSession = () => {
-    const stored = sessionStorage.getItem(STORAGE_KEY)
+    const stored = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY)
     if (stored) {
       try {
         selectedPet.value = JSON.parse(stored)
       } catch (e) {
         console.error('Failed to parse selected pet from session storage', e)
         sessionStorage.removeItem(STORAGE_KEY)
+        localStorage.removeItem(STORAGE_KEY)
       }
     }
   }
@@ -218,11 +219,13 @@ export const usePetStore = defineStore('pets', () => {
   }) => {
     selectedPet.value = pet
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(selectedPet.value))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedPet.value))
   }
 
   const clearSelectedPet = () => {
     selectedPet.value = null
     sessionStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(STORAGE_KEY)
   }
 
   initFromSession()

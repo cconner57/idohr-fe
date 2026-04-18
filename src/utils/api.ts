@@ -12,6 +12,49 @@ const isAbsoluteUrl = (value: string) => {
   return /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)
 }
 
+const DEFAULT_RETRYABLE_STATUS_CODES = new Set([408, 429, 500, 502, 503, 504])
+
+interface IFetchRetryContext {
+  response?: Response
+  error?: unknown
+  attempt: number
+}
+
+interface IFetchRetryOptions {
+  retries?: number
+  retryDelayMs?: number
+  shouldRetry?: (context: IFetchRetryContext) => boolean
+}
+
+const sleep = async (ms: number) => {
+  await new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+const isRetryableFetchError = (error: unknown) => {
+  if (!(error instanceof Error)) {
+    return false
+  }
+
+  if (error.name === 'TimeoutError') {
+    return true
+  }
+
+  // Browsers throw TypeError for network failures in fetch.
+  return error instanceof TypeError
+}
+
+const defaultShouldRetry = (context: IFetchRetryContext) => {
+  if (context.error) {
+    return isRetryableFetchError(context.error)
+  }
+
+  if (!context.response) {
+    return false
+  }
+
+  return DEFAULT_RETRYABLE_STATUS_CODES.has(context.response.status)
+}
+
 export const withPublicOrgId = (endpoint: string, orgId = PUBLIC_ORG_ID) => {
   const url = new URL(endpoint, INTERNAL_URL_BASE)
 
@@ -24,6 +67,36 @@ export const withPublicOrgId = (endpoint: string, orgId = PUBLIC_ORG_ID) => {
   }
 
   return `${url.pathname}${url.search}${url.hash}`
+}
+
+export const fetchWithRetry = async (
+  input: RequestInfo | URL,
+  init?: RequestInit,
+  options: IFetchRetryOptions = {},
+) => {
+  const { retries = 0, retryDelayMs = 500, shouldRetry = defaultShouldRetry } = options
+
+  let lastError: unknown = null
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(input, init)
+
+      if (!shouldRetry({ response, attempt }) || attempt === retries) {
+        return response
+      }
+    } catch (error: unknown) {
+      lastError = error
+
+      if (!shouldRetry({ error, attempt }) || attempt === retries) {
+        throw error
+      }
+    }
+
+    await sleep(retryDelayMs)
+  }
+
+  throw lastError
 }
 
 export const parseApiErrorMessage = (payload: unknown, fallback: string) => {

@@ -88,8 +88,10 @@ const handleSubmit = async () => {
     submitMetric('form_submit', { form: 'adoption', petId: selectedPet.value?.id })
     console.log('Submitting form...')
     vibrate(50)
-    await adoptionStore.submitApplication()
-    petStore.clearSelectedPet()
+    const isSubmissionSuccessful = await adoptionStore.submitApplication()
+    if (isSubmissionSuccessful) {
+      petStore.clearSelectedPet()
+    }
     globalThis.scrollTo({ top: 0, behavior: 'smooth' })
   }
 }

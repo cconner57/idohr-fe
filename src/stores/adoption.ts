@@ -5,7 +5,7 @@ import { useDemoMode } from '../composables/useDemoMode'
 import { useMetrics } from '../composables/useMetrics'
 import { API_ENDPOINTS } from '../constants/api'
 import type { FormState } from '../models/adopt-form'
-import { getApiErrorMessage, withPublicOrgId } from '../utils/api'
+import { fetchWithRetry, getApiErrorMessage, withPublicOrgId } from '../utils/api'
 import { usePetStore } from './pets'
 import { getAdoptionValidationErrors } from './validation/adoptionValidation'
 
@@ -138,6 +138,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
   })
 
   const STORAGE_KEY = 'adoption_form_state'
+  const ADOPTION_SUBMIT_TIMEOUT_MS = 20000
 
   const clearPersistedState = () => {
     sessionStorage.removeItem(STORAGE_KEY)
@@ -405,13 +406,35 @@ export const useAdoptionStore = defineStore('adoption', () => {
       // Re-verifying struct: CatAccess *string `json:"catAccess"`
       // Frontend is string[]. Must join it. Done above.
 
-      const response = await fetch(withPublicOrgId(API_ENDPOINTS.ADOPTION_APPLICATION), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetchWithRetry(
+        withPublicOrgId(API_ENDPOINTS.ADOPTION_APPLICATION),
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(ADOPTION_SUBMIT_TIMEOUT_MS),
         },
-        body: JSON.stringify(payload),
-      })
+        {
+          retries: 1,
+          retryDelayMs: 800,
+          shouldRetry: ({ response, error }) => {
+            if (
+              error instanceof Error &&
+              (error.name === 'TimeoutError' || error instanceof TypeError)
+            ) {
+              return true
+            }
+
+            if (!response) {
+              return false
+            }
+
+            return [408, 429, 502, 503, 504].includes(response.status)
+          },
+        },
+      )
 
       if (!response.ok) {
         throw new Error(await getApiErrorMessage(response, 'Submission failed'))
@@ -424,6 +447,13 @@ export const useAdoptionStore = defineStore('adoption', () => {
       return true
     } catch (error: unknown) {
       console.error('Error submitting application:', error)
+
+      if (error instanceof DOMException && error.name === 'TimeoutError') {
+        submissionError.value =
+          'Request timed out while submitting your application. Please try again.'
+        return false
+      }
+
       const message = error instanceof Error ? error.message : String(error)
       submissionError.value = message
       return false

@@ -38,6 +38,7 @@ const handleStartAdoption = () => {
 
   vibrate(50)
   adoptionStore.resetForm()
+  petStore.clearSelectedPet()
   petStore.selectPet({ id: props.pet.id, petName: props.pet.name, species: props.pet.species })
   router.push(`/pet-adoption/${props.pet.id}`)
 }

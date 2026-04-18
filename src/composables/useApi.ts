@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-import { getApiErrorMessage } from '@/utils/api'
+import { fetchWithRetry, getApiErrorMessage } from '@/utils/api'
 
 interface IApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
@@ -30,11 +30,18 @@ export function useApi() {
     }
 
     try {
-      const response = await fetch(endpoint, {
-        method,
-        headers: finalHeaders,
-        body: body ? JSON.stringify(body) : undefined,
-      })
+      const response = await fetchWithRetry(
+        endpoint,
+        {
+          method,
+          headers: finalHeaders,
+          body: body ? JSON.stringify(body) : undefined,
+        },
+        {
+          retries: method === 'GET' ? 1 : 0,
+          retryDelayMs: 400,
+        },
+      )
 
       if (!response.ok) {
         error.value = await getApiErrorMessage(response, `Request failed (${response.status})`)
