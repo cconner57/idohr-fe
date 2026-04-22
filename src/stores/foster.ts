@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { FOSTER_PAGES } from '@/constants/fosterQuestions'
 import { API_ENDPOINTS } from '@/constants/api'
+import { FOSTER_PAGES } from '@/constants/fosterQuestions'
 import type { IFosterFormState, TFosterSpecies } from '@/models/foster-form'
 import { getApiErrorMessage, withPublicOrgId } from '@/utils/api'
 
