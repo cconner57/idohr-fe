@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const faqGroups = [
   {
-    title: 'Shared Questions',
+    title: 'General Questions',
     items: [
       {
         question: 'Can I adopt if I rent my home?',
@@ -17,6 +17,16 @@ const faqGroups = [
         question: 'Can I return the pet if the match is not successful?',
         answer:
           'Yes. Contact IDOHR directly so we can coordinate a safe return plan and next placement steps.',
+      },
+      {
+        question: 'How long does the adoption process usually take?',
+        answer:
+          'Timelines vary by pet and application volume, but most completed applications are reviewed within a few days.',
+      },
+      {
+        question: 'Are adoption fees the same for every pet?',
+        answer:
+          'Not always. Fees can vary based on age, medical history, and special care needs, and each profile lists current details.',
       },
     ],
   },
@@ -38,6 +48,16 @@ const faqGroups = [
         answer:
           'Have at least one litter box per cat plus one extra, unscented litter, food and water stations, and a quiet decompression space.',
       },
+      {
+        question: 'Should I keep a new cat in one room at first?',
+        answer:
+          'Yes. A quiet starter room helps your cat decompress and adjust before gradually exploring the rest of the home.',
+      },
+      {
+        question: 'How should I introduce a new cat to resident pets?',
+        answer:
+          'Use slow, supervised introductions with scent swapping and short sessions to reduce stress and support a safer transition.',
+      },
     ],
   },
   {
@@ -57,6 +77,16 @@ const faqGroups = [
         question: 'Can I schedule a meet-and-greet with my current dog?',
         answer:
           "Yes. If a profile allows meet-and-greets, we can coordinate a safe introduction based on the dog's temperament and status.",
+      },
+      {
+        question: 'What supplies should I prepare before bringing a new dog home?',
+        answer:
+          'Have a leash, collar with ID tag, crate or safe rest area, food and water bowls, appropriate food, and enrichment toys ready.',
+      },
+      {
+        question: 'How much daily exercise will my adopted dog need?',
+        answer:
+          'Exercise needs depend on age, breed, and energy level, and we can help you choose a dog whose needs match your routine.',
       },
     ],
   },
@@ -111,14 +141,14 @@ const faqGroups = [
 <style scoped lang="css">
 .about-faq {
   padding: 80px var(--layout-padding-side);
-  background-color: var(--color-primary);
-  color: var(--text-inverse);
+  background-color: var(--text-inverse);
+  color: var(--text-primary);
 
   h2 {
     text-align: center;
     font-size: 2.25rem;
     margin-bottom: 2rem;
-    color: var(--text-inverse);
+    color: var(--text-primary);
   }
 
   .groups {
@@ -130,10 +160,11 @@ const faqGroups = [
   }
 
   .group {
-    background: rgb(255 255 255 / 12%);
-    border: 1px solid rgb(255 255 255 / 20%);
+    background: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
     border-radius: var(--radius-lg);
     padding: 1rem;
+    box-shadow: 0 8px 18px rgb(0 165 173 / 18%);
 
     h3 {
       font-size: 1.1rem;
@@ -149,7 +180,7 @@ const faqGroups = [
   }
 
   .faq-details {
-    border-top: 1px solid rgb(255 255 255 / 18%);
+    border-top: 1px solid hsl(from var(--color-primary) h s 84%);
     padding-top: 0.75rem;
 
     &[open] .arrow {
@@ -164,6 +195,7 @@ const faqGroups = [
     gap: 0.5rem;
     font-weight: 700;
     cursor: pointer;
+    color: var(--text-inverse);
 
     &::-webkit-details-marker {
       display: none;
@@ -173,7 +205,7 @@ const faqGroups = [
   .faq-answer {
     margin: 0.6rem 0 0 1.7rem;
     line-height: 1.45;
-    color: hsl(from var(--text-inverse) h s 94%);
+    color: var(--text-inverse);
   }
 
   .arrow {
