@@ -236,11 +236,6 @@ const handleReset = async () => {
             @blur="handleBlur('email')"
           />
 
-          <Allergies
-            v-model="formState.allergies"
-            :class="{ 'has-error': touched.allergies && !formState.allergies }"
-          />
-
           <InputField
             :modelValue="formState.emergencyContactName"
             @update:modelValue="
@@ -267,6 +262,11 @@ const handleReset = async () => {
             maxlength="13"
             :hasError="touched.emergencyContactPhone && !formState.emergencyContactPhone"
             @blur="handleBlur('emergencyContactPhone')"
+          />
+
+          <Allergies
+            v-model="formState.allergies"
+            :class="{ 'has-error': touched.allergies && !formState.allergies }"
           />
         </fieldset>
 

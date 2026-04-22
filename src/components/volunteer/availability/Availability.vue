@@ -22,6 +22,9 @@ const selected = computed({
 
     <div class="times-grid" :class="{ 'has-error': hasError }">
       <div class="sub-header">Everyday Shifts (Monday – Sunday)</div>
+      <div class="sub-header-note">
+        Sunday PM clean/feed/socialize hours are 4PM - 6PM due to PetSmart store hours.
+      </div>
 
       <label class="time-card">
         <input type="checkbox" value="10AM – 12PM" v-model="selected" />
@@ -127,7 +130,7 @@ const selected = computed({
         <input type="checkbox" value="6PM – 8PM" v-model="selected" />
         <div class="time-card__content">
           <div class="time-header">
-            <strong>6PM – 8PM</strong>
+            <strong>6PM – 8PM (Monday - Saturday)</strong>
             <div class="check-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -148,13 +151,42 @@ const selected = computed({
         </div>
       </label>
 
+      <label class="time-card">
+        <input
+          type="checkbox"
+          value="Sunday PM Clean/Feed/Socialize: 4PM - 6PM"
+          v-model="selected"
+        />
+        <div class="time-card__content">
+          <div class="time-header">
+            <strong>Sunday PM: 4PM - 6PM</strong>
+            <div class="check-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <small>Sunday PM clean, feed, & socialize with cats (PetSmart closes early)</small>
+        </div>
+      </label>
+
       <div class="sub-header mt-2">Adoption Events (Saturday & Sunday Only)</div>
 
       <label class="time-card">
-        <input type="checkbox" value="Adoption Event: 12pm - 2pm" v-model="selected" />
+        <input type="checkbox" value="Adoption Event: 12PM - 2PM" v-model="selected" />
         <div class="time-card__content">
           <div class="time-header">
-            <strong>Adoption Event: 12pm - 2pm</strong>
+            <strong>Adoption Event: 12PM - 2PM</strong>
             <div class="check-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -176,10 +208,10 @@ const selected = computed({
       </label>
 
       <label class="time-card">
-        <input type="checkbox" value="Adoption Event: 2pm - 4pm" v-model="selected" />
+        <input type="checkbox" value="Adoption Event: 2PM - 4PM" v-model="selected" />
         <div class="time-card__content">
           <div class="time-header">
-            <strong>Adoption Event: 2pm - 4pm</strong>
+            <strong>Adoption Event: 2PM - 4PM</strong>
             <div class="check-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -197,6 +229,31 @@ const selected = computed({
             </div>
           </div>
           <small>Focus on cat adoptions & customer support</small>
+        </div>
+      </label>
+
+      <label class="time-card">
+        <input type="checkbox" value="Adoption Event Cleanup (Sunday): 4PM - 6PM" v-model="selected" />
+        <div class="time-card__content">
+          <div class="time-header">
+            <strong>Adoption Event Cleanup (Sunday): 4PM - 6PM</strong>
+            <div class="check-icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <small>Help with Sunday event cleanup, breakdown, and post-event cat care support</small>
         </div>
       </label>
     </div>
@@ -231,6 +288,14 @@ const selected = computed({
   color: var(--text-secondary);
   margin-top: 4px;
   margin-bottom: 0;
+}
+
+.sub-header-note {
+  grid-column: 1 / -1;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: -4px;
+  margin-bottom: 2px;
 }
 
 .sub-header.mt-2 {
