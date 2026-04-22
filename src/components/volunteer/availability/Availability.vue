@@ -233,7 +233,11 @@ const selected = computed({
       </label>
 
       <label class="time-card">
-        <input type="checkbox" value="Adoption Event Cleanup (Sunday): 4PM - 6PM" v-model="selected" />
+        <input
+          type="checkbox"
+          value="Adoption Event Cleanup (Sunday): 4PM - 6PM"
+          v-model="selected"
+        />
         <div class="time-card__content">
           <div class="time-header">
             <strong>Adoption Event Cleanup (Sunday): 4PM - 6PM</strong>
