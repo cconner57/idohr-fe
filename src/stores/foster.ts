@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
+import { FOSTER_PAGES } from '@/constants/fosterQuestions'
 import { API_ENDPOINTS } from '@/constants/api'
 import type { IFosterFormState, TFosterSpecies } from '@/models/foster-form'
 import { getApiErrorMessage, withPublicOrgId } from '@/utils/api'
@@ -21,6 +22,54 @@ const defaultState = (): IFosterFormState => ({
   isSubmitting: false,
   apiError: null,
 })
+
+const toSnakeCase = (input: string) => {
+  const cleaned = input
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-zA-Z0-9]+/g, ' ')
+    .trim()
+    .toLowerCase()
+
+  if (!cleaned) return ''
+
+  return cleaned.split(/\s+/).slice(0, 8).join('_')
+}
+
+const createReadableAnswerKeyMap = () => {
+  const keyMap = new Map<string, string>()
+  const usedKeys = new Set<string>()
+
+  FOSTER_PAGES.forEach((page) => {
+    page.questions.forEach((question) => {
+      const labelKey = toSnakeCase(question.label)
+      const baseKey = labelKey ? `p${page.id}_${labelKey}` : `p${page.id}_field_${question.id}`
+
+      let uniqueKey = baseKey
+      let counter = 2
+      while (usedKeys.has(uniqueKey)) {
+        uniqueKey = `${baseKey}_${counter}`
+        counter += 1
+      }
+
+      usedKeys.add(uniqueKey)
+      keyMap.set(question.id, uniqueKey)
+    })
+  })
+
+  return keyMap
+}
+
+const readableAnswerKeyMap = createReadableAnswerKeyMap()
+
+const toReadableAnswers = (answers: Record<string, string>) => {
+  return Object.entries(answers).reduce<Record<string, string>>((acc, [id, value]) => {
+    const fallbackKey = `field_${id.replace(/\W+/g, '_').toLowerCase()}`
+    const readableKey = readableAnswerKeyMap.get(id) ?? fallbackKey
+    acc[readableKey] = value
+    return acc
+  }, {})
+}
 
 const parsePersisted = (raw: string | null): IFosterPersistedState | null => {
   if (!raw) return null
@@ -118,7 +167,7 @@ export const useFosterStore = defineStore('foster', () => {
           lastName,
           email,
           speciesPreference: state.value.speciesPreference,
-          answers: state.value.answers,
+          answers: toReadableAnswers(state.value.answers),
         }),
       })
 
