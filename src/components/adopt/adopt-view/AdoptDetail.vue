@@ -6,14 +6,11 @@ import type { IPet } from '../../../models/common.ts'
 import { useAdoptionStore } from '../../../stores/adoption'
 import { usePetStore } from '../../../stores/pets'
 import { calculateAge } from '../../../utils/date'
-import { formatDate } from '../../../utils/dateUtils'
 import { vibrate } from '../../../utils/haptics.ts'
 import Button from '../../common/ui/Button.vue'
 import Capsules from '../../common/ui/Capsules.vue'
 import AdditionalInfo from '../additional-info/AdditionalInfo.vue'
-import AdoptionFAQ from '../adopt-faq/AdoptionFAQ.vue'
 import AdoptionProcess from '../adopt-process/AdoptionProcess.vue'
-import VaccinationItem from '../vaccination-item/VaccinationItem.vue'
 import AdoptDrawer from './AdoptDrawer.vue'
 import RequestInfoDrawer from './RequestInfoDrawer.vue'
 
@@ -35,6 +32,34 @@ const isComingSoon = computed(() => {
   )
 })
 const isStartAdoptionDisabled = computed(() => isComingSoon.value)
+const fallbackBioStories = [
+  (petName: string) =>
+    `Hi, I'm ${petName}, and I'm still putting the finishing touches on my story. I've got tail wags, zoomies, and cozy nap-time highlights to share. Come back soon so I can tell you all about my favorite things and the kind of home I'm dreaming of.`,
+  (petName: string) =>
+    `Hey there, I'm ${petName}! I'm busy polishing up my autobiography between snack breaks and power naps. Check back soon, because I can't wait to share my funniest moments and what makes me happiest.`,
+  (petName: string) =>
+    `Paws up, I'm ${petName}, and my story is still in the editing phase. I'm choosing the very best tales from my adventures, silly quirks, and cuddle routines. Swing by again soon to read the full version straight from me.`,
+  (petName: string) =>
+    `Hello friend, I'm ${petName}, and my personal bio is almost ready for the spotlight. I'm gathering my best memories, favorite toys, and dream-home wishlist to share with you. Come back soon and I'll spill all the details.`,
+  (petName: string) =>
+    `It's me, ${petName}! I'm currently working with my imaginary editor to craft the perfect story. There will be heartwarming chapters, goofy bonus scenes, and lots of personality. Visit again soon to hear it all from me.`,
+]
+const selectedFallbackStory = ref('')
+const formattedFallbackStory = computed(() => {
+  const story = selectedFallbackStory.value
+  const splitIndex = story.lastIndexOf('. ')
+
+  if (splitIndex === -1) {
+    return story
+  }
+
+  return `${story.slice(0, splitIndex + 1)}\n\n${story.slice(splitIndex + 2)}`
+})
+
+const pickFallbackStory = () => {
+  const randomIndex = Math.floor(Math.random() * fallbackBioStories.length)
+  selectedFallbackStory.value = fallbackBioStories[randomIndex](props.pet.name)
+}
 
 const handleStartAdoption = () => {
   if (isStartAdoptionDisabled.value) {
@@ -100,6 +125,14 @@ watch(petPhotoUrl, () => {
   imgError.value = false
   isImageLoaded.value = false
 })
+
+watch(
+  () => props.pet.id,
+  () => {
+    pickFallbackStory()
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
@@ -177,18 +210,12 @@ watch(petPhotoUrl, () => {
         </output>
       </div>
     </div>
-    <div
-      v-if="
-        pet.descriptions?.primary ||
-        pet.descriptions?.additionalInformation?.length ||
-        pet.profileSettings.showAdditionalInformation
-      "
-      class="adopt-detail__about"
-    >
+    <div class="adopt-detail__about">
       <div class="adopt-detail__about__content">
-        <div v-if="pet.descriptions?.primary" class="adopt-detail__about__fun">
+        <div class="adopt-detail__about__fun">
           <h2>From {{ pet.name }}</h2>
-          <p>{{ pet.descriptions?.primary }}</p>
+          <p v-if="pet.descriptions?.primary">{{ pet.descriptions?.primary }}</p>
+          <p v-else class="adopt-detail__about__fallback">{{ formattedFallbackStory }}</p>
         </div>
         <div
           class="adopt-detail__about__additional-info"
@@ -202,33 +229,9 @@ watch(petPhotoUrl, () => {
           </ul>
         </div>
       </div>
-      <div class="adopt-detail__about__medical" v-if="pet.profileSettings.showMedicalHistory">
-        <h2>Medical History</h2>
-        <h3>Vaccinations</h3>
-        <ul>
-          <VaccinationItem name="rabies" :pet="pet" />
-          <VaccinationItem name="bordetella" :pet="pet" />
-          <VaccinationItem name="canineDistemper" :pet="pet" />
-          <VaccinationItem name="felineDistemper" :pet="pet" />
-          <VaccinationItem name="felineLeukemia" :pet="pet" />
-          <VaccinationItem name="leptospira" :pet="pet" />
-          <VaccinationItem name="other" :pet="pet" />
-        </ul>
-
-        <h3 v-if="pet.medical?.surgeries?.length">Surgeries</h3>
-        <ul v-if="pet.medical?.surgeries?.length">
-          <li v-for="(surgery, index) in pet.medical.surgeries" :key="'surgery-' + index">
-            <p>{{ surgery.name }}</p>
-            <p>
-              {{ surgery.date ? 'Performed on ' + formatDate(surgery.date) : 'Date not available' }}
-            </p>
-          </li>
-        </ul>
+      <div class="adopt-detail__about__process">
+        <AdoptionProcess :pet="pet" />
       </div>
-    </div>
-    <div class="adopt-detail__adoption">
-      <AdoptionProcess :pet="pet" />
-      <AdoptionFAQ />
     </div>
   </div>
 
@@ -384,6 +387,7 @@ watch(petPhotoUrl, () => {
 
   .adopt-detail__about {
     display: flex;
+    gap: 24px;
     margin-top: 20px;
     background-color: var(--text-inverse);
     padding: 32px;
@@ -394,11 +398,9 @@ watch(petPhotoUrl, () => {
 
     & .adopt-detail__about__content {
       width: 50%;
-      margin-right: 20px;
 
       & .adopt-detail__about__fun {
         width: 100%;
-        height: 50%;
       }
 
       & .adopt-detail__about__additional-info {
@@ -413,40 +415,14 @@ watch(petPhotoUrl, () => {
       & .adopt-detail__about__additional-info li {
         margin-bottom: 8px;
       }
+
+      & .adopt-detail__about__fallback {
+        white-space: pre-line;
+      }
     }
 
-    & .adopt-detail__about__medical {
+    & .adopt-detail__about__process {
       width: 50%;
-    }
-
-    & .adopt-detail__about__medical ul {
-      margin-bottom: 16px;
-    }
-
-    & .adopt-detail__about__medical li {
-      margin-bottom: 8px;
-      display: flex;
-      border-bottom: 1px solid rgb(178 177 177);
-      width: 100%;
-      justify-content: space-between;
-    }
-
-    & .adopt-detail__about__medical p {
-      margin-bottom: 8px;
-    }
-
-    & .adopt-detail__about__medical p:first-child {
-      margin-right: 8px;
-      flex: 1;
-    }
-
-    & .adopt-detail__about__medical p:last-child {
-      font-weight: 700;
-    }
-
-    & .adopt-detail__about__medical li:last-of-type {
-      border-bottom: none;
-      margin-bottom: 0;
     }
 
     h2 {
@@ -464,29 +440,9 @@ watch(petPhotoUrl, () => {
       flex-direction: column;
 
       & .adopt-detail__about__content,
-      & .adopt-detail__about__medical {
+      & .adopt-detail__about__process {
         width: 100%;
-        margin-right: 0;
       }
-
-      & .adopt-detail__about__medical {
-        margin-top: 2rem;
-      }
-    }
-  }
-
-  .adopt-detail__adoption {
-    display: flex;
-    margin-top: 30px;
-    background-color: var(--text-inverse);
-    color: var(--text-primary);
-    padding: 32px;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
-    width: 100%;
-
-    @media (width <= 768px) {
-      flex-direction: column;
     }
   }
 

@@ -88,13 +88,7 @@ defineProps<{
 
 <style scoped lang="css">
 .adopt-detail__adoption-process {
-  width: 50%;
-  margin-right: 20px;
-
-  @media (width <= 440px) {
-    width: 100%;
-    margin-right: 0;
-  }
+  width: 100%;
 }
 
 h2 {

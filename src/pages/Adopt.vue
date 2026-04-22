@@ -48,7 +48,9 @@ const resetAllFilters = () => {
 }
 
 onMounted(() => {
-  store.fetchPetsList()
+  if (!id.value) {
+    store.fetchPetsList()
+  }
 })
 
 const filteredPets = computed(() => {
