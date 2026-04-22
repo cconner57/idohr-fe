@@ -104,20 +104,31 @@ export const useFosterStore = defineStore('foster', () => {
     state.value.isSubmitting = true
 
     try {
+      const fullName = (state.value.answers.q1 ?? '').trim()
+      const nameParts = fullName.split(/\s+/).filter(Boolean)
+      const firstName = nameParts[0] ?? ''
+      const lastName = nameParts.slice(1).join(' ') || nameParts[0] || ''
+      const email = (state.value.answers.q5 ?? '').trim()
+
       const response = await fetch(withPublicOrgId(API_ENDPOINTS.FOSTER_APPLICATION), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
           speciesPreference: state.value.speciesPreference,
           answers: state.value.answers,
         }),
       })
 
       if (!response.ok) {
-        state.value.apiError = await getApiErrorMessage(
-          response,
-          'Unable to submit foster application right now. Please try again.',
-        )
+        const fallbackMessage =
+          response.status === 503 || response.status >= 500
+            ? 'Our application service is temporarily unavailable. Please try again in a few minutes.'
+            : 'Unable to submit foster application right now. Please try again.'
+
+        state.value.apiError = await getApiErrorMessage(response, fallbackMessage)
         return false
       }
 
