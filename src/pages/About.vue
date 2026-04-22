@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AboutFAQ from '@/components/about/AboutFAQ.vue'
 import SurrenderCat from '@/components/about/surrender/SurrenderCat.vue'
 import Candid from '@/components/common/candid-award/Candid.vue'
 import { useScrollReveal } from '@/composables/useScrollReveal.ts'
@@ -70,9 +71,30 @@ const { vScrollReveal } = useScrollReveal()
     <section class="transparency">
       <div class="content-wrapper">
         <div class="awards" v-scroll-reveal>
-          <Candid type="Gold" year="2024" class="award-item" />
-          <Candid type="Gold" year="2023" class="award-item" style="transition-delay: 0.1s" />
-          <Candid type="Silver" year="2022" class="award-item" style="transition-delay: 0.2s" />
+          <a
+            href="https://www.guidestar.org/profile/81-0780050"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View IDOHR Candid profile"
+          >
+            <Candid type="Gold" year="2024" class="award-item" />
+          </a>
+          <a
+            href="https://www.guidestar.org/profile/81-0780050"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View IDOHR Candid profile"
+          >
+            <Candid type="Gold" year="2023" class="award-item" style="transition-delay: 0.1s" />
+          </a>
+          <a
+            href="https://www.guidestar.org/profile/81-0780050"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View IDOHR Candid profile"
+          >
+            <Candid type="Silver" year="2022" class="award-item" style="transition-delay: 0.2s" />
+          </a>
         </div>
         <div class="notice reveal-left" v-scroll-reveal>
           <h2>Transparency</h2>
@@ -81,7 +103,42 @@ const { vScrollReveal } = useScrollReveal()
             publish annual updates and operate with financial transparency.
           </p>
           <p class="small">EIN: 81-0780050 • PO Box 7612, La Verne, CA 91750</p>
+          <p class="small">
+            Candid Seals recognize nonprofit transparency and profile completeness.
+            <a
+              href="https://www.guidestar.org/profile/81-0780050"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View our Candid profile
+            </a>
+            .
+          </p>
         </div>
+      </div>
+    </section>
+
+    <section class="locations">
+      <div class="content-wrapper" v-scroll-reveal>
+        <h2>Where To Find Us</h2>
+        <p>We host many volunteer and adoption activities through our PetSmart partner location.</p>
+        <address>
+          PetSmart San Dimas<br />
+          925 W Via Verde Ave, San Dimas, CA 91773
+        </address>
+        <a
+          href="https://maps.google.com/?q=925+W+Via+Verde+Ave+San+Dimas+CA+91773"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open in Google Maps
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <div class="content-wrapper">
+        <AboutFAQ />
       </div>
     </section>
   </main>
@@ -89,7 +146,6 @@ const { vScrollReveal } = useScrollReveal()
 </template>
 
 <style scoped lang="css">
-
 :deep(.reveal) {
   opacity: 0;
   transform: translateY(30px);
@@ -164,7 +220,7 @@ const { vScrollReveal } = useScrollReveal()
       font-size: 1.25rem;
       max-width: 600px;
       margin-top: 12px;
-      font-weight: 400; 
+      font-weight: 400;
       color: var(--text-inverse);
     }
   }
@@ -232,7 +288,7 @@ const { vScrollReveal } = useScrollReveal()
       font-size: 1.15rem;
       max-width: 600px;
       margin-top: 12px;
-      font-weight: 400; 
+      font-weight: 400;
       color: var(--text-inverse);
     }
 
@@ -246,7 +302,7 @@ const { vScrollReveal } = useScrollReveal()
       list-style: none;
       padding: 0;
       margin: 12px 0 0;
-      font-weight: 400; 
+      font-weight: 400;
       color: var(--text-inverse);
     }
 
@@ -291,10 +347,10 @@ const { vScrollReveal } = useScrollReveal()
     }
 
     .notice {
-      text-align: right; 
+      text-align: right;
       display: flex;
       flex-direction: column;
-      align-items: flex-end; 
+      align-items: flex-end;
 
       & h2 {
         font-size: 2.5rem;
@@ -304,6 +360,11 @@ const { vScrollReveal } = useScrollReveal()
         font-size: 0.85rem;
         color: var(--color-neutral-strong);
         margin-top: 12px;
+
+        a {
+          color: var(--color-secondary);
+          font-weight: 700;
+        }
       }
     }
 
@@ -311,7 +372,43 @@ const { vScrollReveal } = useScrollReveal()
       display: flex;
       gap: 3rem;
       align-items: center;
-      justify-content: center; 
+      justify-content: center;
+    }
+  }
+
+  .locations {
+    background-color: var(--text-inverse);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    padding: 80px var(--layout-padding-side);
+
+    .content-wrapper {
+      text-align: center;
+      max-width: 680px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1.1rem;
+    }
+
+    address {
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--color-secondary);
+      font-weight: 700;
     }
   }
 
@@ -334,7 +431,7 @@ const { vScrollReveal } = useScrollReveal()
     .mission content,
     .transparency .notice {
       max-width: 100%;
-      align-items: center; 
+      align-items: center;
     }
 
     .story-text p,
@@ -343,7 +440,7 @@ const { vScrollReveal } = useScrollReveal()
     .mission .ticks {
       margin-left: auto;
       margin-right: auto;
-      text-align: left; 
+      text-align: left;
     }
 
     .mission .ticks {
@@ -352,7 +449,7 @@ const { vScrollReveal } = useScrollReveal()
     }
 
     .transparency .awards {
-      order: -1; 
+      order: -1;
       margin-bottom: 2rem;
     }
 

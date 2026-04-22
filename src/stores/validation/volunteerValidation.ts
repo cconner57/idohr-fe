@@ -33,11 +33,9 @@ export function getVolunteerValidationErrors(formState: IVolunteerFormState): st
   if (!formState.phoneNumber) errors.push('Phone Number')
   if (!formState.birthday) errors.push('Birthday')
 
+  let derivedAge: number | null = null
   if (formState.birthday) {
-    const age = calculateAge(formState.birthday)
-    if (age !== null && age < 21 && formState.age === null) {
-      errors.push('Age')
-    }
+    derivedAge = calculateAge(formState.birthday)
   }
 
   if (!formState.emergencyContactName) errors.push('Emergency Contact Name')
@@ -49,7 +47,7 @@ export function getVolunteerValidationErrors(formState: IVolunteerFormState): st
   if (!formState.signatureDate) errors.push('Agreement Date')
   if (!formState.signatureData) errors.push('Signature')
 
-  if (formState.age !== null && formState.age < 21) {
+  if (derivedAge !== null && derivedAge < 21) {
     if (!formState.parentName) errors.push('Parent Name')
     if (!formState.parentSignatureDate) errors.push('Parent Date')
     if (!formState.parentSignatureData) errors.push('Parent Signature')

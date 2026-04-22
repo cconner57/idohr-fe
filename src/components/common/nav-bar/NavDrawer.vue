@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount,ref, watch } from 'vue'
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -135,6 +135,9 @@ onBeforeUnmount(() => {
           </RouterLink>
           <RouterLink to="/adopt" class="nav-link" @click="close">
             <span>Adopt</span>
+          </RouterLink>
+          <RouterLink to="/foster" class="nav-link" @click="close">
+            <span>Foster</span>
           </RouterLink>
           <RouterLink to="/volunteer" class="nav-link" @click="close">
             <span>Volunteer</span>
@@ -331,7 +334,7 @@ svg[data-open='true'] .hx-bot {
 }
 
 .nav-link.router-link-active {
-  background-color: var(--color-primary-weak); 
+  background-color: var(--color-primary-weak);
   color: var(--color-primary);
 }
 

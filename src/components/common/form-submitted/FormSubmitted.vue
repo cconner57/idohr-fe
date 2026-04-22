@@ -29,6 +29,9 @@ const headerText = () => {
   if (props.formType === 'adoption') {
     return 'Application Received!'
   }
+  if (props.formType === 'foster') {
+    return 'Application Received!'
+  }
   return ''
 }
 
@@ -41,6 +44,9 @@ const messageText = () => {
   }
   if (props.formType === 'adoption') {
     return "We'll review your adoption application and get back to you shortly."
+  }
+  if (props.formType === 'foster') {
+    return "We'll review your foster application and get back to you shortly."
   }
   return ''
 }

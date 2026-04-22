@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, type PropType, ref } from 'vue'
+import { computed, type PropType, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useMetrics } from '../../../composables/useMetrics'
@@ -58,6 +58,7 @@ const photoSrc = computed(() => {
 })
 
 const imgError = ref(false)
+const isImageLoaded = ref(false)
 const buttonTitle = computed(() => `Meet ${props.name}`)
 const isComingSoon = computed(() => {
   const normalizedStatus = props.status.trim().toLowerCase()
@@ -72,6 +73,15 @@ function onImgError() {
   imgError.value = true
 }
 
+function onImgLoad() {
+  isImageLoaded.value = true
+}
+
+watch(photoSrc, () => {
+  imgError.value = false
+  isImageLoaded.value = false
+})
+
 const { submitMetric } = useMetrics()
 
 function handleAdopt() {
@@ -83,14 +93,22 @@ function handleAdopt() {
 <template>
   <div class="pet-item" :style="{ viewTransitionName: `pet-card-${props.id}` }">
     <div class="img-wrapper">
+      <div
+        v-if="!imgError && photoSrc && !isImageLoaded"
+        class="img-placeholder"
+        aria-hidden="true"
+      ></div>
       <img
         v-if="!imgError && photoSrc"
         :src="photoSrc"
         :alt="props.name"
         height="250"
         width="240"
+        loading="lazy"
         :style="{ viewTransitionName: 'pet-' + props.id }"
         :fetchpriority="priority ? 'high' : 'auto'"
+        :class="{ loaded: isImageLoaded }"
+        @load="onImgLoad"
         @error="onImgError"
         @click="handleAdopt"
       />
@@ -150,6 +168,21 @@ function handleAdopt() {
     height: 180px;
     flex-shrink: 0;
 
+    .img-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        110deg,
+        hsl(from var(--color-gray-50) h s 97%) 8%,
+        hsl(from var(--color-gray-50) h s 92%) 18%,
+        hsl(from var(--color-gray-50) h s 97%) 33%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.2s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
     img {
       width: 100%;
       height: 100%;
@@ -158,6 +191,12 @@ function handleAdopt() {
       background-color: var(--color-gray-50);
       cursor: pointer;
       display: block;
+      opacity: 0;
+      transition: opacity 300ms ease-in-out;
+
+      &.loaded {
+        opacity: 1;
+      }
     }
 
     .img-fallback {
@@ -312,6 +351,16 @@ function handleAdopt() {
     & .img-fallback::after {
       mask-position: center center;
     }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
   }
 }
 </style>

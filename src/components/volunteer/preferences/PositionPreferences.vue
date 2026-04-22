@@ -36,6 +36,10 @@ const selected = computed({
         ><input type="checkbox" value="Cat Socializing" v-model="selected" />
         <span>Cat Socializing</span></label
       >
+      <label class="chip"
+        ><input type="checkbox" value="Vet Transportation" v-model="selected" />
+        <span>Vet Transportation</span></label
+      >
     </fieldset>
   </fieldset>
 </template>

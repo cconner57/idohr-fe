@@ -44,6 +44,13 @@ const animalLabel = computed(() => (species.value === 'dog' ? 'dog' : 'cat'))
 const isCatFlow = computed(() => species.value === 'cat')
 const isCatIntroStep = computed(() => isCatFlow.value && step.value === 0)
 const visibleStep = computed(() => (isCatFlow.value ? Math.max(step.value - 1, 0) : step.value))
+const adoptionSteps = computed(() => {
+  if (species.value === 'dog') {
+    return ['General', 'Home', 'New Dog', 'Past Pets', 'Other', 'Summary']
+  }
+
+  return ['General', 'Home', 'New Cat', 'Current Pets', 'Past Pets', 'Other', 'Summary']
+})
 const finalStep = computed(() => (isCatFlow.value ? 7 : 6))
 const headerText = computed(() => {
   if (species.value === 'cat') {
@@ -109,11 +116,7 @@ const handleReset = async () => {
         :header-title="selectedPet?.species === 'cat' ? 'Cat' : 'Dog'"
         :header-text="headerText"
       />
-      <AdoptionSteps
-        v-if="!isCatIntroStep"
-        :formStep="visibleStep"
-        :selectedAnimal="selectedPet?.species ?? 'cat'"
-      />
+      <AdoptionSteps v-if="!isCatIntroStep" :currentStep="visibleStep" :steps="adoptionSteps" />
       <div v-show="!isCatIntroStep" class="cat-name-display">
         <h2>Adopting Pet:</h2>
         <p>{{ selectedPet?.petName }}</p>

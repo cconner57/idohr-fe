@@ -24,12 +24,24 @@ const goodWithText = computed(() => {
 
   return goodWith.join(', ')
 })
+
+const normalizedBreed = computed(() => {
+  const breed = props.pet.physical?.breed
+  if (!breed) return 'N/A'
+
+  const normalized = breed.trim().toLowerCase()
+  if (normalized === 'unknown') return 'Unknown'
+  if (normalized === 'mix') return 'Mix'
+
+  return breed
+})
+
 const houseTrainedText = () => {
   if (props.pet.behavior?.isHouseTrained === undefined) {
     return 'N/A'
   }
   if (props.pet.behavior?.isHouseTrained) {
-    return 'Yes';
+    return 'Yes'
   } else {
     return 'No'
   }
@@ -40,7 +52,7 @@ const houseTrainedText = () => {
   <div class="adopt-detail__additional-info">
     <div class="adopt-detail__additional-info__item">
       <p>Breed</p>
-      <p>{{ pet.physical?.breed ?? 'N/A' }}</p>
+      <p>{{ normalizedBreed }}</p>
     </div>
     <div class="adopt-detail__additional-info__item">
       <p>Color</p>

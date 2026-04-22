@@ -1,64 +1,33 @@
 <script setup lang="ts">
-const { formStep, selectedAnimal } = defineProps<{
-  formStep: number
-  selectedAnimal: 'dog' | 'cat' | null
+const props = defineProps<{
+  currentStep: number
+  steps: string[]
 }>()
 </script>
 
 <template>
-  <div class="steps-container">
-    <div class="line"
-      :class="{ activeLine: formStep >= 1 }"
-      :style="{ width: selectedAnimal === 'dog' ? '100px' : '80px' }"
-    ></div>
-    <div class="step" :class="{ active: formStep >= 0, completed: formStep > 0 }">
+  <div class="steps-container" :style="{ '--steps-count': String(props.steps.length) }">
+    <div class="line"></div>
+    <div
+      v-for="(stepLabel, idx) in props.steps"
+      :key="stepLabel"
+      class="step"
+      :class="{ active: props.currentStep >= idx, completed: props.currentStep > idx }"
+    >
       <div class="step-number">
-        <svg v-if="formStep > 0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <span v-else>1</span>
+        <svg
+          v-if="props.currentStep > idx"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          width="16"
+          height="16"
+        >
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+        </svg>
+        <span v-else>{{ idx + 1 }}</span>
       </div>
-      <div class="step-label">General</div>
-    </div>
-    <div class="step" :class="{ active: formStep >= 1, completed: formStep > 1 }">
-      <div class="step-number">
-        <svg v-if="formStep > 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <span v-else>2</span>
-      </div>
-      <div class="step-label">Home</div>
-    </div>
-    <div class="step" :class="{ active: formStep >= 2, completed: formStep > 2 }">
-      <div class="step-number">
-        <svg v-if="formStep > 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <span v-else>3</span>
-      </div>
-      <div class="step-label">{{ selectedAnimal === 'dog' ? 'New Dog' : 'New Cat' }}</div>
-    </div>
-    <div class="step" v-if="selectedAnimal === 'cat'" :class="{ active: formStep >= 3, completed: formStep > 3 }">
-      <div class="step-number">
-        <svg v-if="formStep > 3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <span v-else>4</span>
-      </div>
-      <div class="step-label">Current Pets</div>
-    </div>
-    <div class="step" :class="{ active: formStep >= 4, completed: formStep > 4 }">
-      <div class="step-number">
-        <svg v-if="formStep > 4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <div v-else>{{ selectedAnimal === 'dog' ? 4 : 5 }}</div>
-      </div>
-      <div class="step-label">Past Pets</div>
-    </div>
-    <div class="step" :class="{ active: formStep >= 5, completed: formStep > 5 }">
-      <div class="step-number">
-        <svg v-if="formStep > 5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <div v-else>{{ selectedAnimal === 'dog' ? 5 : 6 }}</div>
-      </div>
-      <div class="step-label">Other</div>
-    </div>
-    <div class="step" :class="{ active: formStep >= 6, completed: formStep > 6 }">
-      <div class="step-number">
-        <svg v-if="formStep > 6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-        <div v-else>{{ selectedAnimal === 'dog' ? 6 : 7 }}</div>
-      </div>
-      <div class="step-label">Summary</div>
+      <div class="step-label">{{ stepLabel }}</div>
     </div>
   </div>
 </template>
@@ -68,16 +37,17 @@ const { formStep, selectedAnimal } = defineProps<{
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 600px;
+  max-width: 1100px;
   margin: 0 auto 20px;
   align-items: center;
   position: relative;
+  gap: 8px;
 
   & .line {
     position: absolute;
     top: 14px;
-    left: 20px;
-    right: 20px;
+    left: calc(100% / (var(--steps-count) * 2));
+    right: calc(100% / (var(--steps-count) * 2));
     height: 2px;
     background-color: var(--color-primary);
     z-index: 1;
@@ -114,6 +84,8 @@ const { formStep, selectedAnimal } = defineProps<{
     align-items: center;
     position: relative;
     z-index: 2;
+    flex: 1;
+    min-width: 0;
 
     @media (width <= 600px) {
       flex-direction: row;
@@ -142,6 +114,7 @@ const { formStep, selectedAnimal } = defineProps<{
     .step-label {
       font-size: 0.875rem;
       text-align: center;
+      line-height: 1.3;
 
       @media (width <= 600px) {
         font-size: 1rem;

@@ -11,6 +11,7 @@ export const API_BASE_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_URL)
 
 export const API_ENDPOINTS = {
   VOLUNTEER_APPLICATION: `${API_BASE_URL}/applications/volunteer`,
+  FOSTER_APPLICATION: `${API_BASE_URL}/applications/foster`,
   ADOPTION_APPLICATION: `${API_BASE_URL}/applications/adoption`,
   ADOPTED_PETS_COUNT: `${API_BASE_URL}/pets/adopted-count`,
   PET_SPOTLIGHT: `${API_BASE_URL}/pets/spotlight`,
@@ -18,7 +19,10 @@ export const API_ENDPOINTS = {
   PET_INQUIRY: `${API_BASE_URL}/applications/inquiry`,
   METRICS: `${API_BASE_URL}/metrics`,
   PETS: `${API_BASE_URL}/pets`,
+  PETS_LIST: `${API_BASE_URL}/pets`,
+  PET_DETAILS: (idOrSlug: string) => `${API_BASE_URL}/v1/pets/${idOrSlug}`,
   PET_PHOTOS: (id: string) => `${API_BASE_URL}/pets/${id}/photos`,
+  NEWS_PUBLIC: `${API_BASE_URL}/public/news`,
   MARKETING_CAMPAIGNS: `${API_BASE_URL}/v1/marketing/campaigns`, // Using v1
   APPLICATIONS: `${API_BASE_URL}/v1/applications`,
   VOLUNTEERS: `${API_BASE_URL}/v1/volunteers`,

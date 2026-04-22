@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, nextTick, onMounted,ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import AdoptDetail from '@/components/adopt/adopt-view/AdoptDetail.vue'
@@ -16,6 +16,7 @@ const store = usePetStore()
 const { currentPets, isFetching } = storeToRefs(store)
 
 const id = computed(() => props.id ?? (route.params.id as string | undefined))
+const detailPet = ref<IPet | null>(null)
 const isFilterPanelOpen = ref(false)
 
 const activeFilter = ref('All')
@@ -47,14 +48,16 @@ const resetAllFilters = () => {
 }
 
 onMounted(() => {
-  store.fetchPets()
+  store.fetchPetsList()
 })
 
 const filteredPets = computed(() => {
   let result = currentPets.value
 
   if (activeFilter.value !== 'All') {
-    result = result.filter((p: IPet) => p.species.toLowerCase() === activeFilter.value.toLowerCase())
+    result = result.filter(
+      (p: IPet) => p.species.toLowerCase() === activeFilter.value.toLowerCase(),
+    )
   }
 
   const { age, size, sex, goodWith } = advancedFilters.value
@@ -73,7 +76,6 @@ const filteredPets = computed(() => {
 
   if (goodWith.length > 0) {
     result = result.filter((p: IPet) => {
-
       return goodWith.every((trait) => {
         if (trait === 'kids') return p.behavior.isGoodWithKids
         if (trait === 'dogs') return p.behavior.isGoodWithDogs
@@ -99,9 +101,32 @@ const setFilter = (filter: string) => {
 }
 
 const pet = computed(() => {
+  if (detailPet.value) return detailPet.value
+
   const param = id.value
   if (!param) return undefined
   return currentPets.value.find((p: IPet) => p.id === param || p.slug === param)
+})
+
+watch(
+  id,
+  async (param) => {
+    detailPet.value = null
+    if (!param) return
+
+    detailPet.value = await store.fetchPetDetail(param)
+  },
+  { immediate: true },
+)
+
+watch(id, () => {
+  isFilterPanelOpen.value = false
+})
+
+watch(pet, (currentPet) => {
+  if (currentPet) {
+    isFilterPanelOpen.value = false
+  }
 })
 </script>
 
@@ -146,6 +171,7 @@ const pet = computed(() => {
       </div>
 
       <FilterPanel
+        v-if="!pet"
         :isOpen="isFilterPanelOpen"
         :currentFilters="advancedFilters"
         @close="isFilterPanelOpen = false"
@@ -284,7 +310,6 @@ const pet = computed(() => {
       margin-bottom: 2rem;
     }
   }
-
 
   @media (width >= 321px) and (width <= 430px) {
     .content-wrapper {

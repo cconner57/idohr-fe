@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useRoute,useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { goToDonate } from '../../../utils/navigate.ts'
 import { useIsMobile, useIsTablet } from '../../../utils/useIsMobile.ts'
@@ -37,7 +37,9 @@ const isTablet = useIsTablet()
     <nav v-else class="nav-blurred" aria-label="Primary navigation">
       <div class="nav-container">
         <section class="nav-links">
-          <RouterLink to="/" class="nav-item" active-class="active"><p data-text="Home">Home</p></RouterLink>
+          <RouterLink to="/" class="nav-item" active-class="active"
+            ><p data-text="Home">Home</p></RouterLink
+          >
           <RouterLink
             to="/about"
             class="nav-item"
@@ -53,6 +55,9 @@ const isTablet = useIsTablet()
               active: route.path.startsWith('/adopt') || route.path.startsWith('/pet-adoption'),
             }"
             ><p data-text="Adopt">Adopt</p></RouterLink
+          >
+          <RouterLink to="/foster" class="nav-item" active-class="active"
+            ><p data-text="Foster">Foster</p></RouterLink
           >
           <RouterLink to="/volunteer" class="nav-item" active-class="active"
             ><p data-text="Volunteer">Volunteer</p></RouterLink
@@ -139,7 +144,9 @@ const isTablet = useIsTablet()
   }
 
   .nav-blurred {
-    background-color: oklch(52% 0.10 205deg / 85.1%); /* Final User-specified OKLCH (Medium-Dark Teal) */
+    background-color: oklch(
+      52% 0.1 205deg / 85.1%
+    ); /* Final User-specified OKLCH (Medium-Dark Teal) */
     backdrop-filter: blur(10px);
     /* stylelint-disable-next-line property-no-vendor-prefix */
     -webkit-backdrop-filter: blur(10px);

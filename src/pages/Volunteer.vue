@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { nextTick,onMounted } from 'vue'
+import { computed, nextTick, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
@@ -54,7 +54,6 @@ const { touched, handleBlur, touchAll } = useFormState([
   'zip',
   'phoneNumber',
   'birthday',
-  'age',
   'email',
   'allergies',
   'emergencyContactName',
@@ -87,6 +86,25 @@ const handleSubmit = async () => {
   }
 }
 
+const volunteerAge = computed(() => {
+  if (!formState.value.birthday) return null
+
+  const birthDate = formState.value.birthday.includes('-')
+    ? new Date(`${formState.value.birthday}T00:00:00`)
+    : new Date(formState.value.birthday)
+
+  if (Number.isNaN(birthDate.getTime())) return null
+
+  const today = new Date()
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const monthDiff = today.getMonth() - birthDate.getMonth()
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+
+  return age
+})
+
 const router = useRouter()
 
 const handleReset = async () => {
@@ -102,7 +120,8 @@ const handleReset = async () => {
         <ApplicationHeader
           header-title="Volunteer"
           header-text="I Dream of Home Rescue (IDOHR) is an all-volunteer, nonprofit dedicated to helping homeless cats
-    and kittens find loving, permanent homes. We’re looking for responsible volunteers to help with
+    and kittens find loving, permanent homes. Most volunteer shifts take place at our PetSmart partner
+    location in San Dimas, plus occasional events and approved vet transport support. We’re looking for responsible volunteers to help with
     feeding and cleaning, socializing cats and kittens, supporting adoptions, and light
     administrative tasks. Volunteers must be 21 or older. If under 21, a parent or guardian must
     sign the waiver below. Join us and help change a life. You’ll connect with amazing animals, work
@@ -115,7 +134,9 @@ const handleReset = async () => {
 
           <InputField
             :modelValue="formState.firstName"
-            @update:modelValue="(val: unknown) => (formState.firstName = sanitizeName(val as string))"
+            @update:modelValue="
+              (val: unknown) => (formState.firstName = sanitizeName(val as string))
+            "
             label="First Name"
             placeholder="First name"
             autocomplete="given-name"
@@ -126,7 +147,9 @@ const handleReset = async () => {
           />
           <InputField
             :modelValue="formState.lastName"
-            @update:modelValue="(val: unknown) => (formState.lastName = sanitizeName(val as string))"
+            @update:modelValue="
+              (val: unknown) => (formState.lastName = sanitizeName(val as string))
+            "
             label="Last Name"
             placeholder="Last name"
             autocomplete="family-name"
@@ -137,7 +160,9 @@ const handleReset = async () => {
           />
           <InputField
             :modelValue="formState.address"
-            @update:modelValue="(val: unknown) => (formState.address = sanitizeAddress(val as string))"
+            @update:modelValue="
+              (val: unknown) => (formState.address = sanitizeAddress(val as string))
+            "
             label="Address"
             placeholder="Address"
             autocomplete="street-address"
@@ -171,7 +196,9 @@ const handleReset = async () => {
           />
           <InputField
             :modelValue="formState.phoneNumber"
-            @update:modelValue="(val: unknown) => (formState.phoneNumber = formatPhoneNumber(val as string))"
+            @update:modelValue="
+              (val: unknown) => (formState.phoneNumber = formatPhoneNumber(val as string))
+            "
             label="Phone Number"
             placeholder="Phone"
             type="tel"
@@ -193,23 +220,6 @@ const handleReset = async () => {
             @blur="handleBlur('birthday')"
           />
           <InputField
-            :modelValue="formState.age"
-            @update:modelValue="
-              (val: unknown) => {
-                const str = String(val).replace(/\D/g, '').substring(0, 3)
-                formState.age = str ? Number(str) : null
-              }
-            "
-            label="If under 21, Age"
-            placeholder="Age"
-            type="text"
-            name="age"
-            maxlength="3"
-            :hasError="touched.age && validationErrors.includes('Age')"
-            @blur="handleBlur('age')"
-          />
-
-          <InputField
             :modelValue="formState.email"
             @update:modelValue="(val: unknown) => (formState.email = String(val).trim())"
             label="Email"
@@ -219,7 +229,10 @@ const handleReset = async () => {
             type="text"
             inputmode="email"
             maxlength="100"
-            :hasError="touched.email && (!formState.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email))"
+            :hasError="
+              touched.email &&
+              (!formState.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formState.email))
+            "
             @blur="handleBlur('email')"
           />
 
@@ -230,7 +243,9 @@ const handleReset = async () => {
 
           <InputField
             :modelValue="formState.emergencyContactName"
-            @update:modelValue="(val: unknown) => (formState.emergencyContactName = sanitizeName(val as string))"
+            @update:modelValue="
+              (val: unknown) => (formState.emergencyContactName = sanitizeName(val as string))
+            "
             label="Emergency Contact Person"
             placeholder="Name"
             name="emergencyContactName"
@@ -241,7 +256,9 @@ const handleReset = async () => {
           />
           <InputField
             :modelValue="formState.emergencyContactPhone"
-            @update:modelValue="(val: unknown) => (formState.emergencyContactPhone = formatPhoneNumber(val as string))"
+            @update:modelValue="
+              (val: unknown) => (formState.emergencyContactPhone = formatPhoneNumber(val as string))
+            "
             label="Emergency Contact Phone Number"
             placeholder="Phone Number"
             type="tel"
@@ -289,7 +306,7 @@ const handleReset = async () => {
           <Agreement
             :name="formState.firstName + ' ' + formState.lastName"
             v-model:fullName="formState.nameFull"
-            :age="formState.age!"
+            :age="volunteerAge"
             v-model:signature="formState.signatureData"
             v-model:signatureDate="formState.signatureDate"
             v-model:parentName="formState.parentName"
@@ -465,7 +482,5 @@ const handleReset = async () => {
       border-color 0.2s ease,
       box-shadow 0.2s ease;
   }
-
-
 }
 </style>

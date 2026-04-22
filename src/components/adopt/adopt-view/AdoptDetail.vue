@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import type { IPet } from '../../../models/common.ts'
@@ -26,10 +26,15 @@ const adoptionStore = useAdoptionStore()
 const petStore = usePetStore()
 const isDrawerOpen = ref(false)
 const isInfoDrawerOpen = ref(false)
-const isStartAdoptionDisabled = computed(() => {
+const isComingSoon = computed(() => {
   const normalizedStatus = props.pet.details?.status?.trim().toLowerCase() ?? ''
-  return normalizedStatus === 'intake'
+  return (
+    normalizedStatus === 'intake' ||
+    normalizedStatus === 'intake-processing' ||
+    normalizedStatus === 'intake processing'
+  )
 })
+const isStartAdoptionDisabled = computed(() => isComingSoon.value)
 
 const handleStartAdoption = () => {
   if (isStartAdoptionDisabled.value) {
@@ -44,6 +49,10 @@ const handleStartAdoption = () => {
 }
 
 const handleScheduleMeet = () => {
+  if (isComingSoon.value) {
+    return
+  }
+
   isDrawerOpen.value = true
 }
 
@@ -68,9 +77,14 @@ const handleShare = () => {
 }
 
 const imgError = ref(false)
+const isImageLoaded = ref(false)
 
 function onImgError() {
   imgError.value = true
+}
+
+function onImgLoad() {
+  isImageLoaded.value = true
 }
 
 const r2BaseUrl = (import.meta.env.VITE_R2_PUBLIC_URL as string) ?? ''
@@ -81,16 +95,29 @@ const petPhotoUrl = computed(() => {
   const primary = photos.find((p) => p.isPrimary) ?? photos[0]
   return `${r2BaseUrl}/${primary.url.replace(/^pets\//, '')}`
 })
+
+watch(petPhotoUrl, () => {
+  imgError.value = false
+  isImageLoaded.value = false
+})
 </script>
 
 <template>
   <div class="adopt-detail">
     <div class="adopt-detail__main">
+      <div
+        v-if="petPhotoUrl && !imgError && !isImageLoaded"
+        class="img-placeholder"
+        aria-hidden="true"
+      ></div>
       <img
         v-if="petPhotoUrl && !imgError"
         :src="petPhotoUrl"
         :alt="pet.name"
+        loading="lazy"
         :style="{ viewTransitionName: 'pet-' + pet.id }"
+        :class="{ loaded: isImageLoaded }"
+        @load="onImgLoad"
         @error="onImgError"
       />
       <div v-else class="img-fallback" aria-hidden="true"></div>
@@ -125,9 +152,14 @@ const petPhotoUrl = computed(() => {
               title="Schedule a Meet"
               color="purple"
               @click="handleScheduleMeet"
+              :disabled="isComingSoon"
               :fullWidth="true"
             />
           </div>
+          <output v-if="isComingSoon" class="coming-soon-banner">
+            This pet is coming soon. You can request information now, and scheduling opens once the
+            pet is available.
+          </output>
         </div>
         <AdditionalInfo :pet="pet" />
         <output v-if="pet.sponsored?.isSponsored" class="sponsored-banner">
@@ -221,6 +253,23 @@ const petPhotoUrl = computed(() => {
     gap: 30px;
     width: 100%;
 
+    .img-placeholder {
+      flex: 3;
+      width: 0;
+      min-width: 0;
+      height: 600px;
+      border-radius: 16px;
+      background: linear-gradient(
+        110deg,
+        hsl(from var(--color-gray-50) h s 97%) 8%,
+        hsl(from var(--color-gray-50) h s 92%) 18%,
+        hsl(from var(--color-gray-50) h s 97%) 33%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.2s linear infinite;
+      box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
+    }
+
     img {
       flex: 3;
       width: 100%;
@@ -230,6 +279,12 @@ const petPhotoUrl = computed(() => {
       object-position: center center;
       border-radius: 16px;
       box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
+      opacity: 0;
+      transition: opacity 300ms ease-in-out;
+
+      &.loaded {
+        opacity: 1;
+      }
     }
 
     & .img-fallback {
@@ -294,12 +349,26 @@ const petPhotoUrl = computed(() => {
           opacity: 0.85;
         }
       }
+
+      .coming-soon-banner {
+        display: block;
+        margin-top: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 10px;
+        background-color: hsl(180deg 65% 93%);
+        border: 1px solid hsl(180deg 55% 74%);
+        color: hsl(180deg 60% 17%);
+        font-size: 0.9rem;
+        font-weight: 600;
+        line-height: 1.4;
+      }
     }
 
     @media (width <= 1024px) {
       flex-direction: column;
 
       img,
+      .img-placeholder,
       .img-fallback {
         width: 100%;
         height: 400px;
@@ -460,6 +529,16 @@ const petPhotoUrl = computed(() => {
         flex-direction: column;
       }
     }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
   }
 }
 </style>

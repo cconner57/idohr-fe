@@ -29,7 +29,43 @@ export const usePetStore = defineStore('pets', () => {
 
   const error = ref<string | null>(null)
 
-  const fetchPets = async (forceRefresh = false) => {
+  const parsePetPayload = (json: unknown): IPet[] => {
+    if (!json || typeof json !== 'object') return []
+
+    const payload = (json as { data?: unknown }).data ?? json
+    if (Array.isArray(payload)) return payload as IPet[]
+
+    if (
+      payload &&
+      typeof payload === 'object' &&
+      Array.isArray((payload as { data?: unknown }).data)
+    ) {
+      return (payload as { data: IPet[] }).data
+    }
+
+    return []
+  }
+
+  const fetchListByStatus = async (status: string) => {
+    const response = await fetch(`${API_ENDPOINTS.PETS_LIST}?status=${status}&sort=age&orgId=idohr`)
+    if (!response.ok) {
+      throw new Error(`Failed to fetch pets with status: ${status}`)
+    }
+
+    const json = await response.json()
+    return parsePetPayload(json)
+  }
+
+  const mergeIntoCurrentPets = (pets: IPet[]) => {
+    const dedupedPets = new Map<string, IPet>()
+    const allPets = [...currentPets.value, ...pets]
+    allPets.forEach((pet: IPet) => {
+      dedupedPets.set(pet.id, pet)
+    })
+    currentPets.value = Array.from(dedupedPets.values())
+  }
+
+  const fetchPetsList = async (forceRefresh = false) => {
     const isFresh = Date.now() - lastFetched.value < CACHE_DURATION
     if (currentPets.value.length > 0 && isFresh && !forceRefresh) {
       return
@@ -38,27 +74,12 @@ export const usePetStore = defineStore('pets', () => {
     isFetching.value = true
     error.value = null
     try {
-      const fetchByStatus = async (status: string) => {
-        const response = await fetch(`${API_ENDPOINTS.PETS}?status=${status}&sort=age&orgId=idohr`)
-        if (!response.ok) throw new Error(`Failed to fetch pets with status: ${status}`)
-
-        const json = await response.json()
-        const payload = json.data ?? json
-        return Array.isArray(payload) ? payload : payload.data || []
-      }
-
       const [availablePets, intakePets] = await Promise.all([
-        fetchByStatus('available'),
-        fetchByStatus('intake'),
+        fetchListByStatus('available'),
+        fetchListByStatus('intake'),
       ])
 
-      const dedupedPets = new Map<string, IPet>()
-      const allPets = [...availablePets, ...intakePets]
-      allPets.forEach((pet: IPet) => {
-        dedupedPets.set(pet.id, pet)
-      })
-
-      currentPets.value = Array.from(dedupedPets.values())
+      mergeIntoCurrentPets([...availablePets, ...intakePets])
       lastFetched.value = Date.now()
     } catch (err: unknown) {
       console.error('Error fetching pets:', err)
@@ -66,6 +87,46 @@ export const usePetStore = defineStore('pets', () => {
     } finally {
       isFetching.value = false
     }
+  }
+
+  const fetchPetDetail = async (idOrSlug: string) => {
+    const normalizedParam = idOrSlug.trim().toLowerCase()
+    const cachedPet = currentPets.value.find((p: IPet) => {
+      const id = p.id.trim().toLowerCase()
+      const slug = p.slug?.trim().toLowerCase() ?? ''
+      return id === normalizedParam || slug === normalizedParam
+    })
+
+    if (cachedPet) return cachedPet
+
+    await fetchPetsList(true)
+    const refreshedPet = currentPets.value.find((p: IPet) => {
+      const id = p.id.trim().toLowerCase()
+      const slug = p.slug?.trim().toLowerCase() ?? ''
+      return id === normalizedParam || slug === normalizedParam
+    })
+
+    if (refreshedPet) return refreshedPet
+
+    try {
+      const response = await fetch(`${API_ENDPOINTS.PET_DETAILS(idOrSlug)}?orgId=idohr`)
+      if (!response.ok) return null
+
+      const json = await response.json()
+      const payload = (json as { data?: unknown }).data ?? json
+      if (!payload || typeof payload !== 'object') return null
+
+      const fetchedPet = payload as IPet
+      mergeIntoCurrentPets([fetchedPet])
+      return fetchedPet
+    } catch (err) {
+      console.warn('Pet detail endpoint unavailable, using cached list fallback', err)
+      return null
+    }
+  }
+
+  const fetchPets = async (forceRefresh = false) => {
+    await fetchPetsList(forceRefresh)
   }
 
   const fetchAdminPets = async (params: URLSearchParams, forceRefresh = false) => {
@@ -240,6 +301,8 @@ export const usePetStore = defineStore('pets', () => {
     isFetching,
 
     fetchPets,
+    fetchPetsList,
+    fetchPetDetail,
     fetchAdminPets,
     fetchAdoptedPets,
     fetchAdoptedCounts,

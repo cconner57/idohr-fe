@@ -7,7 +7,10 @@ import Home from '../pages/Home.vue'
 const About = () => import('../pages/About.vue')
 const Adopt = () => import('../pages/Adopt.vue')
 const Donate = () => import('../pages/Donate.vue')
+const Foster = () => import('../pages/Foster.vue')
+const PetMedicalProfile = () => import('../pages/PetMedicalProfile.vue')
 const NotFound = () => import('../pages/NotFound.vue')
+const News = () => import('../pages/News.vue')
 const PetAdoption = () => import('../pages/PetAdoption.vue')
 const SurrenderPet = () => import('../pages/SurrenderPet.vue')
 const Volunteer = () => import('../pages/Volunteer.vue')
@@ -22,6 +25,10 @@ const router = createRouter({
     {
       path: '/about',
       component: About,
+    },
+    {
+      path: '/pets/:slug/medical',
+      component: PetMedicalProfile,
     },
     { path: '/adopt', name: 'adopt-list', component: Adopt },
     {
@@ -39,8 +46,16 @@ const router = createRouter({
       component: Volunteer,
     },
     {
+      path: '/foster',
+      component: Foster,
+    },
+    {
       path: '/surrender',
       component: SurrenderPet,
+    },
+    {
+      path: '/news',
+      component: News,
     },
     {
       path: '/pet-adoption/:id',
@@ -65,10 +80,7 @@ interface CustomViewTransitionDocument extends Document {
   startViewTransition: any
 }
 
-
-
 import { useUIStore } from '../stores/ui'
-
 
 router.beforeEach(async () => {
   const uiStore = useUIStore()

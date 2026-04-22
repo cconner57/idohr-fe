@@ -52,10 +52,10 @@ onMounted(() => {
           />
           <BannerButton
             imgSrc="/images/hand.svg"
-            title="Get Involved"
-            subtitle="Volunteer, foster, or support us"
+            title="Foster a Pet"
+            subtitle="Provide temporary care and save a life"
             color="purple"
-            @click="() => router.push('/volunteer')"
+            @click="() => router.push('/foster')"
             class="hover-scale"
           />
           <BannerButton
@@ -145,7 +145,7 @@ main {
 }
 
 .section-1 {
-  background-color: var(--color-primary); 
+  background-color: var(--color-primary);
   padding: 0 var(--layout-padding-side) 220px;
   margin-top: -20px;
   min-height: auto;

@@ -71,7 +71,7 @@ export interface IPet {
 
   physical: {
     ageGroup: TAgeGroup | null
-    breed: TPetBreed | 'Unknown' | 'Mix' | null
+    breed: TPetBreed | 'Unknown' | 'unknown' | 'Mix' | 'mix' | null
     coatLength: TCoatLength | null
     color: string | null
     dateOfBirth?: string | null
