@@ -60,7 +60,47 @@ export const usePetStore = defineStore('pets', () => {
     }
 
     const json = await response.json()
-    return parsePetPayload(json)
+    const firstPagePets = parsePetPayload(json)
+
+    const pageSize = 25
+    if (firstPagePets.length < pageSize) {
+      return firstPagePets
+    }
+
+    const allPets = [...firstPagePets]
+    let page = 2
+
+    while (page <= 200) {
+      const pageParams = new URLSearchParams({
+        status,
+        sort: 'age',
+        page: String(page),
+        page_size: String(pageSize),
+        orgId: 'idohr',
+      })
+
+      const pageResponse = await fetch(`${API_ENDPOINTS.PETS_LIST}?${pageParams.toString()}`)
+      if (!pageResponse.ok) {
+        throw new Error(`Failed to fetch pets with status: ${status} (page ${page})`)
+      }
+
+      const pageJson = await pageResponse.json()
+      const pagePets = parsePetPayload(pageJson)
+
+      if (pagePets.length === 0) {
+        break
+      }
+
+      allPets.push(...pagePets)
+
+      if (pagePets.length < pageSize) {
+        break
+      }
+
+      page += 1
+    }
+
+    return allPets
   }
 
   const mergeIntoCurrentPets = (pets: IPet[]) => {
