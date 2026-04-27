@@ -47,7 +47,14 @@ export const usePetStore = defineStore('pets', () => {
   }
 
   const fetchListByStatus = async (status: string) => {
-    const response = await fetch(`${API_ENDPOINTS.PETS_LIST}?status=${status}&sort=age&orgId=idohr`)
+    const params = new URLSearchParams({
+      status,
+      sort: 'age',
+      limit: '10000',
+      orgId: 'idohr',
+    })
+
+    const response = await fetch(`${API_ENDPOINTS.PETS_LIST}?${params.toString()}`)
     if (!response.ok) {
       throw new Error(`Failed to fetch pets with status: ${status}`)
     }
