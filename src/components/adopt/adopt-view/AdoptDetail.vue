@@ -138,22 +138,24 @@ watch(
 <template>
   <div class="adopt-detail">
     <div class="adopt-detail__main">
-      <div
-        v-if="petPhotoUrl && !imgError && !isImageLoaded"
-        class="img-placeholder"
-        aria-hidden="true"
-      ></div>
-      <img
-        v-if="petPhotoUrl && !imgError"
-        :src="petPhotoUrl"
-        :alt="pet.name"
-        loading="lazy"
-        :style="{ viewTransitionName: 'pet-' + pet.id }"
-        :class="{ loaded: isImageLoaded }"
-        @load="onImgLoad"
-        @error="onImgError"
-      />
-      <div v-else class="img-fallback" aria-hidden="true"></div>
+      <div class="adopt-detail__media">
+        <div
+          v-if="petPhotoUrl && !imgError && !isImageLoaded"
+          class="img-placeholder"
+          aria-hidden="true"
+        ></div>
+        <img
+          v-if="petPhotoUrl && !imgError"
+          :src="petPhotoUrl"
+          :alt="pet.name"
+          loading="lazy"
+          :style="{ viewTransitionName: 'pet-' + pet.id }"
+          :class="{ loaded: isImageLoaded }"
+          @load="onImgLoad"
+          @error="onImgError"
+        />
+        <div v-else class="img-fallback" aria-hidden="true"></div>
+      </div>
       <div class="adopt-detail__info">
         <div class="adopt-detail__info__main">
           <h1 class="text-balance">{{ pet.name }}</h1>
@@ -256,11 +258,19 @@ watch(
     gap: 30px;
     width: 100%;
 
-    .img-placeholder {
+    .adopt-detail__media {
+      position: relative;
       flex: 3;
       width: 0;
       min-width: 0;
       height: 600px;
+    }
+
+    .img-placeholder {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       border-radius: 16px;
       background: linear-gradient(
         110deg,
@@ -274,10 +284,10 @@ watch(
     }
 
     img {
-      flex: 3;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      min-width: 0;
-      height: 600px;
+      height: 100%;
       object-fit: cover;
       object-position: center center;
       border-radius: 16px;
@@ -291,10 +301,10 @@ watch(
     }
 
     & .img-fallback {
-      flex: 3;
-      width: 0;
-      min-width: 0;
-      height: 600px;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       border-radius: 16px;
       background: url('/images/paw.svg') center/100px 100px no-repeat #add8e6;
       box-shadow: 0 4px 6px rgb(0 0 0 / 25%);
@@ -370,12 +380,17 @@ watch(
     @media (width <= 1024px) {
       flex-direction: column;
 
+      .adopt-detail__media {
+        width: 100%;
+        height: 400px;
+        flex: auto;
+      }
+
       img,
       .img-placeholder,
       .img-fallback {
         width: 100%;
-        height: 400px;
-        flex: auto;
+        height: 100%;
       }
 
       .adopt-detail__info {
