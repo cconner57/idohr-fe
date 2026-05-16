@@ -20,6 +20,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
 
   const formState = reactive<FormState>({
     fax_number: '',
+    secondPetId: null,
     firstName: '',
     lastName: '',
     age: null,
@@ -189,6 +190,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
 
   const clearFormData = () => {
     formState.fax_number = ''
+    formState.secondPetId = null
     formState.firstName = ''
     formState.lastName = ''
     formState.age = null
@@ -309,6 +311,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
       // Prepare payload matching backend AdoptionApplication struct
       const payload = {
         petId: petStore.selectedPet?.id || null,
+        secondPetId: formState.secondPetId,
         petName: petStore.selectedPet?.petName || null,
         firstName: formState.firstName,
         lastName: formState.lastName,

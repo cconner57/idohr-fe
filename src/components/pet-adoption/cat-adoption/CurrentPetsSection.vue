@@ -3,12 +3,13 @@ import type { FormState } from '../../../models/adopt-form.ts'
 import InputField from '../../common/ui/InputField.vue'
 import InputSelectGroup from '../../common/ui/InputSelectGroup.vue'
 
-const { modelValue } = defineProps<{
+const { modelValue, animalLabel = 'dog' } = defineProps<{
   modelValue: FormState
   touched?: Record<string, boolean>
   // eslint-disable-next-line no-unused-vars
   handleBlur: (_field: string) => void
   hasAttemptedSubmit?: boolean
+  animalLabel?: string
 }>()
 
 const addPet = () => {
@@ -108,10 +109,10 @@ const removePet = (index: number) => {
           />
           <InputField
             v-model="pet.likesDogs"
-            label="Does this pet like dogs?"
+            :label="animalLabel === 'cat' ? 'Does this pet like other cats?' : 'Does this pet like dogs?'"
             :name="`pet-likes-dogs-${index}`"
-            placeholder="Describe previous interactions with dogs"
-            subtext="Describe previous interactions with dogs"
+            :placeholder="animalLabel === 'cat' ? 'Describe previous interactions with other cats' : 'Describe previous interactions with dogs'"
+            :subtext="animalLabel === 'cat' ? 'Describe previous interactions with other cats' : 'Describe previous interactions with dogs'"
             required
             :hasError="
               (touched?.[`pet-likes-dogs-${index}`] && !pet.likesDogs) ||

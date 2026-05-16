@@ -18,6 +18,7 @@ export interface PastPet {
 
 export interface FormState {
   fax_number: string | null
+  secondPetId: string | null
   firstName: string | null
   lastName: string | null
   age: number | null

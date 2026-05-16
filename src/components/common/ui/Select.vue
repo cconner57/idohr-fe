@@ -45,24 +45,33 @@ const updateDropdownPosition = () => {
   const leftStart = rect.left + window.scrollX
   const width = rect.width
   const menuWidth = props.variant === 'borderless' ? 200 : Math.max(width, 160)
+  const menuMaxHeight = 250 // Matches CSS max-height
 
   let left = leftStart
   if (props.variant === 'borderless') {
     left = rect.right + window.scrollX - menuWidth
   }
 
-  // Ensure it doesn't go off screen
+  // Ensure it doesn't go off screen horizontally
   if (left < 10) left = 10
   if (left + menuWidth > window.innerWidth - 10) {
     left = window.innerWidth - menuWidth - 10
   }
 
+  // Check if there is enough space below
+  const spaceBelow = window.innerHeight - rect.bottom
+  const shouldOpenUp = spaceBelow < menuMaxHeight + 20 && rect.top > menuMaxHeight + 20
+
+  const top = shouldOpenUp
+    ? rect.top + window.scrollY - menuMaxHeight - 8
+    : rect.bottom + window.scrollY + 4
+
   dropdownStyles.value = {
-    top: `${rect.bottom + window.scrollY + 4}px`,
+    top: `${top}px`,
     left: `${left}px`,
     width: `${menuWidth}px`,
     position: 'absolute',
-    zIndex: 9999
+    zIndex: 9999,
   }
 }
 

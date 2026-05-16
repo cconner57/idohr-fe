@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import AdoptDetail from '@/components/adopt/adopt-view/AdoptDetail.vue'
 import AdoptSummary from '@/components/adopt/adopt-view/AdoptSummary.vue'
 import FilterPanel from '@/components/adopt/FilterPanel.vue'
 import Spinner from '@/components/common/ui/Spinner.vue'
+import Button from '@/components/common/ui/Button.vue'
 import type { IPet } from '@/models/common'
+import { useAdoptionStore } from '@/stores/adoption'
 import { usePetStore } from '@/stores/pets'
+import { vibrate } from '@/utils/haptics'
 
 const props = defineProps<{ id?: string }>()
 const route = useRoute()
+const router = useRouter()
 const store = usePetStore()
+const adoptionStore = useAdoptionStore()
 const { currentPets, isFetching } = storeToRefs(store)
 
 const id = computed(() => props.id ?? (route.params.id as string | undefined))
@@ -130,6 +135,14 @@ watch(pet, (currentPet) => {
     isFilterPanelOpen.value = false
   }
 })
+
+const handleGeneralApplication = (species: 'cat' | 'dog') => {
+  vibrate(50)
+  adoptionStore.resetForm()
+  store.clearSelectedPet()
+  store.selectPet({ id: 'unspecified', petName: 'Unspecified', species })
+  router.push(`/pet-adoption/unspecified`)
+}
 </script>
 
 <template>
@@ -192,6 +205,28 @@ watch(pet, (currentPet) => {
             <h2>No pets found</h2>
             <p>We couldn't find any friends matching that filter.</p>
             <button class="reset-btn" @click="resetAllFilters">View All Pets</button>
+          </div>
+
+          <div v-if="!pet" class="general-application">
+            <h2>Don't see who you're looking for?</h2>
+            <p>
+              You can still submit a general application for a pet that may not be in our system
+              yet.
+            </p>
+            <div class="application-buttons">
+              <Button
+                v-if="activeFilter === 'All' || activeFilter === 'Cat'"
+                title="General Cat Application"
+                color="white"
+                @click="handleGeneralApplication('cat')"
+              />
+              <Button
+                v-if="activeFilter === 'All' || activeFilter === 'Dog'"
+                title="General Dog Application"
+                color="white"
+                @click="handleGeneralApplication('dog')"
+              />
+            </div>
           </div>
         </template>
       </main>
@@ -483,7 +518,48 @@ watch(pet, (currentPet) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 200px;
   width: 100%;
+}
+
+.general-application {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--text-inverse);
+  margin-top: 4rem;
+  padding: 3rem;
+  background: color-mix(in srgb, var(--color-primary), black 12%);
+  border-radius: 24px;
+  backdrop-filter: blur(8px);
+  border: 1px dashed rgb(255 255 255 / 30%);
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    max-width: 500px;
+  }
+
+  .application-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    button {
+      min-width: 240px;
+    }
+  }
 }
 </style>

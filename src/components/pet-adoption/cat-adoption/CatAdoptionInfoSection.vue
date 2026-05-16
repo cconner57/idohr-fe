@@ -4,6 +4,8 @@ interface IPolicyItem {
   description?: string
 }
 
+defineProps<{ isKitten: boolean }>()
+
 const includedItems = [
   'Spay or Neuter',
   'Vaccinations (kitten series or adult booster)',
@@ -30,7 +32,29 @@ const goodToKnowItems: IPolicyItem[] = [
 </script>
 
 <template>
-  <section class="intro-grid" aria-label="Cat adoption policies and included care">
+  <div class="info-section-wrapper">
+    <div v-if="isKitten" class="kitten-notice" role="alert">
+      <span class="kitten-notice-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <div class="kitten-notice-body">
+        <p class="kitten-notice-title">Kitten Pairing Policy</p>
+        <p>
+          Kittens must be adopted in pairs, or go to a home that already has a young resident cat.
+          We do not adopt kittens out as a single pet in order to prevent
+          <a
+            href="https://meowcatrescue.org/resources/adoption-considerations/single-kitten-syndrome/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="kitten-link"
+          >single kitten syndrome</a>
+          and ensure they have a healthy social environment.
+        </p>
+      </div>
+    </div>
+    <section class="intro-grid" aria-label="Cat adoption policies and included care">
     <article class="policy-card">
       <h3 class="policy-title">What's <span>Included</span></h3>
       <ul class="included-list">
@@ -74,10 +98,79 @@ const goodToKnowItems: IPolicyItem[] = [
         of the cat, and we appreciate your understanding.
       </p>
     </article>
-  </section>
+    </section>
+  </div>
 </template>
 
 <style scoped lang="css">
+.info-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.kitten-notice {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-warning-weak);
+  border: 1px solid var(--color-warning-border);
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.kitten-notice-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: var(--color-warning);
+  color: var(--text-inverse);
+  margin-top: 0.1rem;
+
+  svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+}
+
+.kitten-notice-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.kitten-notice-title {
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+  color: var(--color-warning-strong);
+}
+
+.kitten-notice-body p:last-child {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+.kitten-link {
+  color: var(--color-warning-strong);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
 .intro-grid {
   --intro-panel-bg: color-mix(in oklch, var(--text-inverse) 90%, var(--color-primary) 10%);
   --intro-card-bg: color-mix(in oklch, var(--text-inverse) 96%, var(--color-primary) 4%);
@@ -86,7 +179,7 @@ const goodToKnowItems: IPolicyItem[] = [
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1.75rem;
-  margin: 1rem auto 2.5rem;
+  margin: 1rem auto 0.5rem;
   padding: clamp(1rem, 1.2vw, 1.4rem);
   border-radius: 1.5rem;
   border: 1px solid color-mix(in oklch, var(--color-primary-border) 55%, transparent);
