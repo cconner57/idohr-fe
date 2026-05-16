@@ -23,6 +23,7 @@ interface IFetchRetryContext {
 interface IFetchRetryOptions {
   retries?: number
   retryDelayMs?: number
+  // eslint-disable-next-line no-unused-vars
   shouldRetry?: (context: IFetchRetryContext) => boolean
 }
 

@@ -250,7 +250,15 @@ export const useSurrenderStore = defineStore('surrender', () => {
 
   const serializableTextFields = () => {
     const raw = toRaw(formState)
-    const { fullBodyPhotoOfAnimal, closeUpPhotoOfAnimalFace, copiesOfRecords, ...textFields } = raw
+    const {
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      fullBodyPhotoOfAnimal: _fullBodyPhotoOfAnimal,
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      closeUpPhotoOfAnimalFace: _closeUpPhotoOfAnimalFace,
+      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      copiesOfRecords: _copiesOfRecords,
+      ...textFields
+    } = raw
     // Join any string[] values into comma-separated strings for the backend
     const serialized: Record<string, unknown> = {}
     for (const [key, value] of Object.entries(textFields)) {

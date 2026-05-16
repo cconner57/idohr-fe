@@ -1,0 +1,83 @@
+import type { IFosterPage } from '@/models/foster-form'
+
+const yesNoOptions = ['Yes', 'No']
+
+export const PAGES_6_TO_10: IFosterPage[] = [
+  {
+    id: 6,
+    title: 'Page 6: Technical Skills & Scenarios',
+    questions: [
+      { id: 'q51', number: 51, label: 'How will you handle a scratched door or a chewed rug?', type: 'textarea', required: true },
+      { id: 'q52', number: 52, label: 'How will you handle a pet that vocalizes at 3:00 AM?', type: 'textarea', required: true },
+      { id: 'q53', number: 53, label: 'Are you willing to wait 2+ weeks for a terrified pet to come out?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q54', number: 54, label: 'Comfortable giving oral pills or liquid medications?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q55', number: 55, label: 'Comfortable applying flea drops or cleaning ears/eyes?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q56', number: 56, label: 'Willing to bathe or brush a pet that arrives in poor condition?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q57', number: 57, label: 'Willing to disinfect the foster area daily if needed?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q58', number: 58, label: 'Do you agree to use ONLY positive reinforcement (no hitting/shouting)?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q59', number: 59, label: 'What is your first action if the foster pet escapes?', type: 'textarea', required: true },
+      { id: 'q60', number: 60, label: 'If you are scratched or nipped, will you report it to IDOHR immediately?', type: 'select', required: true, options: yesNoOptions },
+    ],
+  },
+  {
+    id: 7,
+    title: 'Page 7: Specialized Care & Preferences',
+    questions: [
+      { id: 'q61', number: 61, label: 'Age Preference', type: 'select', required: true, options: ['Bottle babies', 'Weaned', 'Adults', 'Seniors', 'Open to all'] },
+      { id: 'q62', number: 62, label: 'Willing to host a mother and her litter?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q63', number: 63, label: 'Willing to monitor a pet recovering from surgery?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q64', number: 64, label: 'Willing to take a pet with a disability (blind, deaf, tripod)?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q65', number: 65, label: 'Willing to work with pets that have litter box/potty issues?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q66', number: 66, label: 'Willing to work with feral or extremely unsocialized pets?', type: 'select', required: true, options: yesNoOptions, speciesScope: 'cat' },
+      { id: 'q67', number: 67, label: 'Willing to provide fospice (end-of-life) care?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q68', number: 68, label: 'How many fosters can you safely house at once?', type: 'number', required: true },
+      { id: 'q69', number: 69, label: 'What do you need IDOHR to provide? (Food, litter, crate, etc.)', type: 'textarea', required: true },
+      { id: 'q70', number: 70, label: 'If you foster dogs, would you consider an emergency cat foster?', type: 'select', required: true, options: yesNoOptions, speciesScope: 'dog' },
+      { id: 'q93', number: 70, label: 'Do you authorize us to speak with your vet?', type: 'select', required: true, options: yesNoOptions },
+    ],
+  },
+  {
+    id: 8,
+    title: 'Page 8: Rescue Commitment & Logistics',
+    questions: [
+      { id: 'q71', number: 71, label: 'Do you commit to bringing the pet to mandatory events?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q72', number: 72, label: 'Do you have a car for transport to events/vets?', type: 'select', required: true, options: yesNoOptions, speciesScope: 'dog' },
+      { id: 'q73', number: 73, label: 'How will you secure the pet inside the car during transport?', type: 'textarea', required: true },
+      { id: 'q74', number: 74, label: 'Can you provide clear, high-quality photos of the pet for the website?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q75', number: 75, label: "Can you provide a summary of the pet's personality for their profile?", type: 'select', required: true, options: yesNoOptions },
+      { id: 'q76', number: 76, label: 'Comfortable letting approved families meet the pet?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q77', number: 77, label: 'Do you agree to respond to IDOHR within 24 hours?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q78', number: 78, label: 'Do you agree to only use our approved clinics?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q79', number: 79, label: 'Do you agree to get approval before spending money you expect back?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q80', number: 80, label: 'If you decide to adopt the pet you are fostering, do you understand that you must still complete an adoption application and pay the adoption fee?', type: 'select', required: true, options: yesNoOptions },
+    ],
+  },
+  {
+    id: 9,
+    title: 'Page 9: Resilience & Final Scenarios',
+    questions: [
+      { id: 'q81', number: 81, label: 'How will you handle a fight between your pet and the foster?', type: 'textarea', required: true },
+      { id: 'q82', number: 82, label: 'If you have to move during your foster period, what is your plan?', type: 'textarea', required: true },
+      { id: 'q83', number: 83, label: 'Who will care for the foster if you go out of town?', type: 'textarea', required: true },
+      { id: 'q84', number: 84, label: 'Are you emotionally ready to let the pet go to their new family?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q85', number: 85, label: 'Are you prepared for the possibility that a foster pet may not survive?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q86', number: 86, label: 'Do you understand that IDOHR is the legal owner of the animal?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q87', number: 87, label: 'Do you understand it may take several days to find a new spot if you need to return them?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q88', number: 88, label: 'How do you plan to prevent the pet from dashing out when people enter/exit your home?', type: 'textarea', required: true },
+      { id: 'q89', number: 89, label: 'Do you agree to keep adopter information private?', type: 'select', required: true, options: yesNoOptions },
+      { id: 'q90', number: 90, label: 'Do you have a support system to help you if fostering gets overwhelming?', type: 'textarea', required: true },
+      { id: 'q99', number: 90, label: 'Anything else the director should know?', type: 'textarea' },
+    ],
+  },
+  {
+    id: 10,
+    title: 'Page 10: Sign-Off & Legal',
+    questions: [
+      { id: 'q94', number: 94, label: 'Type your name to confirm application accuracy and age certification.', type: 'text', required: true },
+      { id: 'q94_date', number: 94, label: 'Date', type: 'date', required: true },
+      { id: 'q95', number: 95, label: 'Type your name to confirm agreement to foster policies and liability terms.', type: 'text', required: true },
+      { id: 'q95_date', number: 95, label: 'Date', type: 'date', required: true },
+      { id: 'q100', number: 100, label: 'Signature', type: 'text', required: true },
+    ],
+  },
+]

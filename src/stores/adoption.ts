@@ -422,7 +422,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
         {
           retries: 1,
           retryDelayMs: 800,
-          shouldRetry: ({ response, error }) => {
+          shouldRetry: ({ response: _res, error }) => {
             if (
               error instanceof Error &&
               (error.name === 'TimeoutError' || error instanceof TypeError)
@@ -430,11 +430,11 @@ export const useAdoptionStore = defineStore('adoption', () => {
               return true
             }
 
-            if (!response) {
+            if (!_res) {
               return false
             }
 
-            return [408, 429, 502, 503, 504].includes(response.status)
+            return [408, 429, 502, 503, 504].includes(_res.status)
           },
         },
       )

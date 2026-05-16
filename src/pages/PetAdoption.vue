@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
 import Button from '@/components/common/ui/Button.vue'
+import Select from '@/components/common/ui/Select.vue'
 import AdoptionSteps from '@/components/pet-adoption/adoption-steps/AdoptionSteps.vue'
 import CatAdoptionInfoSection from '@/components/pet-adoption/cat-adoption/CatAdoptionInfoSection.vue'
 import CurrentPetsSection from '@/components/pet-adoption/cat-adoption/CurrentPetsSection.vue'
@@ -14,7 +15,6 @@ import NewCatSection from '@/components/pet-adoption/cat-adoption/NewCatSection.
 import OtherSection from '@/components/pet-adoption/cat-adoption/OtherSection.vue'
 import PastPetsSection from '@/components/pet-adoption/cat-adoption/PastPetsSection.vue'
 import SummarySection from '@/components/pet-adoption/cat-adoption/SummarySection.vue'
-import Select from '@/components/common/ui/Select.vue'
 import ApplicationHeader from '@/components/volunteer/application-header/ApplicationHeader.vue'
 import { useMetrics } from '@/composables/useMetrics'
 import { useAdoptionStore } from '@/stores/adoption'
@@ -144,13 +144,15 @@ const secondPetName = computed(() => {
   <section class="page-shell">
     <section v-if="!isSubmitted" class="form-card" aria-labelledby="form-title">
       <ApplicationHeader
-        :header-title="selectedPet?.species === 'cat' ? 'Cat' : 'Dog'"
+        :header-title="species === 'cat' ? 'Cat' : 'Dog'"
         :header-text="headerText"
       />
       <AdoptionSteps v-if="!isCatIntroStep" :currentStep="visibleStep" :steps="adoptionSteps" />
       <div v-show="!isCatIntroStep" class="cat-name-display">
         <h2>Adopting Pet{{ secondPetName ? 's' : '' }}:</h2>
-        <p>{{ selectedPet?.petName }}{{ secondPetName ? ` & ${secondPetName}` : '' }}</p>
+        <p>
+          {{ selectedPet?.petName || selectedPet?.name }}{{ secondPetName ? ` & ${secondPetName}` : '' }}
+        </p>
       </div>
       <CatAdoptionInfoSection v-show="isCatIntroStep" :is-kitten="isKitten" />
       <GeneralSection
