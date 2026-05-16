@@ -151,7 +151,10 @@ const secondPetName = computed(() => {
       <div v-show="!isCatIntroStep" class="cat-name-display">
         <h2>Adopting Pet{{ secondPetName ? 's' : '' }}:</h2>
         <p>
-          {{ selectedPet?.petName || selectedPet?.name }}{{ secondPetName ? ` & ${secondPetName}` : '' }}
+          <template v-if="selectedPet?.id === 'unspecified'">No pet selected</template>
+          <template v-else>
+            {{ selectedPet?.petName || selectedPet?.name }}{{ secondPetName ? ` & ${secondPetName}` : '' }}
+          </template>
         </p>
       </div>
       <CatAdoptionInfoSection v-show="isCatIntroStep" :is-kitten="isKitten" />
