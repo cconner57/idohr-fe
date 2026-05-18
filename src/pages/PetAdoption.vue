@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router'
 
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
 import Button from '@/components/common/ui/Button.vue'
+import InputField from '@/components/common/ui/InputField.vue'
 import Select from '@/components/common/ui/Select.vue'
 import AdoptionSteps from '@/components/pet-adoption/adoption-steps/AdoptionSteps.vue'
 import CatAdoptionInfoSection from '@/components/pet-adoption/cat-adoption/CatAdoptionInfoSection.vue'
@@ -151,7 +152,9 @@ const secondPetName = computed(() => {
       <div v-show="!isCatIntroStep" class="cat-name-display">
         <h2>Adopting Pet{{ secondPetName ? 's' : '' }}:</h2>
         <p>
-          <template v-if="selectedPet?.id === 'unspecified'">No pet selected</template>
+          <template v-if="selectedPet?.id === 'unspecified'">
+            Custom: {{ formState.generalPetName || '' }}
+          </template>
           <template v-else>
             {{ selectedPet?.petName || selectedPet?.name }}{{ secondPetName ? ` & ${secondPetName}` : '' }}
           </template>
@@ -225,7 +228,21 @@ const secondPetName = computed(() => {
         <p class="error-message">{{ submissionError }}</p>
       </div>
 
-      <div v-if="step === 0 && availablePetsOptions.length > 0" class="second-pet-selection">
+      <!-- General Application Flow: Required Interested Pet Name -->
+      <div v-if="step === 0 && selectedPet?.id === 'unspecified'" class="second-pet-selection">
+        <InputField
+          v-model="formState.generalPetName"
+          :label="`Which ${animalLabel} are you interested in?`"
+          placeholder="Enter pet name"
+          required
+          fullWidth
+          :has-error="hasAttemptedSubmit && (!formState.generalPetName || !formState.generalPetName.trim())"
+          @blur="handleBlur('generalPetName')"
+        />
+      </div>
+
+      <!-- Specific Pet Flow: Optional Second Pet Selection -->
+      <div v-else-if="step === 0 && selectedPet?.id !== 'unspecified' && availablePetsOptions.length > 0" class="second-pet-selection">
         <p class="selection-text">
           Would you like to add a second {{ animalLabel }} to this application?
         </p>

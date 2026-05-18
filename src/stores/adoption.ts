@@ -21,6 +21,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
   const formState = reactive<FormState>({
     fax_number: '',
     secondPetId: null,
+    generalPetName: '',
     firstName: '',
     lastName: '',
     age: null,
@@ -130,6 +131,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
       validationStep.value,
       formState,
       petStore.selectedPet?.species ?? 'cat',
+      petStore.selectedPet?.id === 'unspecified',
     )
   })
 
@@ -191,6 +193,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
   const clearFormData = () => {
     formState.fax_number = ''
     formState.secondPetId = null
+    formState.generalPetName = ''
     formState.firstName = ''
     formState.lastName = ''
     formState.age = null
@@ -314,7 +317,7 @@ export const useAdoptionStore = defineStore('adoption', () => {
         secondPetId: formState.secondPetId,
         petName:
           petStore.selectedPet?.id === 'unspecified'
-            ? null
+            ? formState.generalPetName
             : (petStore.selectedPet?.petName || petStore.selectedPet?.name || null),
         secondPetName:
           petStore.currentPets.find((p) => p.id === formState.secondPetId)?.name || null,

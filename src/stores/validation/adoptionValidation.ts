@@ -8,8 +8,21 @@ export function getAdoptionValidationErrors(
   step: number,
   formState: FormState,
   species = 'cat',
+  isGeneral = false,
 ): string[] {
   const errors: string[] = []
+
+  if (isGeneral) {
+    if (species === 'cat' && step === -1) {
+      if (!formState.generalPetName || !formState.generalPetName.trim()) {
+        errors.push('Interested Pet Name')
+      }
+    } else if (species === 'dog' && step === 0) {
+      if (!formState.generalPetName || !formState.generalPetName.trim()) {
+        errors.push('Interested Pet Name')
+      }
+    }
+  }
 
   if (step === 0) {
     if (!formState.firstName) errors.push('First Name')
