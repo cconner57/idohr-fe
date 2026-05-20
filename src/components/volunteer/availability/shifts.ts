@@ -22,7 +22,7 @@ export const SHIFTS: SlotDefinition[] = [
     label: '12PM – 2PM',
     description: 'Focus on cat socializing & customer support',
     type: 'everyday',
-    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
   },
   {
     id: '2pm_4pm',
@@ -30,7 +30,7 @@ export const SHIFTS: SlotDefinition[] = [
     label: '2PM – 4PM',
     description: 'Focus on cat socializing & customer support',
     type: 'everyday',
-    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
   },
   {
     id: '4pm_6pm',
@@ -38,7 +38,7 @@ export const SHIFTS: SlotDefinition[] = [
     label: '4PM – 6PM',
     description: 'Focus on cat socializing & customer support',
     type: 'everyday',
-    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
   },
   {
     id: '6pm_8pm',
