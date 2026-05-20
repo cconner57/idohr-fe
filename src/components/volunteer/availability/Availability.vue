@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
+
+import { SHIFTS, type SlotDefinition } from './shifts'
 
 const props = defineProps<{
   modelValue: string[]
@@ -10,10 +12,138 @@ const emit = defineEmits<{
   'update:modelValue': [value: string[]]
 }>()
 
-const selected = computed({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val),
-})
+const slotDaysMap = ref<Record<string, string[]>>({})
+
+const parseModelValue = () => {
+  const newMap: Record<string, string[]> = {}
+
+  for (const item of props.modelValue) {
+    const exactSlot = SHIFTS.find((s) => s.value === item)
+    if (exactSlot) {
+      newMap[exactSlot.value] = [...exactSlot.days]
+      continue
+    }
+
+    const match = item.match(/^([^(]+)(?:\(([^)]+)\))?$/)
+    if (!match) continue
+
+    const baseValue = match[1].trim()
+    const daysStr = match[2]
+
+    const slot = SHIFTS.find((s) => s.value === baseValue)
+    if (!slot) continue
+
+    if (daysStr) {
+      const days = daysStr.split(',').map((d) => d.trim())
+      newMap[baseValue] = days.filter((d) => slot.days.includes(d))
+    } else {
+      newMap[baseValue] = [...slot.days]
+    }
+  }
+
+  slotDaysMap.value = newMap
+}
+
+watch(
+  () => props.modelValue,
+  () => {
+    parseModelValue()
+  },
+  { immediate: true, deep: true }
+)
+
+const emitChanges = () => {
+  const result: string[] = []
+
+  for (const slot of SHIFTS) {
+    const selectedDays = slotDaysMap.value[slot.value]
+    if (!selectedDays || selectedDays.length === 0) continue
+
+    if (slot.type === 'fixed') {
+      result.push(slot.value)
+      continue
+    }
+
+    const isAllDaysSelected = slot.days.every((d) => selectedDays.includes(d))
+
+    if (isAllDaysSelected) {
+      result.push(slot.value)
+    } else {
+      result.push(`${slot.value} (${selectedDays.join(', ')})`)
+    }
+  }
+
+  const currentStr = JSON.stringify(props.modelValue)
+  const newStr = JSON.stringify(result)
+
+  if (currentStr !== newStr) {
+    emit('update:modelValue', result)
+  }
+}
+
+const toggleSlot = (slot: SlotDefinition) => {
+  const isChecked = !!slotDaysMap.value[slot.value]
+  if (isChecked) {
+    const newMap = { ...slotDaysMap.value }
+    delete newMap[slot.value]
+    slotDaysMap.value = newMap
+  } else {
+    slotDaysMap.value = {
+      ...slotDaysMap.value,
+      [slot.value]: [...slot.days],
+    }
+  }
+  emitChanges()
+}
+
+const toggleDay = (slotValue: string, day: string) => {
+  const slot = SHIFTS.find((s) => s.value === slotValue)
+  if (!slot) return
+
+  const selectedDays = slotDaysMap.value[slotValue] || []
+  let newDays: string[]
+
+  if (selectedDays.includes(day)) {
+    newDays = selectedDays.filter((d) => d !== day)
+  } else {
+    newDays = [...selectedDays, day]
+  }
+
+  if (newDays.length === 0) {
+    const newMap = { ...slotDaysMap.value }
+    delete newMap[slotValue]
+    slotDaysMap.value = newMap
+  } else {
+    slotDaysMap.value = {
+      ...slotDaysMap.value,
+      [slotValue]: newDays,
+    }
+  }
+  emitChanges()
+}
+
+const isSlotChecked = (slotValue: string): boolean => {
+  return !!slotDaysMap.value[slotValue]
+}
+
+const isDaySelected = (slotValue: string, day: string): boolean => {
+  const selectedDays = slotDaysMap.value[slotValue] || []
+  return selectedDays.includes(day)
+}
+
+const getDayAbbreviation = (day: string): string => {
+  if (day === 'Thursday') return 'Th'
+  if (day === 'Saturday') return 'Sa'
+  if (day === 'Sunday') return 'Su'
+  return day.slice(0, 1)
+}
+
+const everydayShifts = computed(() =>
+  SHIFTS.filter((s) => s.type === 'everyday' || s.id === 'sunday_pm')
+)
+const adoptionShifts = computed(() =>
+  SHIFTS.filter((s) => s.type === 'adoption' || s.id === 'event_cleanup')
+)
 </script>
 
 <template>
@@ -26,140 +156,25 @@ const selected = computed({
         Sunday PM clean/feed/socialize hours are 4PM - 6PM due to PetSmart store hours.
       </div>
 
-      <label class="time-card">
-        <input type="checkbox" value="10AM – 12PM" v-model="selected" />
-        <div class="time-card__content">
-          <div class="time-header">
-            <strong>10AM – 12PM</strong>
-            <div class="check-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          </div>
-          <small>Clean, feed, & socialize with cats</small>
-        </div>
-      </label>
-
-      <label class="time-card">
-        <input type="checkbox" value="12PM – 2PM" v-model="selected" />
-        <div class="time-card__content">
-          <div class="time-header">
-            <strong>12PM – 2PM</strong>
-            <div class="check-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          </div>
-          <small>Focus on cat socializing & customer support</small>
-        </div>
-      </label>
-
-      <label class="time-card">
-        <input type="checkbox" value="2PM – 4PM" v-model="selected" />
-        <div class="time-card__content">
-          <div class="time-header">
-            <strong>2PM – 4PM</strong>
-            <div class="check-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          </div>
-          <small>Focus on cat socializing & customer support</small>
-        </div>
-      </label>
-
-      <label class="time-card">
-        <input type="checkbox" value="4PM – 6PM" v-model="selected" />
-        <div class="time-card__content">
-          <div class="time-header">
-            <strong>4PM – 6PM</strong>
-            <div class="check-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          </div>
-          <small>Focus on cat socializing & customer support</small>
-        </div>
-      </label>
-
-      <label class="time-card">
-        <input type="checkbox" value="6PM – 8PM" v-model="selected" />
-        <div class="time-card__content">
-          <div class="time-header">
-            <strong>6PM – 8PM (Monday - Saturday)</strong>
-            <div class="check-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          </div>
-          <small>Clean, feed, & socialize with cats</small>
-        </div>
-      </label>
-
-      <label class="time-card">
+      <div
+        v-for="slot in everydayShifts"
+        :key="slot.id"
+        class="time-card"
+        :class="{ 'is-selected': isSlotChecked(slot.value) }"
+        @click="toggleSlot(slot)"
+      >
         <input
           type="checkbox"
-          value="Sunday PM Clean/Feed/Socialize: 4PM - 6PM"
-          v-model="selected"
+          :id="'avail-' + slot.id"
+          :checked="isSlotChecked(slot.value)"
+          @change="toggleSlot(slot)"
+          @click.stop
+          class="visually-hidden"
+          :aria-label="slot.label"
         />
         <div class="time-card__content">
           <div class="time-header">
-            <strong>Sunday PM: 4PM - 6PM</strong>
+            <strong>{{ slot.label }}</strong>
             <div class="check-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -176,71 +191,55 @@ const selected = computed({
               </svg>
             </div>
           </div>
-          <small>Sunday PM clean, feed, & socialize with cats (PetSmart closes early)</small>
+          <small>{{ slot.description }}</small>
+
+          <div
+            v-if="slot.type !== 'fixed'"
+            class="day-selection-wrapper"
+            :class="{ 'is-open': isSlotChecked(slot.value) }"
+            @click.stop
+          >
+            <div class="day-selection-content">
+              <span class="day-selection-title">Select Days:</span>
+              <div class="days-chips">
+                <button
+                  v-for="day in slot.days"
+                  :key="day"
+                  type="button"
+                  class="day-chip"
+                  :class="{ 'is-active': isDaySelected(slot.value, day) }"
+                  @click="toggleDay(slot.value, day)"
+                  :aria-label="'Select ' + day + ' for ' + slot.label"
+                >
+                  {{ getDayAbbreviation(day) }}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </label>
+      </div>
 
       <div class="sub-header mt-2">Adoption Events (Saturday & Sunday Only)</div>
 
-      <label class="time-card">
-        <input type="checkbox" value="Adoption Event: 12PM - 2PM" v-model="selected" />
-        <div class="time-card__content">
-          <div class="time-header">
-            <strong>Adoption Event: 12PM - 2PM</strong>
-            <div class="check-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          </div>
-          <small>Focus on cat adoptions & customer support</small>
-        </div>
-      </label>
-
-      <label class="time-card">
-        <input type="checkbox" value="Adoption Event: 2PM - 4PM" v-model="selected" />
-        <div class="time-card__content">
-          <div class="time-header">
-            <strong>Adoption Event: 2PM - 4PM</strong>
-            <div class="check-icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </div>
-          </div>
-          <small>Focus on cat adoptions & customer support</small>
-        </div>
-      </label>
-
-      <label class="time-card">
+      <div
+        v-for="slot in adoptionShifts"
+        :key="slot.id"
+        class="time-card"
+        :class="{ 'is-selected': isSlotChecked(slot.value) }"
+        @click="toggleSlot(slot)"
+      >
         <input
           type="checkbox"
-          value="Adoption Event Cleanup (Sunday): 4PM - 6PM"
-          v-model="selected"
+          :id="'avail-' + slot.id"
+          :checked="isSlotChecked(slot.value)"
+          @change="toggleSlot(slot)"
+          @click.stop
+          class="visually-hidden"
+          :aria-label="slot.label"
         />
         <div class="time-card__content">
           <div class="time-header">
-            <strong>Adoption Event Cleanup (Sunday): 4PM - 6PM</strong>
+            <strong>{{ slot.label }}</strong>
             <div class="check-icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -257,9 +256,33 @@ const selected = computed({
               </svg>
             </div>
           </div>
-          <small>Help with Sunday event cleanup, breakdown, and post-event cat care support</small>
+          <small>{{ slot.description }}</small>
+
+          <div
+            v-if="slot.type !== 'fixed'"
+            class="day-selection-wrapper"
+            :class="{ 'is-open': isSlotChecked(slot.value) }"
+            @click.stop
+          >
+            <div class="day-selection-content">
+              <span class="day-selection-title">Select Days:</span>
+              <div class="days-chips">
+                <button
+                  v-for="day in slot.days"
+                  :key="day"
+                  type="button"
+                  class="day-chip"
+                  :class="{ 'is-active': isDaySelected(slot.value, day) }"
+                  @click="toggleDay(slot.value, day)"
+                  :aria-label="'Select ' + day + ' for ' + slot.label"
+                >
+                  {{ getDayAbbreviation(day) }}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </label>
+      </div>
     </div>
   </div>
 </template>
@@ -268,7 +291,7 @@ const selected = computed({
 .availability-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
   width: 100%;
 }
 
@@ -282,7 +305,7 @@ const selected = computed({
 .times-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .sub-header {
@@ -290,7 +313,7 @@ const selected = computed({
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-secondary);
-  margin-top: 4px;
+  margin-top: 0.25rem;
   margin-bottom: 0;
 }
 
@@ -298,25 +321,25 @@ const selected = computed({
   grid-column: 1 / -1;
   font-size: 0.85rem;
   color: var(--text-secondary);
-  margin-top: -4px;
-  margin-bottom: 2px;
+  margin-top: -0.25rem;
+  margin-bottom: 0.125rem;
 }
 
 .sub-header.mt-2 {
-  margin-top: 16px;
+  margin-top: 1rem;
 }
 
 .times-grid.has-error {
   border: 1px solid var(--color-danger);
   border-radius: var(--radius-lg);
-  padding: 8px;
+  padding: 0.5rem;
 }
 
 .time-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 16px;
+  padding: 1rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   background: var(--color-white);
@@ -330,7 +353,7 @@ const selected = computed({
   border-color: var(--color-neutral-border-strong);
 }
 
-.time-card > input {
+.visually-hidden {
   position: absolute;
   opacity: 0;
   width: 1px;
@@ -342,7 +365,7 @@ const selected = computed({
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: 0.25rem;
 }
 
 .time-header strong {
@@ -354,6 +377,7 @@ const selected = computed({
 .check-icon {
   width: 20px;
   height: 20px;
+  flex-shrink: 0;
   border-radius: 50%;
   border: 2px solid var(--border-color);
   display: flex;
@@ -370,18 +394,18 @@ const selected = computed({
   transition: all var(--transition-normal);
 }
 
-.time-card:has(> input:checked) {
+.time-card.is-selected {
   background: color-mix(in srgb, var(--color-primary) 5%, #fff);
   border-color: var(--color-primary);
   box-shadow: 0 4px 12px rgb(0 0 0 / 5%);
 }
 
-.time-card:has(> input:checked) .check-icon {
+.time-card.is-selected .check-icon {
   background: var(--color-primary);
   border-color: var(--color-primary);
 }
 
-.time-card:has(> input:checked) .check-icon svg {
+.time-card.is-selected .check-icon svg {
   opacity: 1;
   transform: scale(1);
 }
@@ -391,5 +415,66 @@ const selected = computed({
   color: var(--text-secondary);
   line-height: 1.4;
   display: block;
+}
+
+.day-selection-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), margin-top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+  margin-top: 0;
+}
+
+.day-selection-wrapper.is-open {
+  grid-template-rows: 1fr;
+  margin-top: 0.75rem;
+}
+
+.day-selection-content {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.day-selection-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.days-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.day-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--color-white);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.day-chip:hover {
+  background: var(--color-neutral-surface);
+  border-color: var(--color-neutral-border-strong);
+}
+
+.day-chip.is-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--text-inverse);
 }
 </style>
