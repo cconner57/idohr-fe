@@ -63,7 +63,7 @@ const isTablet = useIsTablet()
             ><p data-text="Volunteer">Volunteer</p></RouterLink
           >
         </section>
-        <Button title="Donate" color="green" @click="goToDonate(router)" />
+        <!-- <Button title="Donate" color="green" @click="goToDonate(router)" /> -->
       </div>
     </nav>
   </div>

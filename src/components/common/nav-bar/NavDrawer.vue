@@ -144,9 +144,9 @@ onBeforeUnmount(() => {
           </RouterLink>
         </nav>
 
-        <footer class="drawer-footer">
+        <!-- <footer class="drawer-footer">
           <RouterLink to="/donate" class="donate-btn" @click="close">Donate</RouterLink>
-        </footer>
+        </footer> -->
       </aside>
     </transition>
   </Teleport>
