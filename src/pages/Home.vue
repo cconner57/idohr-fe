@@ -58,14 +58,14 @@ onMounted(() => {
             @click="() => router.push('/foster')"
             class="hover-scale"
           />
-          <BannerButton
+          <!-- <BannerButton
             imgSrc="/images/heart.svg"
             title="Donate"
             subtitle="Help us save more lives"
             color="green"
             @click="() => router.push('/donate')"
             class="hover-scale"
-          />
+          /> -->
         </section>
       </div>
     </main>
