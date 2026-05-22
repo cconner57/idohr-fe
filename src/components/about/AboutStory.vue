@@ -12,7 +12,7 @@
       <div class="story-text reveal-right" v-scroll-reveal>
         <h2>Our Story</h2>
         <p>
-          IDOHR began with a simple dream: to give every abandoned, neglected, and unwanted animal
+          IDOHR began in 2016 with a simple dream: to give every abandoned, neglected, and unwanted animal
           a safe place to call home. What started as a small circle of fosters has grown into a
           community of adopters, volunteers, and supporters who believe compassion changes
           lives—both animal and human.
