@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, nextTick, onMounted } from 'vue'
+import { computed, nextTick, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import FormSubmitted from '@/components/common/form-submitted/FormSubmitted.vue'
@@ -111,6 +111,15 @@ const handleReset = async () => {
   await router.push('/')
   resetForm()
 }
+
+watch(
+  () => formState.value.allergies,
+  (newVal) => {
+    if (newVal !== true) {
+      formState.value.allergiesDetails = ''
+    }
+  }
+)
 </script>
 
 <template>
@@ -268,6 +277,18 @@ const handleReset = async () => {
             v-model="formState.allergies"
             :class="{ 'has-error': touched.allergies && !formState.allergies }"
           />
+
+          <InputField
+            :modelValue="formState.allergiesDetails ?? ''"
+            @update:modelValue="
+              (val: unknown) => (formState.allergiesDetails = val as string)
+            "
+            label="Allergy Details"
+            placeholder="Specify allergies (e.g., peanuts, penicillin)"
+            name="allergiesDetails"
+            autocomplete="off"
+            :disabled="formState.allergies !== true"
+          />
         </fieldset>
 
         <fieldset class="volunteer-stack" aria-labelledby="exp" v-scroll-reveal>
@@ -356,131 +377,4 @@ const handleReset = async () => {
   </section>
 </template>
 
-<style scoped>
-.page-shell {
-  min-height: 100vh;
-  background-color: var(--color-primary);
-  padding: 9rem var(--layout-padding-side) 64px;
-
-  @media (width <= 430px) {
-    padding: 6rem 16px 32px;
-  }
-
-  .form-container {
-    container-type: inline-size;
-    container-name: form-card;
-    max-width: 1600px;
-    margin: 0 auto;
-  }
-
-  /* Fix for Allergies component spacer breaking grid layout */
-  :deep(.spacer) {
-    display: none !important;
-  }
-
-  .form-card {
-    background: var(--text-inverse);
-    color: var(--text-primary);
-    border-radius: 24px;
-    box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
-    padding: 48px 48px 32px;
-
-    @container form-card (max-width: 768px) {
-      padding: 32px 24px;
-    }
-
-    fieldset {
-      border: 0;
-      margin: 24px 0;
-      padding: 0;
-
-      .section-title {
-        font-weight: 700;
-        font-size: 18px;
-        margin: 18px 0 12px;
-      }
-    }
-
-    .actions {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 20px;
-    }
-
-    .volunteer-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-
-      @container form-card (min-width: 700px) {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        align-items: start;
-      }
-    }
-
-    .volunteer-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-  }
-
-  .validation-summary {
-    background-color: var(--color-danger-surface);
-    border: 1px solid var(--color-danger);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-    margin: 24px 0;
-    text-align: center;
-
-    .summary-title {
-      color: var(--color-danger);
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: center;
-    }
-
-    .tag.is-danger {
-      background-color: var(--color-danger-weak);
-      color: var(--color-danger);
-      padding: 4px 12px;
-      border-radius: 16px;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-  }
-
-  .has-error :deep(input),
-  .has-error :deep(textarea) {
-    border-color: var(--color-danger) !important;
-    outline: 2px solid var(--color-danger) !important;
-  }
-
-  :deep(.reveal) {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-  }
-
-  :deep(.reveal.active) {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  :deep(input),
-  :deep(textarea),
-  :deep(select) {
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-}
-</style>
+<style scoped src="./Volunteer.css"></style>

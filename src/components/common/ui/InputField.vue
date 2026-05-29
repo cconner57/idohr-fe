@@ -15,6 +15,7 @@ const props = defineProps<{
   type?: string
   modelValue: TInputValue
   fullWidth?: boolean
+  disabled?: boolean
   required?: boolean
   hasError?: boolean
   maxlength?: string | number
@@ -80,7 +81,11 @@ function openPicker() {
 <template>
   <div
     class="control field"
-    :class="{ 'is-fullwidth': props.fullWidth, 'has-error': props.hasError }"
+    :class="{
+      'is-fullwidth': props.fullWidth,
+      'has-error': props.hasError,
+      'is-disabled': props.disabled
+    }"
   >
     <label v-if="props.label" class="label" :for="inputId">{{ props.label }}</label>
     <input
@@ -91,6 +96,7 @@ function openPicker() {
       :placeholder="props.placeholder"
       :type="props.type"
       :value="props.modelValue"
+      :disabled="props.disabled"
       :aria-invalid="props.hasError"
       @input="onInput"
       @focus="openPicker"
@@ -141,5 +147,15 @@ input:focus {
 .control.has-error input {
   border-color: var(--color-danger);
   outline: 1px solid var(--color-danger);
+}
+
+.control.is-disabled .label {
+  opacity: 0.5;
+}
+
+input:disabled {
+  opacity: 0.6;
+  background-color: #f9fafb;
+  cursor: not-allowed;
 }
 </style>

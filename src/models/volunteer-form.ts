@@ -10,6 +10,7 @@ export interface IVolunteerFormState {
   birthday: string
   age: number | null
   allergies: boolean | null
+  allergiesDetails?: string
   emergencyContactName: string
   emergencyContactPhone: string
   volunteerExperience: string

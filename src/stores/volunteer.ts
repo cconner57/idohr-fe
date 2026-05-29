@@ -42,6 +42,7 @@ export const useVolunteerStore = defineStore('volunteer', () => {
     birthday: '',
     age: null,
     allergies: null,
+    allergiesDetails: '',
     emergencyContactName: '',
     emergencyContactPhone: '',
     volunteerExperience: '',
@@ -79,6 +80,7 @@ export const useVolunteerStore = defineStore('volunteer', () => {
     formState.birthday = ''
     formState.age = null
     formState.allergies = null
+    formState.allergiesDetails = ''
     formState.emergencyContactName = ''
     formState.emergencyContactPhone = ''
     formState.volunteerExperience = ''
