@@ -188,7 +188,7 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
                 :key="question.id"
                 :question="question"
                 :modelValue="state.answers[question.id] ?? ''"
-                :hasError="!!getQuestionValidationIssue(question)"
+                :hasError="attemptedValidation && !!getQuestionValidationIssue(question)"
                 :inputType="getInputType(question.type)"
                 :questionLabel="questionLabel(question)"
               @update:modelValue="(val) => fosterStore.setAnswer(question.id, val)"
@@ -233,6 +233,7 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
   min-height: 100vh;
   background-color: var(--color-primary);
   padding: 9rem var(--layout-padding-side) 64px;
+
   @media (width <= 440px) { padding: 6rem 16px 32px; }
 }
 
@@ -248,6 +249,7 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
   border-radius: 24px;
   box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
   padding: 48px 48px 32px;
+
   @container (max-width: 900px) { padding: 32px 24px; }
 }
 
@@ -259,6 +261,7 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+
   @container (max-width: 860px) { grid-template-columns: 1fr; }
 }
 
@@ -277,6 +280,7 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
 }
 
 .actions { margin-top: 20px; display: flex; justify-content: center; gap: 16px; }
+
 @media (width <= 440px) {
   .actions { flex-direction: column; button { width: 100%; } }
 }
