@@ -34,8 +34,8 @@ import Candid from '@/components/common/candid-award/Candid.vue'
       <div class="notice reveal-left" v-scroll-reveal>
         <h2>Transparency</h2>
         <p>
-          IDOHR is a 501(c)(3) nonprofit. Donations are tax-deductible as allowed by law. We
-          publish annual updates and operate with financial transparency.
+          IDOHR is a 501(c)(3) nonprofit. Donations are tax-deductible as allowed by law. We publish
+          annual updates and operate with financial transparency.
         </p>
         <p class="small">EIN: 81-0780050 • PO Box 7612, La Verne, CA 91750</p>
         <p class="small">

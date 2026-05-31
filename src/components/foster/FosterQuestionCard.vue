@@ -16,10 +16,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <article
-    class="question-card"
-    :class="{ 'has-error': hasError }"
-  >
+  <article class="question-card" :class="{ 'has-error': hasError }">
     <label :for="question.id">
       {{ questionLabel }}
     </label>

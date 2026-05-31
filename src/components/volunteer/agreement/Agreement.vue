@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import InputField from '../../common/ui/InputField.vue'
 import InputSignature from '../../common/ui/InputSignature.vue'
 

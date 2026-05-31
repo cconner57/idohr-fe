@@ -23,11 +23,7 @@ const updateCol = (key: string, val: boolean) => {
 
 <template>
   <div class="settings-dropdown-wrapper" @click.stop>
-    <SettingsButton
-      :active="isOpen"
-      title="Table Settings"
-      @click="isOpen = !isOpen"
-    />
+    <SettingsButton :active="isOpen" title="Table Settings" @click="isOpen = !isOpen" />
 
     <div v-if="isOpen" class="settings-dropdown">
       <div class="dropdown-header">Visible Columns</div>
@@ -80,7 +76,6 @@ const updateCol = (key: string, val: boolean) => {
   padding: 8px 0;
   z-index: 50;
 }
-
 
 .dropdown-header {
   padding: 8px 16px;

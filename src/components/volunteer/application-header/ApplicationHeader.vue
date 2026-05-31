@@ -83,10 +83,12 @@ const { headerTitle, headerText } = defineProps<{
   max-width: 900px;
   user-select: none;
   font-weight: 400;
+  text-align: center;
 
   @media (width <= 440px) {
     font-size: 1rem;
     margin: 4px 0 12px;
+    text-align: center;
   }
 }
 </style>

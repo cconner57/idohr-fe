@@ -23,7 +23,7 @@ describe('Select.vue', () => {
   it('opens menu on click', async () => {
     const wrapper = mount(Select, {
       props: { modelValue: null, options },
-      global: { stubs: { Teleport: true } }
+      global: { stubs: { Teleport: true } },
     })
 
     await wrapper.find('.select-trigger').trigger('click')
@@ -34,7 +34,7 @@ describe('Select.vue', () => {
   it('selects an option', async () => {
     const wrapper = mount(Select, {
       props: { modelValue: null, options },
-      global: { stubs: { Teleport: true } }
+      global: { stubs: { Teleport: true } },
     })
 
     await wrapper.find('.select-trigger').trigger('click')
@@ -50,9 +50,9 @@ describe('Select.vue', () => {
       props: {
         modelValue: ['opt1'], // Initial value
         options,
-        multiple: true
+        multiple: true,
       },
-      global: { stubs: { Teleport: true } }
+      global: { stubs: { Teleport: true } },
     })
 
     await wrapper.find('.select-trigger').trigger('click')
@@ -69,7 +69,7 @@ describe('Select.vue', () => {
   it('closes on escape', async () => {
     const wrapper = mount(Select, {
       props: { modelValue: null, options },
-      global: { stubs: { Teleport: true } }
+      global: { stubs: { Teleport: true } },
     })
 
     await wrapper.find('.select-trigger').trigger('click')

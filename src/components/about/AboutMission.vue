@@ -108,8 +108,9 @@
 
     .mission-text {
       max-width: 100%;
-      
-      p, .ticks {
+
+      p,
+      .ticks {
         margin-left: auto;
         margin-right: auto;
         text-align: left;

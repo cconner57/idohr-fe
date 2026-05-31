@@ -137,7 +137,9 @@ watch(pet, (currentPet) => {
   }
 })
 
-const filterCount = computed(() => Object.values(advancedFilters.value).flat().filter(Boolean).length)
+const filterCount = computed(
+  () => Object.values(advancedFilters.value).flat().filter(Boolean).length,
+)
 
 const handleGeneralApplication = (species: 'cat' | 'dog') => {
   vibrate(50)

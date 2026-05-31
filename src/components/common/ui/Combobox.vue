@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted,ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
@@ -82,7 +82,7 @@ function selectOption(option: { label: string; value: string; isCustom?: boolean
     inputRef.value?.focus()
   } else {
     emit('update:modelValue', valToEmit)
-    
+
     searchQuery.value = option.isCustom ? valToEmit : option.label
     isOpen.value = false
   }
@@ -126,7 +126,6 @@ onUnmounted(() => {
     <label v-if="label" class="label">{{ label }}</label>
 
     <div class="combobox-wrapper">
-      
       <div v-if="multiple && (modelValue as string[])?.length" class="selected-tags">
         <span v-for="val in modelValue as string[]" :key="val" class="tag">
           {{ options.find((o) => o.value === val)?.label || val }}

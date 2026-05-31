@@ -35,7 +35,7 @@ const dropdownStyles = ref({
   left: '0px',
   width: '0px',
   position: 'absolute' as const,
-  zIndex: 9999
+  zIndex: 9999,
 })
 
 const updateDropdownPosition = () => {
@@ -102,8 +102,8 @@ const selectedLabel = computed(() => {
     if (!Array.isArray(props.modelValue) || props.modelValue.length === 0) {
       return props.placeholder
     }
-    const selected = normalizedOptions.value.filter((opt) =>
-      Array.isArray(props.modelValue) && props.modelValue.includes(opt.value)
+    const selected = normalizedOptions.value.filter(
+      (opt) => Array.isArray(props.modelValue) && props.modelValue.includes(opt.value),
     )
     return selected.map((s) => s.label).join(', ')
   }
@@ -126,7 +126,6 @@ const selectOption = (value: string | number) => {
       current.push(value)
     }
     emit('update:modelValue', current)
-
   } else {
     emit('update:modelValue', value)
     isOpen.value = false
@@ -159,7 +158,7 @@ onUnmounted(() => {
     :class="{
       'is-fullwidth': fullWidth,
       'has-error': hasError,
-      'variant-borderless': variant === 'borderless'
+      'variant-borderless': variant === 'borderless',
     }"
     ref="containerRef"
   >
@@ -208,9 +207,15 @@ onUnmounted(() => {
                 : option.value === modelValue,
             }"
             role="option"
-            :aria-selected="multiple
-              ? (Array.isArray(modelValue) && modelValue.includes(option.value)) ? 'true' : 'false'
-              : (option.value === modelValue) ? 'true' : 'false'"
+            :aria-selected="
+              multiple
+                ? Array.isArray(modelValue) && modelValue.includes(option.value)
+                  ? 'true'
+                  : 'false'
+                : option.value === modelValue
+                  ? 'true'
+                  : 'false'
+            "
             tabindex="-1"
             @click="selectOption(option.value)"
           >

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const props = withDefaults(
   defineProps<{
     modelValue: boolean
@@ -79,7 +78,7 @@ function toggle() {
 }
 
 .toggle-switch {
-  width: 44px; 
+  width: 44px;
   height: 24px;
   background-color: var(--color-neutral-border-strong);
   border-radius: var(--radius-full);

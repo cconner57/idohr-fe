@@ -24,7 +24,11 @@ defineEmits(['click'])
     @keydown.space.prevent="clickable && $emit('click')"
     @click="clickable && $emit('click')"
   >
-    <div v-if="icon" class="row-icon" :style="{ color: iconColor, backgroundColor: `${iconColor}15` }">
+    <div
+      v-if="icon"
+      class="row-icon"
+      :style="{ color: iconColor, backgroundColor: `${iconColor}15` }"
+    >
       <Icon :name="icon" size="18" />
     </div>
 

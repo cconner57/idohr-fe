@@ -15,7 +15,7 @@ import SurrenderCat from '@/components/about/surrender/SurrenderCat.vue'
     <AboutMission />
     <AboutTransparency />
     <AboutLocations />
-    
+
     <section class="faq-section">
       <div class="content-wrapper">
         <AboutFAQ />

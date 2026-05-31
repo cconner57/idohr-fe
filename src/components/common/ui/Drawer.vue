@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted,onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import Icon from './Icon.vue'
 
@@ -13,7 +13,7 @@ const props = withDefaults(
   {
     placement: 'right',
     mobilePlacement: 'bottom',
-  }
+  },
 )
 
 const emit = defineEmits<{
@@ -29,7 +29,7 @@ watch(
     } else {
       document.body.style.overflow = ''
     }
-  }
+  },
 )
 
 // Ensure cleanup on unmount if component is destroyed while open

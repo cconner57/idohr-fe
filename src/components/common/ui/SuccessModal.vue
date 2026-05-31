@@ -43,12 +43,7 @@ const emit = defineEmits(['close'])
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgb(
-    0
-    0
-    0 /
-    50%
-  );
+  background-color: rgb(0 0 0 / 50%);
   display: flex;
   justify-content: center;
   align-items: center;

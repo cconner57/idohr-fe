@@ -49,7 +49,7 @@ watch(
   () => {
     parseModelValue()
   },
-  { immediate: true, deep: true }
+  { immediate: true, deep: true },
 )
 
 const emitChanges = () => {
@@ -139,10 +139,10 @@ const getDayAbbreviation = (day: string): string => {
 }
 
 const everydayShifts = computed(() =>
-  SHIFTS.filter((s) => s.type === 'everyday' || s.id === 'sunday_pm')
+  SHIFTS.filter((s) => s.type === 'everyday' || s.id === 'sunday_pm'),
 )
 const adoptionShifts = computed(() =>
-  SHIFTS.filter((s) => s.type === 'adoption' || s.id === 'event_cleanup')
+  SHIFTS.filter((s) => s.type === 'adoption' || s.id === 'event_cleanup'),
 )
 </script>
 
@@ -420,7 +420,9 @@ const adoptionShifts = computed(() =>
 .day-selection-wrapper {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), margin-top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition:
+    grid-template-rows 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    margin-top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   overflow: hidden;
   margin-top: 0;
 }

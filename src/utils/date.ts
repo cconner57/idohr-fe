@@ -1,4 +1,3 @@
-
 export function formatDigitDate(dateString?: string | null) {
   if (!dateString) return '-'
 

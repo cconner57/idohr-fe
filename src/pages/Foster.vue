@@ -48,10 +48,15 @@ const currentVisibleQuestions = computed(() => {
 
 const isQuestionRequired = (question: IFosterQuestion) => {
   if (currentPage.value.id === 4) {
-    return question.id === 'q30_hasCurrentPets' || (state.value.answers.q30_hasCurrentPets?.trim() === 'Yes')
+    return (
+      question.id === 'q30_hasCurrentPets' ||
+      state.value.answers.q30_hasCurrentPets?.trim() === 'Yes'
+    )
   }
   if (currentPage.value.id === 5) {
-    return question.id === 'q40_hasPastPets' || (state.value.answers.q40_hasPastPets?.trim() === 'Yes')
+    return (
+      question.id === 'q40_hasPastPets' || state.value.answers.q40_hasPastPets?.trim() === 'Yes'
+    )
   }
   return !!question.required
 }
@@ -77,7 +82,9 @@ const questionLabel = (question: IFosterQuestion) => {
     return 'Has your current pet(s) lived with other dogs and cats before?'
   }
   const speciesText = getSpeciesText()
-  return question.label.replace(/this species/g, speciesText).replace(/This species/g, speciesText.charAt(0).toUpperCase() + speciesText.slice(1))
+  return question.label
+    .replace(/this species/g, speciesText)
+    .replace(/This species/g, speciesText.charAt(0).toUpperCase() + speciesText.slice(1))
 }
 
 const getQuestionValidationIssue = (question: IFosterQuestion) => {
@@ -85,17 +92,26 @@ const getQuestionValidationIssue = (question: IFosterQuestion) => {
   const label = questionLabel(question).replace(/^Page\s+\d+:\s*/, '')
 
   if (isQuestionRequired(question) && !value.trim()) return label
-  if (question.type === 'email' && value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return label
-  
+  if (question.type === 'email' && value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()))
+    return label
+
   if (question.id === 'q2' && value.trim()) {
     const date = new Date(`${value}T00:00:00`)
     const now = new Date()
     let age = now.getFullYear() - date.getFullYear()
-    if (now.getMonth() < date.getMonth() || (now.getMonth() === date.getMonth() && now.getDate() < date.getDate())) age--
+    if (
+      now.getMonth() < date.getMonth() ||
+      (now.getMonth() === date.getMonth() && now.getDate() < date.getDate())
+    )
+      age--
     if (age < 18) return label
   }
 
-  if ((question.id === 'q94_date' || question.id === 'q95_date') && value.trim() && value !== getTodayLocalIsoDate()) {
+  if (
+    (question.id === 'q94_date' || question.id === 'q95_date') &&
+    value.trim() &&
+    value !== getTodayLocalIsoDate()
+  ) {
     return `Acknowledgment date must be today`
   }
 
@@ -105,7 +121,8 @@ const getQuestionValidationIssue = (question: IFosterQuestion) => {
 const validationErrors = computed(() => {
   if (!attemptedValidation.value) return []
   const issues = new Set<string>()
-  if (state.value.currentStep === 1 && !state.value.speciesPreference) issues.add('Foster Preference')
+  if (state.value.currentStep === 1 && !state.value.speciesPreference)
+    issues.add('Foster Preference')
   currentVisibleQuestions.value.forEach((q) => {
     const issue = getQuestionValidationIssue(q)
     if (issue) issues.add(issue)
@@ -152,14 +169,30 @@ const getInputType = (type: string) => {
   return 'text'
 }
 
-const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', 'Skills', 'Care', 'Commitment', 'Scenarios', 'Agreement']
+const fosterStepLabels = [
+  'Profile',
+  'Home',
+  'Environment',
+  'Pets',
+  'History',
+  'Skills',
+  'Care',
+  'Commitment',
+  'Scenarios',
+  'Agreement',
+]
 </script>
 
 <template>
   <section class="page-shell">
     <div v-if="!state.isSubmitted" class="form-container">
       <form class="form-card" aria-label="Foster Application" novalidate @submit.prevent>
-        <ApplicationHeader header-title="Foster" :header-text="state.currentStep === 1 ? 'Thank you for opening your home to a rescue pet.' : undefined" />
+        <ApplicationHeader
+          header-title="Foster"
+          :header-text="
+            state.currentStep === 1 ? 'Thank you for opening your home to a rescue pet.' : undefined
+          "
+        />
 
         <section class="progress-panel">
           <AdoptionSteps :currentStep="state.currentStep - 1" :steps="fosterStepLabels" />
@@ -170,10 +203,16 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
           <p class="section-copy">What species are you currently available to foster?</p>
           <InputSelectGroup
             label=""
-            :options="[{ label: 'Cats', value: 'cat' }, { label: 'Dogs', value: 'dog' }, { label: 'Both', value: 'both' }]"
+            :options="[
+              { label: 'Cats', value: 'cat' },
+              { label: 'Dogs', value: 'dog' },
+              { label: 'Both', value: 'both' },
+            ]"
             :modelValue="state.speciesPreference"
             :hasError="attemptedValidation && state.currentStep === 1 && !state.speciesPreference"
-            @update:modelValue="(val) => fosterStore.setSpeciesPreference((val as TFosterSpecies) ?? '')"
+            @update:modelValue="
+              (val) => fosterStore.setSpeciesPreference((val as TFosterSpecies) ?? '')
+            "
           />
         </fieldset>
 
@@ -183,29 +222,37 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
           </legend>
 
           <div v-if="state.currentStep < 10" class="questions-grid">
-              <FosterQuestionCard
-                v-for="question in currentVisibleQuestions"
-                :key="question.id"
-                :question="question"
-                :modelValue="state.answers[question.id] ?? ''"
-                :hasError="attemptedValidation && !!getQuestionValidationIssue(question)"
-                :inputType="getInputType(question.type)"
-                :questionLabel="questionLabel(question)"
+            <FosterQuestionCard
+              v-for="question in currentVisibleQuestions"
+              :key="question.id"
+              :question="question"
+              :modelValue="state.answers[question.id] ?? ''"
+              :hasError="attemptedValidation && !!getQuestionValidationIssue(question)"
+              :inputType="getInputType(question.type)"
+              :questionLabel="questionLabel(question)"
               @update:modelValue="(val) => fosterStore.setAnswer(question.id, val)"
-              :class="{ 'full-row': (state.currentStep === 4 && question.id === 'q30_hasCurrentPets') || (state.currentStep === 5 && question.id === 'q40_hasPastPets') }"
+              :class="{
+                'full-row':
+                  (state.currentStep === 4 && question.id === 'q30_hasCurrentPets') ||
+                  (state.currentStep === 5 && question.id === 'q40_hasPastPets'),
+              }"
             />
           </div>
 
           <FosterAgreement
             v-else
             :answers="state.answers"
-            :getVisibleQuestion="(id) => currentVisibleQuestions.find(q => q.id === id)"
+            :getVisibleQuestion="(id) => currentVisibleQuestions.find((q) => q.id === id)"
             :questionHasError="(q) => attemptedValidation && !!getQuestionValidationIssue(q)"
             @update-answer="(id, val) => fosterStore.setAnswer(id, val)"
           />
         </fieldset>
 
-        <div v-if="attemptedValidation && validationErrors.length > 0" class="validation-summary" role="alert">
+        <div
+          v-if="attemptedValidation && validationErrors.length > 0"
+          class="validation-summary"
+          role="alert"
+        >
           <p class="summary-title">Please complete the following required fields:</p>
           <div class="tags">
             <span v-for="err in validationErrors" :key="err" class="tag is-danger">{{ err }}</span>
@@ -218,9 +265,32 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
         </div>
 
         <footer class="actions">
-          <Button type="button" title="Back" color="white" size="large" @click="onBack" :disabled="state.currentStep === 1" style="border: 1px solid var(--color-primary); color: var(--color-primary)" />
-          <Button v-if="state.currentStep < 10" type="button" title="Next" color="green" size="large" @click="onNext" />
-          <Button v-else type="button" title="Submit Application" color="green" size="large" @click="onSubmit" :loading="state.isSubmitting" />
+          <Button
+            type="button"
+            title="Back"
+            color="white"
+            size="large"
+            @click="onBack"
+            :disabled="state.currentStep === 1"
+            style="border: 1px solid var(--color-primary); color: var(--color-primary)"
+          />
+          <Button
+            v-if="state.currentStep < 10"
+            type="button"
+            title="Next"
+            color="green"
+            size="large"
+            @click="onNext"
+          />
+          <Button
+            v-else
+            type="button"
+            title="Submit Application"
+            color="green"
+            size="large"
+            @click="onSubmit"
+            :loading="state.isSubmitting"
+          />
         </footer>
       </form>
     </div>
@@ -234,7 +304,9 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
   background-color: var(--color-primary);
   padding: 9rem var(--layout-padding-side) 64px;
 
-  @media (width <= 440px) { padding: 6rem 16px 32px; }
+  @media (width <= 440px) {
+    padding: 6rem 16px 32px;
+  }
 }
 
 .form-container {
@@ -250,22 +322,42 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
   box-shadow: 0 10px 30px rgb(0 0 0 / 10%);
   padding: 48px 48px 32px;
 
-  @container (max-width: 900px) { padding: 32px 24px; }
+  @container (max-width: 900px) {
+    padding: 32px 24px;
+  }
 }
 
-.section-block { border: 0; margin: 24px 0; padding: 0; }
-.section-title { font-weight: 700; font-size: 18px; line-height: 1.35; margin: 18px 0 12px; }
-.section-copy { margin-bottom: 12px; font-size: 1rem; line-height: 1.5; color: var(--text-secondary); }
+.section-block {
+  border: 0;
+  margin: 24px 0;
+  padding: 0;
+}
+.section-title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 18px 0 12px;
+}
+.section-copy {
+  margin-bottom: 12px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
 
 .questions-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
 
-  @container (max-width: 860px) { grid-template-columns: 1fr; }
+  @container (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-.full-row { grid-column: 1 / -1; }
+.full-row {
+  grid-column: 1 / -1;
+}
 
 .validation-summary {
   background-color: var(--color-danger-surface);
@@ -274,14 +366,40 @@ const fosterStepLabels = ['Profile', 'Home', 'Environment', 'Pets', 'History', '
   padding: 16px;
   margin: 24px 0;
   text-align: center;
-  .summary-title { color: var(--color-danger); font-weight: 600; margin-bottom: 12px; }
-  .tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .tag.is-danger { background-color: var(--color-danger-weak); color: var(--color-danger); padding: 4px 12px; border-radius: 16px; font-size: 0.875rem; font-weight: 500; }
+  .summary-title {
+    color: var(--color-danger);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .tag.is-danger {
+    background-color: var(--color-danger-weak);
+    color: var(--color-danger);
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
 }
 
-.actions { margin-top: 20px; display: flex; justify-content: center; gap: 16px; }
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
 
 @media (width <= 440px) {
-  .actions { flex-direction: column; button { width: 100%; } }
+  .actions {
+    flex-direction: column;
+    button {
+      width: 100%;
+    }
+  }
 }
 </style>

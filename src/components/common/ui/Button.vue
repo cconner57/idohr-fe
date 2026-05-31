@@ -73,7 +73,12 @@ const classes = computed(() => {
     :class="classes"
     @click="props.onClick && props.onClick()"
     :disabled="props.disabled || props.loading"
-  ><span v-if="props.loading" class="spinner"></span><slot v-else><span>{{ props.title }}</span></slot></button>
+  >
+    <span v-if="props.loading" class="spinner"></span
+    ><slot v-else
+      ><span>{{ props.title }}</span></slot
+    >
+  </button>
 </template>
 
 <style scoped lang="css">

@@ -202,7 +202,9 @@ watch(
         placeholder="Describe health problems"
         :spanFull="false"
         :modelValue="formState.animalPastOrPresentHealthProblemsExplanation"
-        @update:modelValue="(val) => (formState.animalPastOrPresentHealthProblemsExplanation = val || '')"
+        @update:modelValue="
+          (val) => (formState.animalPastOrPresentHealthProblemsExplanation = val || '')
+        "
       />
 
       <ButtonToggle

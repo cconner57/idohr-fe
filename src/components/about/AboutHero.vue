@@ -43,8 +43,12 @@
 
   @media (width >= 321px) and (width <= 430px) {
     padding: 100px var(--layout-padding-side) 50px;
-    h1 { font-size: 2rem; }
-    p { font-size: 1.15rem; }
+    h1 {
+      font-size: 2rem;
+    }
+    p {
+      font-size: 1.15rem;
+    }
   }
 }
 </style>

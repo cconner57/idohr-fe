@@ -169,7 +169,6 @@
   --font-size-h6: 1rem;
 }
 
-
 /* Global Scrollbar Styling - Hide for Native Feel but allow scroll */
 ::-webkit-scrollbar {
   width: 0;
@@ -179,30 +178,52 @@
 html {
   scrollbar-width: none;
   -ms-overflow-style: none; /* IE 10+ */
-  background-color: var(--text-inverse); /* Cool White to match Admin pages and prevent black flicker */
+  background-color: var(
+    --text-inverse
+  ); /* Cool White to match Admin pages and prevent black flicker */
 }
 
 /* Base Native App Feel */
 body {
-  background-color: var(--text-inverse); /* Cool White to match Admin pages and prevent black flicker */
+  background-color: var(
+    --text-inverse
+  ); /* Cool White to match Admin pages and prevent black flicker */
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   overscroll-behavior-y: none; /* Prevent pull-to-refresh on body if implemented elsewhere */
 }
 
 /* Allow text selection on content that matters */
-p, h1, h2, h3, h4, h5, h6, span, td, th, li, a {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+td,
+th,
+li,
+a {
   user-select: text;
 }
 
 /* Fix iOS Zoom on Inputs */
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   font-size: 16px !important; /* Forces 16px to prevent zoom */
   max-width: 100%;
 }
 
 /* Button & Interactive - No Selection */
-button, .btn, a.btn, label, .clickable {
+button,
+.btn,
+a.btn,
+label,
+.clickable {
   user-select: none;
   cursor: pointer;
   touch-action: manipulation; /* Improves tap response */

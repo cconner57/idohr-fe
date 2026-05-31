@@ -109,10 +109,20 @@ const removePet = (index: number) => {
           />
           <InputField
             v-model="pet.likesDogs"
-            :label="animalLabel === 'cat' ? 'Does this pet like other cats?' : 'Does this pet like dogs?'"
+            :label="
+              animalLabel === 'cat' ? 'Does this pet like other cats?' : 'Does this pet like dogs?'
+            "
             :name="`pet-likes-dogs-${index}`"
-            :placeholder="animalLabel === 'cat' ? 'Describe previous interactions with other cats' : 'Describe previous interactions with dogs'"
-            :subtext="animalLabel === 'cat' ? 'Describe previous interactions with other cats' : 'Describe previous interactions with dogs'"
+            :placeholder="
+              animalLabel === 'cat'
+                ? 'Describe previous interactions with other cats'
+                : 'Describe previous interactions with dogs'
+            "
+            :subtext="
+              animalLabel === 'cat'
+                ? 'Describe previous interactions with other cats'
+                : 'Describe previous interactions with dogs'
+            "
             required
             :hasError="
               (touched?.[`pet-likes-dogs-${index}`] && !pet.likesDogs) ||
@@ -239,7 +249,7 @@ const removePet = (index: number) => {
 .remove-btn:hover {
   color: var(--color-danger);
   border-color: var(--color-danger);
-  background: var(--color-white)5f5;
+  background: var(--color-white) 5f5;
 }
 
 .add-btn-large {

@@ -25,7 +25,10 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
 <template>
   <div class="household-section">
     <h5>{{ selectedAnimal }} & Household Information</h5>
-    <HoneypotField :model-value="formState.fax_number || null" @update:model-value="val => formState.fax_number = val as string" />
+    <HoneypotField
+      :model-value="formState.fax_number || null"
+      @update:model-value="(val) => (formState.fax_number = val as string)"
+    />
     <fieldset class="household-grid">
       <InputField
         label="First Name"

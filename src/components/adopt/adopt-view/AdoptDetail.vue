@@ -104,11 +104,7 @@ watch(
 <template>
   <div class="adopt-detail">
     <div class="adopt-detail__main">
-      <AdoptDetailMedia
-        :petPhotoUrl="petPhotoUrl"
-        :petName="pet.name"
-        :petId="pet.id"
-      />
+      <AdoptDetailMedia :petPhotoUrl="petPhotoUrl" :petName="pet.name" :petId="pet.id" />
       <AdoptDetailInfo
         :pet="pet"
         :isComingSoon="isComingSoon"
@@ -119,10 +115,7 @@ watch(
         @schedule-meet="isDrawerOpen = true"
       />
     </div>
-    <AdoptDetailAbout
-      :pet="pet"
-      :formattedFallbackStory="formattedFallbackStory"
-    />
+    <AdoptDetailAbout :pet="pet" :formattedFallbackStory="formattedFallbackStory" />
   </div>
 
   <AdoptDrawer

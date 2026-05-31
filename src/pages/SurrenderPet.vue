@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, onMounted,reactive } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
 import {
@@ -87,16 +87,8 @@ const formattedAnimal = computed(() => {
   <section class="page-shell">
     <section v-if="!isSubmitted" class="form-card" aria-labelledby="form-title">
       <div class="form-header">
-        <img
-          v-if="selectedAnimal === 'cat' && step > 0"
-          src="/images/cat.png"
-          alt="cat"
-        />
-        <img
-          v-if="selectedAnimal === 'dog' && step > 0"
-          src="/images/dog.png"
-          alt="dog"
-        />
+        <img v-if="selectedAnimal === 'cat' && step > 0" src="/images/cat.png" alt="cat" />
+        <img v-if="selectedAnimal === 'dog' && step > 0" src="/images/dog.png" alt="dog" />
         <h1>{{ headerText }}</h1>
       </div>
       <SurrenderSteps
@@ -171,12 +163,7 @@ const formattedAnimal = computed(() => {
         </div>
       </div>
 
-      <div
-        v-if="submissionError"
-        class="validation-summary"
-        role="alert"
-        aria-live="polite"
-      >
+      <div v-if="submissionError" class="validation-summary" role="alert" aria-live="polite">
         <p class="summary-title">{{ submissionError }}</p>
       </div>
 

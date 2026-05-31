@@ -20,7 +20,8 @@ const colorClass = computed(() => {
   if (c === 'orange' || c === 'scheduled' || c === 'warning') return 'capsule--orange'
   if (c === 'red' || c === 'danger' || c === 'rejected') return 'capsule--red'
   if (c === 'purple' || c === 'foster') return 'capsule--purple'
-  if (c === 'gray' || c === 'neutral' || c === 'draft' || c === 'pending' || c === 'intake') return 'capsule--gray'
+  if (c === 'gray' || c === 'neutral' || c === 'draft' || c === 'pending' || c === 'intake')
+    return 'capsule--gray'
 
   // Fallback for custom colors if key not found (though CSS vars expect specific classes)
   return 'capsule--gray'
@@ -28,10 +29,7 @@ const colorClass = computed(() => {
 </script>
 
 <template>
-  <span
-    class="capsule"
-    :class="[sizeClass, colorClass]"
-  >
+  <span class="capsule" :class="[sizeClass, colorClass]">
     <slot>{{ props.label }}</slot>
   </span>
 </template>

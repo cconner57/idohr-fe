@@ -16,44 +16,72 @@ const { formState, touched, handleBlur, hasAttemptedSubmit, selectedAnimal } = d
 }>()
 
 const peopleRows = ['men', 'women', 'children']
-const peopleColumns = ['never encounter', 'friendly', 'afraid', 'show teeth/growl', 'snaps', 'bites', 'other']
+const peopleColumns = [
+  'never encounter',
+  'friendly',
+  'afraid',
+  'show teeth/growl',
+  'snaps',
+  'bites',
+  'other',
+]
 
 const unknownsRows = ['dogs', 'cats']
-const unknownsColumns = ['never encounter', 'friendly', 'afraid', 'show teeth/growl', 'snaps', 'bites', 'other']
+const unknownsColumns = [
+  'never encounter',
+  'friendly',
+  'afraid',
+  'show teeth/growl',
+  'snaps',
+  'bites',
+  'other',
+]
 
 const knownsRows = ['dogs', 'cats']
-const knownsColumns = ['never encounter', 'friendly', 'afraid', 'show teeth/hiss', 'snaps', 'bites', 'other']
+const knownsColumns = [
+  'never encounter',
+  'friendly',
+  'afraid',
+  'show teeth/hiss',
+  'snaps',
+  'bites',
+  'other',
+]
 
 onMounted(() => {
+  const toggleFields: (
+    | 'animalScaredOfAnything'
+    | 'animalAllowedOnFurniture'
+    | 'animalEscapedBefore'
+    | 'animalProblemsRidingInCar'
+  )[] = ['animalScaredOfAnything', 'animalAllowedOnFurniture', 'animalEscapedBefore']
 
-  const toggleFields: ('animalScaredOfAnything' | 'animalAllowedOnFurniture' | 'animalEscapedBefore' | 'animalProblemsRidingInCar')[] = [
-    'animalScaredOfAnything',
-    'animalAllowedOnFurniture',
-    'animalEscapedBefore',
-  ]
-
-  toggleFields.forEach(field => {
+  toggleFields.forEach((field) => {
     if (!formState[field]) {
-
       formState[field] = 'No'
     }
   })
 
-  const gridInits: { field: 'animalsBehaviorTowardsKnownPeople' | 'animalsBehaviorTowardsStrangers' | 'animalsBehaviorTowardsKnownAnimals'; rows: string[] }[] = [
+  const gridInits: {
+    field:
+      | 'animalsBehaviorTowardsKnownPeople'
+      | 'animalsBehaviorTowardsStrangers'
+      | 'animalsBehaviorTowardsKnownAnimals'
+    rows: string[]
+  }[] = [
     { field: 'animalsBehaviorTowardsKnownPeople', rows: peopleRows },
     { field: 'animalsBehaviorTowardsStrangers', rows: unknownsRows },
-    { field: 'animalsBehaviorTowardsKnownAnimals', rows: knownsRows }
+    { field: 'animalsBehaviorTowardsKnownAnimals', rows: knownsRows },
   ]
 
   gridInits.forEach(({ field, rows }) => {
-
     if (!formState[field]) {
-       const initialGridState: Record<string, string[]> = {}
-       rows.forEach(row => {
-         initialGridState[row] = ['other']
-       })
+      const initialGridState: Record<string, string[]> = {}
+      rows.forEach((row) => {
+        initialGridState[row] = ['other']
+      })
 
-       formState[field] = JSON.stringify(initialGridState)
+      formState[field] = JSON.stringify(initialGridState)
     }
   })
 })
@@ -102,7 +130,10 @@ onMounted(() => {
         :options="['Friendly', 'Afraid', 'Barks', 'Shows Teeth/Hisses', 'Will Bite/Scratch']"
         :modelValue="formState.animalsReactionToNewPeople"
         @update:modelValue="(val) => (formState.animalsReactionToNewPeople = val as string)"
-        :hasError="(touched.animalsReactionToNewPeople && !formState.animalsReactionToNewPeople) || (hasAttemptedSubmit && !formState.animalsReactionToNewPeople)"
+        :hasError="
+          (touched.animalsReactionToNewPeople && !formState.animalsReactionToNewPeople) ||
+          (hasAttemptedSubmit && !formState.animalsReactionToNewPeople)
+        "
         @blur="handleBlur('animalsReactionToNewPeople')"
         :multiple="true"
       />
@@ -111,15 +142,28 @@ onMounted(() => {
         :options="['Yes', 'No', 'Partially']"
         :modelValue="formState.animalHouseTrained"
         @update:modelValue="(val) => (formState.animalHouseTrained = val as string)"
-        :hasError="(touched.animalHouseTrained && !formState.animalHouseTrained) || (hasAttemptedSubmit && !formState.animalHouseTrained)"
+        :hasError="
+          (touched.animalHouseTrained && !formState.animalHouseTrained) ||
+          (hasAttemptedSubmit && !formState.animalHouseTrained)
+        "
         @blur="handleBlur('animalHouseTrained')"
       />
       <InputSelectGroup
         :label="`Where does the ${selectedAnimal.toLowerCase()} spend the majority of their time?`"
-        :options="['Inside the house, runs free', 'Inside the house, crated', 'Outside the house, runs free in yard', 'Outside the house, kennel', 'Outside the house, tied up', 'Other']"
+        :options="[
+          'Inside the house, runs free',
+          'Inside the house, crated',
+          'Outside the house, runs free in yard',
+          'Outside the house, kennel',
+          'Outside the house, tied up',
+          'Other',
+        ]"
         :modelValue="formState.animalSpendMajorityOfTime"
         @update:modelValue="(val) => (formState.animalSpendMajorityOfTime = val as string)"
-        :hasError="(touched.animalSpendMajorityOfTime && !formState.animalSpendMajorityOfTime) || (hasAttemptedSubmit && !formState.animalSpendMajorityOfTime)"
+        :hasError="
+          (touched.animalSpendMajorityOfTime && !formState.animalSpendMajorityOfTime) ||
+          (hasAttemptedSubmit && !formState.animalSpendMajorityOfTime)
+        "
         @blur="handleBlur('animalSpendMajorityOfTime')"
       />
       <InputSelectGroup
@@ -127,7 +171,10 @@ onMounted(() => {
         :options="['Never', '1-3 hours', '4-8 hours', '9-12 hours', 'Over 12 hours']"
         :modelValue="formState.animalLeftAloneDuration"
         @update:modelValue="(val) => (formState.animalLeftAloneDuration = val as string)"
-        :hasError="(touched.animalLeftAloneDuration && !formState.animalLeftAloneDuration) || (hasAttemptedSubmit && !formState.animalLeftAloneDuration)"
+        :hasError="
+          (touched.animalLeftAloneDuration && !formState.animalLeftAloneDuration) ||
+          (hasAttemptedSubmit && !formState.animalLeftAloneDuration)
+        "
         @blur="handleBlur('animalLeftAloneDuration')"
       />
       <InputSelectGroup
@@ -135,7 +182,10 @@ onMounted(() => {
         :options="['Outdoors', 'Free roam in home', 'Confined to a room', 'Crated', 'Other']"
         :modelValue="formState.animalWhenLeftAlone"
         @update:modelValue="(val) => (formState.animalWhenLeftAlone = val as string)"
-        :hasError="(touched.animalWhenLeftAlone && !formState.animalWhenLeftAlone) || (hasAttemptedSubmit && !formState.animalWhenLeftAlone)"
+        :hasError="
+          (touched.animalWhenLeftAlone && !formState.animalWhenLeftAlone) ||
+          (hasAttemptedSubmit && !formState.animalWhenLeftAlone)
+        "
         @blur="handleBlur('animalWhenLeftAlone')"
       />
       <InputSelectGroup
@@ -143,7 +193,10 @@ onMounted(() => {
         :options="['Destroy household items', 'Urinate/Deficate', 'Cry', 'None of these', 'Other']"
         :modelValue="formState.animalLeftAloneBehaviors"
         @update:modelValue="(val) => (formState.animalLeftAloneBehaviors = val as string)"
-        :hasError="(touched.animalLeftAloneBehaviors && !formState.animalLeftAloneBehaviors) || (hasAttemptedSubmit && !formState.animalLeftAloneBehaviors)"
+        :hasError="
+          (touched.animalLeftAloneBehaviors && !formState.animalLeftAloneBehaviors) ||
+          (hasAttemptedSubmit && !formState.animalLeftAloneBehaviors)
+        "
         @blur="handleBlur('animalLeftAloneBehaviors')"
         :multiple="true"
       />
@@ -152,7 +205,10 @@ onMounted(() => {
         :options="['Jumps', 'Hiss', 'Bites lightly', 'Bites hard', 'None of these', 'Other']"
         :modelValue="formState.animalHowItPlays"
         @update:modelValue="(val) => (formState.animalHowItPlays = val as string)"
-        :hasError="(touched.animalHowItPlays && !formState.animalHowItPlays) || (hasAttemptedSubmit && !formState.animalHowItPlays)"
+        :hasError="
+          (touched.animalHowItPlays && !formState.animalHowItPlays) ||
+          (hasAttemptedSubmit && !formState.animalHowItPlays)
+        "
         @blur="handleBlur('animalHowItPlays')"
         :multiple="true"
       />
@@ -161,7 +217,10 @@ onMounted(() => {
         :options="['Balls', 'Plush', 'Squeaky', 'Tug toy', 'None', 'Other']"
         :modelValue="formState.animalToysItLikes"
         @update:modelValue="(val) => (formState.animalToysItLikes = val as string)"
-        :hasError="(touched.animalToysItLikes && !formState.animalToysItLikes) || (hasAttemptedSubmit && !formState.animalToysItLikes)"
+        :hasError="
+          (touched.animalToysItLikes && !formState.animalToysItLikes) ||
+          (hasAttemptedSubmit && !formState.animalToysItLikes)
+        "
         @blur="handleBlur('animalToysItLikes')"
         :multiple="true"
       />
@@ -170,7 +229,10 @@ onMounted(() => {
         :options="['Tug', 'Chase', 'Wrestling', 'None', 'Other']"
         :modelValue="formState.animalGamesItLikes"
         @update:modelValue="(val) => (formState.animalGamesItLikes = val as string)"
-        :hasError="(touched.animalGamesItLikes && !formState.animalGamesItLikes) || (hasAttemptedSubmit && !formState.animalGamesItLikes)"
+        :hasError="
+          (touched.animalGamesItLikes && !formState.animalGamesItLikes) ||
+          (hasAttemptedSubmit && !formState.animalGamesItLikes)
+        "
         @blur="handleBlur('animalGamesItLikes')"
         :multiple="true"
       />
@@ -200,10 +262,22 @@ onMounted(() => {
       />
       <InputSelectGroup
         :label="`Where does the ${selectedAnimal.toLowerCase()} usually sleep at overnight?`"
-        :options="['Crate', 'Floor', 'Your bed', 'Couch', 'Kids bed', 'Cat bed', 'Outside', 'Other']"
+        :options="[
+          'Crate',
+          'Floor',
+          'Your bed',
+          'Couch',
+          'Kids bed',
+          'Cat bed',
+          'Outside',
+          'Other',
+        ]"
         :modelValue="formState.animalSleepAtNight"
         @update:modelValue="(val) => (formState.animalSleepAtNight = val as string)"
-        :hasError="(touched.animalSleepAtNight && !formState.animalSleepAtNight) || (hasAttemptedSubmit && !formState.animalSleepAtNight)"
+        :hasError="
+          (touched.animalSleepAtNight && !formState.animalSleepAtNight) ||
+          (hasAttemptedSubmit && !formState.animalSleepAtNight)
+        "
         @blur="handleBlur('animalSleepAtNight')"
         :multiple="true"
       />
@@ -219,7 +293,10 @@ onMounted(() => {
         :options="['Yes', 'No', 'Don\'t know']"
         :modelValue="formState.animalProblemsRidingInCar"
         @update:modelValue="(val) => (formState.animalProblemsRidingInCar = val as string)"
-        :hasError="(touched.animalProblemsRidingInCar && !formState.animalProblemsRidingInCar) || (hasAttemptedSubmit && !formState.animalProblemsRidingInCar)"
+        :hasError="
+          (touched.animalProblemsRidingInCar && !formState.animalProblemsRidingInCar) ||
+          (hasAttemptedSubmit && !formState.animalProblemsRidingInCar)
+        "
         @blur="handleBlur('animalProblemsRidingInCar')"
       />
       <InputTextArea

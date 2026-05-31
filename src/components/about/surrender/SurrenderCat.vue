@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { useRouter } from 'vue-router'
 
 import Button from '../../common/ui/Button.vue'

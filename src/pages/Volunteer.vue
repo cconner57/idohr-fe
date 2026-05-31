@@ -118,7 +118,7 @@ watch(
     if (newVal !== true) {
       formState.value.allergiesDetails = ''
     }
-  }
+  },
 )
 </script>
 
@@ -280,9 +280,7 @@ watch(
 
           <InputField
             :modelValue="formState.allergiesDetails ?? ''"
-            @update:modelValue="
-              (val: unknown) => (formState.allergiesDetails = val as string)
-            "
+            @update:modelValue="(val: unknown) => (formState.allergiesDetails = val as string)"
             label="Allergy Details"
             placeholder="Specify allergies (e.g., peanuts, penicillin)"
             name="allergiesDetails"

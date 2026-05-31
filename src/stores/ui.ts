@@ -30,7 +30,9 @@ export const useUIStore = defineStore('ui', () => {
         adminState.value = parsed
       } else {
         // Version mismatch: Clear specific key only
-        console.warn(`Admin UI state version mismatch (found ${parsed.version}, expected ${CURRENT_VERSION}). Resetting.`)
+        console.warn(
+          `Admin UI state version mismatch (found ${parsed.version}, expected ${CURRENT_VERSION}). Resetting.`,
+        )
         localStorage.removeItem(STORAGE_KEY)
       }
     } catch (e) {

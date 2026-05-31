@@ -84,7 +84,7 @@ function openPicker() {
     :class="{
       'is-fullwidth': props.fullWidth,
       'has-error': props.hasError,
-      'is-disabled': props.disabled
+      'is-disabled': props.disabled,
     }"
   >
     <label v-if="props.label" class="label" :for="inputId">{{ props.label }}</label>

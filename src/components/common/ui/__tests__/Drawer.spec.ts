@@ -15,12 +15,12 @@ describe('Drawer.vue', () => {
       global: {
         stubs: {
           Teleport: true, // Stub teleport to render in-place for easier testing
-          Transition: true
-        }
+          Transition: true,
+        },
       },
       slots: {
-        default: '<div class="content">Hello World</div>'
-      }
+        default: '<div class="content">Hello World</div>',
+      },
     })
 
     expect(wrapper.text()).toContain('Menu')
@@ -30,7 +30,7 @@ describe('Drawer.vue', () => {
   it('locks body scroll when open', async () => {
     const wrapper = mount(Drawer, {
       props: { isOpen: false, title: 'Menu' },
-      global: { stubs: { Teleport: true } }
+      global: { stubs: { Teleport: true } },
     })
 
     expect(document.body.style.overflow).toBe('')
@@ -45,7 +45,7 @@ describe('Drawer.vue', () => {
   it('emits close event', async () => {
     const wrapper = mount(Drawer, {
       props: { isOpen: true, title: 'Menu' },
-      global: { stubs: { Teleport: true } }
+      global: { stubs: { Teleport: true } },
     })
 
     await wrapper.find('.close-btn').trigger('click')

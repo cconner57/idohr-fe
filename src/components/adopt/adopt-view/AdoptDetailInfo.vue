@@ -13,7 +13,7 @@ defineProps<{
 
 const emit = defineEmits<{
   'start-adoption': []
-  'share': []
+  share: []
   'request-info': []
   'schedule-meet': []
 }>()
@@ -56,8 +56,8 @@ const emit = defineEmits<{
         />
       </div>
       <output v-if="isComingSoon" class="coming-soon-banner">
-        This pet is coming soon. You can request information now, and scheduling opens once the
-        pet is available.
+        This pet is coming soon. You can request information now, and scheduling opens once the pet
+        is available.
       </output>
     </div>
     <AdditionalInfo :pet="pet" />
@@ -69,9 +69,7 @@ const emit = defineEmits<{
       </svg>
       <span>
         <strong>Adoption Fee Sponsored</strong>
-        <span class="sponsored-sub"
-          >A generous supporter has covered this pet's adoption fee.</span
-        >
+        <span class="sponsored-sub">A generous supporter has covered this pet's adoption fee.</span>
       </span>
     </output>
   </div>

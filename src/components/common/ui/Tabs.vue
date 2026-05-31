@@ -3,9 +3,9 @@ import Icon from './Icon.vue'
 
 defineProps<{
   items: {
-    id: string;
-    label: string;
-    icon?: string;
+    id: string
+    label: string
+    icon?: string
     badge?: number | string | null
   }[]
   modelValue: string

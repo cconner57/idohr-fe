@@ -9,7 +9,7 @@ describe('SuccessModal.vue', () => {
       props: {
         isVisible: true,
         title: 'Great Job',
-        message: 'You did it'
+        message: 'You did it',
       },
     })
     expect(wrapper.text()).toContain('Great Job')

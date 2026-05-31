@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-
-
 const props = defineProps<{
   modelValue?: boolean
   label?: string
@@ -76,7 +74,7 @@ const toggle = () => {
    Actually, standard practice for custom checkbox:
    Hidden input, visual sibling.
 */
-input[type="checkbox"] {
+input[type='checkbox'] {
   position: absolute;
   opacity: 0;
   width: 100%;

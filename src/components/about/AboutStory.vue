@@ -12,9 +12,9 @@
       <div class="story-text reveal-right" v-scroll-reveal>
         <h2>Our Story</h2>
         <p>
-          IDOHR began in 2016 with a simple dream: to give every abandoned, neglected, and unwanted animal
-          a safe place to call home. What started as a small circle of fosters has grown into a
-          community of adopters, volunteers, and supporters who believe compassion changes
+          IDOHR began in 2016 with a simple dream: to give every abandoned, neglected, and unwanted
+          animal a safe place to call home. What started as a small circle of fosters has grown into
+          a community of adopters, volunteers, and supporters who believe compassion changes
           lives—both animal and human.
         </p>
       </div>
@@ -78,7 +78,7 @@
     .story-text {
       max-width: 100%;
       align-items: center;
-      
+
       p {
         margin-left: auto;
         margin-right: auto;

@@ -18,10 +18,13 @@ function onImgLoad() {
   isImageLoaded.value = true
 }
 
-watch(() => props.petPhotoUrl, () => {
-  imgError.value = false
-  isImageLoaded.value = false
-})
+watch(
+  () => props.petPhotoUrl,
+  () => {
+    imgError.value = false
+    isImageLoaded.value = false
+  },
+)
 </script>
 
 <template>

@@ -243,7 +243,7 @@ const removePet = (index: number) => {
 .remove-btn:hover {
   color: var(--color-danger);
   border-color: var(--color-danger);
-  background: var(--color-white)5f5;
+  background: var(--color-white) 5f5;
 }
 
 .add-btn-large {

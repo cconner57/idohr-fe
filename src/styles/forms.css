@@ -61,7 +61,6 @@ input[type='time'] {
   color-scheme: light dark;
 }
 
-
 input[type='date']::placeholder,
 input[type='time']::placeholder {
   color: inherit;

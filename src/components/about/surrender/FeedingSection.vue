@@ -26,10 +26,10 @@ onMounted(() => {
     <h5>Feeding</h5>
     <div class="feeding-grid">
       <ButtonToggle
-          :label="`Does the ${selectedAnimal.toLowerCase()} get treats?`"
-          :modelValue="formState.animalFoodTreats"
-          @update:modelValue="(val) => (formState.animalFoodTreats = val as any)"
-        />
+        :label="`Does the ${selectedAnimal.toLowerCase()} get treats?`"
+        :modelValue="formState.animalFoodTreats"
+        @update:modelValue="(val) => (formState.animalFoodTreats = val as any)"
+      />
       <InputField
         :label="`If yes, what treats does the ${selectedAnimal.toLowerCase()} like?`"
         placeholder="Answer"
@@ -37,31 +37,46 @@ onMounted(() => {
         @update:modelValue="(val) => (formState.animalFoodTreatsExplanation = val as string)"
       />
       <InputSelectGroup
-          :label="`What type of food does the ${selectedAnimal.toLowerCase()} eat?`"
-          :options="['Canned', 'Dry', 'Soft', 'Table scraps', 'Raw', 'Home cooked']"
-          :modelValue="formState.animalTypeOfFood"
-          @update:modelValue="(val) => (formState.animalTypeOfFood = val as any)"
-          :hasError="(touched.animalTypeOfFood && !formState.animalTypeOfFood) || (hasAttemptedSubmit && !formState.animalTypeOfFood)"
-          @blur="handleBlur('animalTypeOfFood')"
-          :multiple="true"
-        />
+        :label="`What type of food does the ${selectedAnimal.toLowerCase()} eat?`"
+        :options="['Canned', 'Dry', 'Soft', 'Table scraps', 'Raw', 'Home cooked']"
+        :modelValue="formState.animalTypeOfFood"
+        @update:modelValue="(val) => (formState.animalTypeOfFood = val as any)"
+        :hasError="
+          (touched.animalTypeOfFood && !formState.animalTypeOfFood) ||
+          (hasAttemptedSubmit && !formState.animalTypeOfFood)
+        "
+        @blur="handleBlur('animalTypeOfFood')"
+        :multiple="true"
+      />
       <InputSelectGroup
-          :label="`How many times a day is the ${selectedAnimal.toLowerCase()} fed?`"
-          :options="['1 time', '2 times', '3 times', 'Free feeds']"
-          :modelValue="formState.animalEatingFrequency"
-          @update:modelValue="(val) => (formState.animalEatingFrequency = val as any)"
-          :hasError="(touched.animalEatingFrequency && !formState.animalEatingFrequency) || (hasAttemptedSubmit && !formState.animalEatingFrequency)"
-          @blur="handleBlur('animalEatingFrequency')"
-        />
+        :label="`How many times a day is the ${selectedAnimal.toLowerCase()} fed?`"
+        :options="['1 time', '2 times', '3 times', 'Free feeds']"
+        :modelValue="formState.animalEatingFrequency"
+        @update:modelValue="(val) => (formState.animalEatingFrequency = val as any)"
+        :hasError="
+          (touched.animalEatingFrequency && !formState.animalEatingFrequency) ||
+          (hasAttemptedSubmit && !formState.animalEatingFrequency)
+        "
+        @blur="handleBlur('animalEatingFrequency')"
+      />
       <InputSelectGroup
-          :label="`How much is fed per feeding?`"
-          :options="['1 cup', '1 1/2 cups', '2 cups', '2 1/2 cups', 'Not sure, just fill the bowl up', 'Other']"
-          :modelValue="formState.animalAmountOfFood"
-          @update:modelValue="(val) => (formState.animalAmountOfFood = val as any)"
-          :hasError="(touched.animalAmountOfFood && !formState.animalAmountOfFood) || (hasAttemptedSubmit && !formState.animalAmountOfFood)"
-          @blur="handleBlur('animalAmountOfFood')"
-        />
-
+        :label="`How much is fed per feeding?`"
+        :options="[
+          '1 cup',
+          '1 1/2 cups',
+          '2 cups',
+          '2 1/2 cups',
+          'Not sure, just fill the bowl up',
+          'Other',
+        ]"
+        :modelValue="formState.animalAmountOfFood"
+        @update:modelValue="(val) => (formState.animalAmountOfFood = val as any)"
+        :hasError="
+          (touched.animalAmountOfFood && !formState.animalAmountOfFood) ||
+          (hasAttemptedSubmit && !formState.animalAmountOfFood)
+        "
+        @blur="handleBlur('animalAmountOfFood')"
+      />
     </div>
   </div>
 </template>

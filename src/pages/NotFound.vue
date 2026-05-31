@@ -24,13 +24,13 @@ const handleGoHome = () => {
   align-items: center;
   min-height: 80vh;
   padding: 2rem;
-  padding-top: 8rem; 
+  padding-top: 8rem;
   text-align: center;
 }
 
 @media (width <= 768px) {
   .not-found-container {
-    padding-top: 6rem; 
+    padding-top: 6rem;
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -43,7 +43,7 @@ const handleGoHome = () => {
   gap: 1.5rem;
   max-width: 600px;
   position: relative;
-  z-index: 1; 
+  z-index: 1;
 }
 
 .not-found-image {
@@ -58,17 +58,17 @@ const handleGoHome = () => {
 h1 {
   color: var(--text-inverse);
   font-size: 2.5rem;
-  font-weight: 800; 
+  font-weight: 800;
   margin: 0;
   text-shadow: 0 2px 4px rgb(0 0 0 / 20%);
 }
 
 p {
-  color: var(--text-inverse); 
-  font-size: 1.25rem; 
-  font-weight: 600; 
+  color: var(--text-inverse);
+  font-size: 1.25rem;
+  font-weight: 600;
   margin: 0 0 1rem;
-  text-shadow: 0 2px 4px rgb(0 0 0 / 30%); 
+  text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
   line-height: 1.5;
 }
 </style>

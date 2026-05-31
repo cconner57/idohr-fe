@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onUnmounted,ref, watch } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 
 const props = defineProps<{
   imageFile: File
@@ -60,7 +60,6 @@ function onMouseUp() {
   window.removeEventListener('mouseup', onMouseUp)
   window.removeEventListener('touchmove', onMouseMove)
   window.removeEventListener('touchend', onMouseUp)
-
 }
 
 function onMouseDown(e: MouseEvent | TouchEvent) {

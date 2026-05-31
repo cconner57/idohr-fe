@@ -254,10 +254,10 @@ function handleAgreementUpdate(val: string | number | boolean | null) {
               <InputField
                 :modelValue="child.age"
                 @update:modelValue="
-                    (val) => {
-                        const str = String(val).replace(/\D/g, '').substring(0, 3)
-                        child.age = str || ''
-                    }
+                  (val) => {
+                    const str = String(val).replace(/\D/g, '').substring(0, 3)
+                    child.age = str || ''
+                  }
                 "
                 :name="`child-age-${index}`"
                 placeholder="Age"

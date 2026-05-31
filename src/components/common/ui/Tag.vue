@@ -28,7 +28,7 @@ defineProps<{
 
 .tag.default.neutral {
   background-color: var(--color-neutral-light);
-  color: var(--color-neutral-dark); 
+  color: var(--color-neutral-dark);
   border-color: var(--color-neutral-border);
 }
 

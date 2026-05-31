@@ -29,8 +29,8 @@ describe('Button.vue', () => {
     // Test the computed logic for legacy colors
     const wrapper = mount(Button, {
       props: {
-        color: 'blue'
-      }
+        color: 'blue',
+      },
     })
     // blue -> secondary theme
     expect(wrapper.classes()).toContain('theme-secondary')

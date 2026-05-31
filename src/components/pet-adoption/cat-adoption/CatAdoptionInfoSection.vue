@@ -36,7 +36,13 @@ const goodToKnowItems: IPolicyItem[] = [
     <div v-if="isKitten" class="kitten-notice" role="alert">
       <span class="kitten-notice-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+            d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </span>
       <div class="kitten-notice-body">
@@ -49,55 +55,56 @@ const goodToKnowItems: IPolicyItem[] = [
             target="_blank"
             rel="noopener noreferrer"
             class="kitten-link"
-          >single kitten syndrome</a>
+            >single kitten syndrome</a
+          >
           and ensure they have a healthy social environment.
         </p>
       </div>
     </div>
     <section class="intro-grid" aria-label="Cat adoption policies and included care">
-    <article class="policy-card">
-      <h3 class="policy-title">What's <span>Included</span></h3>
-      <ul class="included-list">
-        <li v-for="item in includedItems" :key="item" class="included-item">
-          <span class="check-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M20 6L9 17L4 12"
-                stroke="currentColor"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-          <span>{{ item }}</span>
-        </li>
-      </ul>
-      <p class="policy-body">
-        Kittens may not have completed every service at the time of adoption. By around 6 months of
-        age, kittens are expected to receive all required veterinary care listed above. If you adopt
-        a kitten, you agree to coordinate with an IDOHR director so your kitten can attend required
-        follow-up vet visits.
-      </p>
-      <p class="policy-body">
-        These services would ordinarily cost well over $350. Additional donations are always
-        appreciated and directly support cats needing extra medical care.
-      </p>
-    </article>
+      <article class="policy-card">
+        <h3 class="policy-title">What's <span>Included</span></h3>
+        <ul class="included-list">
+          <li v-for="item in includedItems" :key="item" class="included-item">
+            <span class="check-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M20 6L9 17L4 12"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+            <span>{{ item }}</span>
+          </li>
+        </ul>
+        <p class="policy-body">
+          Kittens may not have completed every service at the time of adoption. By around 6 months
+          of age, kittens are expected to receive all required veterinary care listed above. If you
+          adopt a kitten, you agree to coordinate with an IDOHR director so your kitten can attend
+          required follow-up vet visits.
+        </p>
+        <p class="policy-body">
+          These services would ordinarily cost well over $350. Additional donations are always
+          appreciated and directly support cats needing extra medical care.
+        </p>
+      </article>
 
-    <article class="policy-card">
-      <h3 class="policy-title">Good to <span>Know</span></h3>
-      <ul class="good-to-know-list">
-        <li v-for="item in goodToKnowItems" :key="item.title" class="good-to-know-item">
-          <h4>{{ item.title }}</h4>
-          <p v-if="item.description">{{ item.description }}</p>
-        </li>
-      </ul>
-      <p class="policy-body final-note">
-        Not every application is approved. Our first responsibility is always the long-term welfare
-        of the cat, and we appreciate your understanding.
-      </p>
-    </article>
+      <article class="policy-card">
+        <h3 class="policy-title">Good to <span>Know</span></h3>
+        <ul class="good-to-know-list">
+          <li v-for="item in goodToKnowItems" :key="item.title" class="good-to-know-item">
+            <h4>{{ item.title }}</h4>
+            <p v-if="item.description">{{ item.description }}</p>
+          </li>
+        </ul>
+        <p class="policy-body final-note">
+          Not every application is approved. Our first responsibility is always the long-term
+          welfare of the cat, and we appreciate your understanding.
+        </p>
+      </article>
     </section>
   </div>
 </template>

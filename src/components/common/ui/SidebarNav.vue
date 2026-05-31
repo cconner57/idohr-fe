@@ -41,7 +41,6 @@ function handleClick(item: NavItem) {
 <template>
   <nav class="sidebar-nav" :class="[`variant-${props.variant}`]">
     <template v-for="item in items" :key="item.label">
-
       <router-link
         v-if="item.to"
         :to="item.to"

@@ -73,7 +73,7 @@ const removeFile = (index?: number) => {
   } else {
     emit('update:modelValue', null)
   }
-  
+
   if (fileInput.value) fileInput.value.value = ''
 }
 

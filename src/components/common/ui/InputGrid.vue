@@ -41,13 +41,11 @@ const toggleSelection = (row: string, col: string) => {
 
   if (props.singleSelect) {
     if (rowSelections.includes(col)) {
-
       current[row] = []
     } else {
       current[row] = [col]
     }
   } else {
-
     const isExclusive = props.exclusiveOptions.includes(col)
 
     if (isExclusive) {

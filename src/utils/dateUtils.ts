@@ -29,22 +29,22 @@ export function formatDate(dateString?: string | null): string {
 }
 
 export function formatDateTime(dateString?: string | null): string {
-    if (!dateString) return '-'
-    if (dateString.startsWith('0001-01-01')) return 'N/A'
+  if (!dateString) return '-'
+  if (dateString.startsWith('0001-01-01')) return 'N/A'
 
-    const date = new Date(dateString)
-    if (Number.isNaN(date.getTime())) return '-'
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) return '-'
 
-    // If it looks like a date-only string (length <= 10), use formatDate
-    if (dateString.length <= 10) {
-        return formatDate(dateString)
-    }
+  // If it looks like a date-only string (length <= 10), use formatDate
+  if (dateString.length <= 10) {
+    return formatDate(dateString)
+  }
 
-    return date.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit'
-    })
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  })
 }

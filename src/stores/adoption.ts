@@ -313,12 +313,12 @@ export const useAdoptionStore = defineStore('adoption', () => {
 
       // Prepare payload matching backend AdoptionApplication struct
       const payload = {
-        petId: petStore.selectedPet?.id === 'unspecified' ? null : (petStore.selectedPet?.id || null),
+        petId: petStore.selectedPet?.id === 'unspecified' ? null : petStore.selectedPet?.id || null,
         secondPetId: formState.secondPetId,
         petName:
           petStore.selectedPet?.id === 'unspecified'
             ? formState.generalPetName
-            : (petStore.selectedPet?.petName || petStore.selectedPet?.name || null),
+            : petStore.selectedPet?.petName || petStore.selectedPet?.name || null,
         secondPetName:
           petStore.currentPets.find((p) => p.id === formState.secondPetId)?.name || null,
         firstName: formState.firstName,

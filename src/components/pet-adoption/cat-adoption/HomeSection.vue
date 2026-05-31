@@ -78,7 +78,8 @@ const { formState } = storeToRefs(adoptionStore)
         placeholder="Yes/No, explain if needed"
         required
         :hasError="
-          (touched.allowPets && !formState.allowPets) || (hasAttemptedSubmit && !formState.allowPets)
+          (touched.allowPets && !formState.allowPets) ||
+          (hasAttemptedSubmit && !formState.allowPets)
         "
         @blur="handleBlur('allowPets')"
       />

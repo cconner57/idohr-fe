@@ -10,8 +10,8 @@ withDefaults(
   {
     active: false,
     title: 'Settings',
-    size: 20
-  }
+    size: 20,
+  },
 )
 
 const emit = defineEmits<{
@@ -20,12 +20,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <button
-    class="settings-btn"
-    :class="{ active }"
-    :title="title"
-    @click="(e) => emit('click', e)"
-  >
+  <button class="settings-btn" :class="{ active }" :title="title" @click="(e) => emit('click', e)">
     <Icon name="cog" :size="size" />
   </button>
 </template>

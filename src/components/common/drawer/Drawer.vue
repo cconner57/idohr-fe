@@ -15,7 +15,7 @@ watch(
   (newValue) => {
     open.value = newValue
   },
-  { immediate: true }, 
+  { immediate: true },
 )
 
 function closeDrawer() {
@@ -27,7 +27,13 @@ function closeDrawer() {
 <template>
   <Transition name="drawer-fade">
     <div v-if="open" class="overlay" @click="closeDrawer">
-      <div class="drawer" role="dialog" aria-labelledby="drawer-title" aria-modal="true" @click.stop>
+      <div
+        class="drawer"
+        role="dialog"
+        aria-labelledby="drawer-title"
+        aria-modal="true"
+        @click.stop
+      >
         <div class="drawer-header">
           <h2 id="drawer-title">{{ props.header }}</h2>
           <button

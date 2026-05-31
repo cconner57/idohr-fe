@@ -130,7 +130,9 @@ onMounted(() => {
   border: 1px solid var(--color-primary-border);
   flex: 1;
   max-width: 280px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
   &::before {
     content: '';

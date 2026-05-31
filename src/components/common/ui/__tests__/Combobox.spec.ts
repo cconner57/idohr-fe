@@ -49,7 +49,7 @@ describe('Combobox.vue', () => {
       props: {
         modelValue: null,
         options,
-        allowCreate: true
+        allowCreate: true,
       },
     })
 
@@ -69,7 +69,7 @@ describe('Combobox.vue', () => {
       props: {
         modelValue: ['apple'],
         options,
-        multiple: true
+        multiple: true,
       },
     })
 
@@ -87,7 +87,7 @@ describe('Combobox.vue', () => {
       props: {
         modelValue: ['apple'],
         options,
-        multiple: true
+        multiple: true,
       },
     })
 

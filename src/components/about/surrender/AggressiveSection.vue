@@ -27,7 +27,7 @@ onMounted(() => {
   <div class="aggressive-section">
     <h5>Aggressive Behavior</h5>
     <div class="aggressive-grid">
-        <ButtonToggle
+      <ButtonToggle
         :label="`Has the ${selectedAnimal.toLowerCase()} ever attacked or bit a person?`"
         :modelValue="formState.animalEverAttackedPeople"
         @update:modelValue="(val) => (formState.animalEverAttackedPeople = val as string)"
@@ -39,7 +39,7 @@ onMounted(() => {
         :modelValue="formState.animalEverAttackedPeopleExplanation"
         @update:modelValue="(val) => (formState.animalEverAttackedPeopleExplanation = val || '')"
       />
-        <ButtonToggle
+      <ButtonToggle
         :label="`Has the ${selectedAnimal.toLowerCase()} ever attacked or bit a cat?`"
         :modelValue="formState.animalEverAttackedOtherCats"
         @update:modelValue="(val) => (formState.animalEverAttackedOtherCats = val as string)"
@@ -71,5 +71,4 @@ onMounted(() => {
     gap: 16px 24px;
   }
 }
-
 </style>

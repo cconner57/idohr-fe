@@ -156,7 +156,8 @@ const secondPetName = computed(() => {
             Custom: {{ formState.generalPetName || '' }}
           </template>
           <template v-else>
-            {{ selectedPet?.petName || selectedPet?.name }}{{ secondPetName ? ` & ${secondPetName}` : '' }}
+            {{ selectedPet?.petName || selectedPet?.name
+            }}{{ secondPetName ? ` & ${secondPetName}` : '' }}
           </template>
         </p>
       </div>
@@ -236,13 +237,20 @@ const secondPetName = computed(() => {
           placeholder="Enter pet name"
           required
           fullWidth
-          :has-error="hasAttemptedSubmit && (!formState.generalPetName || !formState.generalPetName.trim())"
+          :has-error="
+            hasAttemptedSubmit && (!formState.generalPetName || !formState.generalPetName.trim())
+          "
           @blur="handleBlur('generalPetName')"
         />
       </div>
 
       <!-- Specific Pet Flow: Optional Second Pet Selection -->
-      <div v-else-if="step === 0 && selectedPet?.id !== 'unspecified' && availablePetsOptions.length > 0" class="second-pet-selection">
+      <div
+        v-else-if="
+          step === 0 && selectedPet?.id !== 'unspecified' && availablePetsOptions.length > 0
+        "
+        class="second-pet-selection"
+      >
         <p class="selection-text">
           Would you like to add a second {{ animalLabel }} to this application?
         </p>

@@ -16,12 +16,12 @@ const { formState } = defineProps<{
     <h5>Other</h5>
     <div class="other-grid">
       <InputTextArea
-          label="Please feel free to tell us any other information about the pet you feel is important"
-          placeholder="Answer"
-          :spanFull="true"
-          :modelValue="formState.additionalInformation"
-          @update:modelValue="(val) => (formState.additionalInformation = val as string)"
-        />
+        label="Please feel free to tell us any other information about the pet you feel is important"
+        placeholder="Answer"
+        :spanFull="true"
+        :modelValue="formState.additionalInformation"
+        @update:modelValue="(val) => (formState.additionalInformation = val as string)"
+      />
       <InputFileUpload
         label="Please upload a full body picture of the pet"
         :modelValue="formState.fullBodyPhotoOfAnimal"

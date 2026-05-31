@@ -22,7 +22,7 @@ describe('Tag.vue', () => {
     const wrapper = mount(Tag, {
       props: {
         variant: 'outline',
-        color: 'danger'
+        color: 'danger',
       },
     })
     expect(wrapper.classes()).toContain('outline')

@@ -13,9 +13,7 @@ export function usePets() {
   const cachedPets = ref<IPet[]>(cached ? JSON.parse(cached) : [])
 
   const spotlightPets = computed(() => {
-    const featured = currentPets.value.filter(
-      (p) => p.profileSettings?.isSpotlightFeatured,
-    )
+    const featured = currentPets.value.filter((p) => p.profileSettings?.isSpotlightFeatured)
     const freshPets = featured.length > 0 ? featured.slice(0, 4) : []
 
     if (freshPets.length > 0) {

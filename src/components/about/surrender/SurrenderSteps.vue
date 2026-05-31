@@ -68,18 +68,18 @@ const { formStep, selectedAnimal } = defineProps<{
   width: 100%;
   max-width: 600px;
   margin: 0 auto 20px;
-  align-items: center; 
-  position: relative; 
+  align-items: center;
+  position: relative;
 
   &::before {
     content: '';
     position: absolute;
-    top: 15px; 
-    left: 27px; 
-    right: 27px; 
+    top: 15px;
+    left: 27px;
+    right: 27px;
     height: 2px;
     background-color: var(--color-primary);
-    z-index: 0; 
+    z-index: 0;
   }
 
   @media (width <= 600px) {
@@ -126,7 +126,7 @@ const { formStep, selectedAnimal } = defineProps<{
       justify-content: center;
       align-items: center;
       margin-bottom: 8px;
-      z-index: 5; 
+      z-index: 5;
 
       @media (width <= 600px) {
         margin-bottom: 0;
