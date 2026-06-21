@@ -7,7 +7,7 @@ import AdoptDetail from '@/components/adopt/adopt-view/AdoptDetail.vue'
 import AdoptSummary from '@/components/adopt/adopt-view/AdoptSummary.vue'
 import AdoptPageHeader from '@/components/adopt/AdoptPageHeader.vue'
 import FilterPanel from '@/components/adopt/FilterPanel.vue'
-import GeneralApplicationCTA from '@/components/adopt/GeneralApplicationCTA.vue'
+// import GeneralApplicationCTA from '@/components/adopt/GeneralApplicationCTA.vue'
 import Spinner from '@/components/common/ui/Spinner.vue'
 import type { IPet } from '@/models/common'
 import { useAdoptionStore } from '@/stores/adoption'
@@ -141,6 +141,7 @@ const filterCount = computed(
   () => Object.values(advancedFilters.value).flat().filter(Boolean).length,
 )
 
+/*
 const handleGeneralApplication = (species: 'cat' | 'dog') => {
   vibrate(50)
   adoptionStore.resetForm()
@@ -148,6 +149,7 @@ const handleGeneralApplication = (species: 'cat' | 'dog') => {
   store.selectPet({ id: 'unspecified', petName: 'Unspecified', species })
   router.push(`/pet-adoption/unspecified`)
 }
+*/
 </script>
 
 <template>
@@ -185,11 +187,11 @@ const handleGeneralApplication = (species: 'cat' | 'dog') => {
             <button class="reset-btn" @click="resetAllFilters">View All Pets</button>
           </div>
 
-          <GeneralApplicationCTA
+          <!-- <GeneralApplicationCTA
             v-if="!pet"
             :activeFilter="activeFilter"
             @apply="handleGeneralApplication"
-          />
+          /> -->
         </template>
       </main>
     </div>
