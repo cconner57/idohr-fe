@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
-import { goToDonate } from '../../../utils/navigate.ts'
 import { useIsMobile, useIsTablet } from '../../../utils/useIsMobile.ts'
-import Button from '../ui/Button.vue'
 import NavDrawer from './NavDrawer.vue'
 
-const router = useRouter()
 const route = useRoute()
 
 const menuOpen = ref(false)

@@ -16,6 +16,11 @@ test.describe('Adopt page — browsing and filtering', () => {
     await expect(petCards).toHaveCount(6)
   })
 
+  test('displays pets in alphabetical order', async ({ page }) => {
+    const petNames = await page.locator('.pet-item h3').allTextContents()
+    expect(petNames).toEqual(['Buddy', 'Daisy', 'Luna', 'Max', 'Oliver', 'Whiskers'])
+  })
+
   test('filters by cats', async ({ page }) => {
     await page.getByRole('button', { name: 'Cats' }).click()
     // Fixture has 3 cats: Luna, Whiskers, Oliver

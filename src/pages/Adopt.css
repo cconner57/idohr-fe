@@ -42,7 +42,6 @@ main {
   align-items: center;
   text-align: center;
   color: var(--text-inverse);
-  margin-top: 2rem;
   padding: 3rem;
   background: rgb(255 255 255 / 10%);
   border-radius: 24px;
@@ -275,7 +274,7 @@ main {
   color: var(--text-inverse);
   margin-top: 4rem;
   padding: 3rem;
-  background: color-mix(in srgb, var(--color-primary), black 12%);
+  background: color-mix(in srgb, var(--color-primary), #000 12%);
   border-radius: 24px;
   backdrop-filter: blur(8px);
   border: 1px dashed rgb(255 255 255 / 30%);

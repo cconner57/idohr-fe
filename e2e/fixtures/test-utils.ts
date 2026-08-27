@@ -28,16 +28,7 @@ export async function mockPetsApi(page: Page) {
     }),
   )
 
-  await page.route('**/pets?*', (route) =>
-    route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify(petsFixture),
-    }),
-  )
-
-  // Bare /pets without query string
-  await page.route(/\/pets$/, (route) =>
+  await page.route(/.*\/pets(\?.*)?$/, (route) =>
     route.fulfill({
       status: 200,
       contentType: 'application/json',

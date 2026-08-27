@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 import AdoptDetail from '@/components/adopt/adopt-view/AdoptDetail.vue'
 import AdoptSummary from '@/components/adopt/adopt-view/AdoptSummary.vue'
@@ -10,15 +10,11 @@ import FilterPanel from '@/components/adopt/FilterPanel.vue'
 // import GeneralApplicationCTA from '@/components/adopt/GeneralApplicationCTA.vue'
 import Spinner from '@/components/common/ui/Spinner.vue'
 import type { IPet } from '@/models/common'
-import { useAdoptionStore } from '@/stores/adoption'
 import { usePetStore } from '@/stores/pets'
-import { vibrate } from '@/utils/haptics'
 
 const props = defineProps<{ id?: string }>()
 const route = useRoute()
-const router = useRouter()
 const store = usePetStore()
-const adoptionStore = useAdoptionStore()
 const { currentPets, isFetching } = storeToRefs(store)
 
 const id = computed(() => props.id ?? (route.params.id as string | undefined))
@@ -93,7 +89,14 @@ const filteredPets = computed(() => {
     })
   }
 
-  return result
+  return [...result].sort((a: IPet, b: IPet) => {
+    const nameA = a.name?.trim() ?? ''
+    const nameB = b.name?.trim() ?? ''
+    return (
+      nameA.localeCompare(nameB, undefined, { sensitivity: 'base' }) ||
+      nameA.localeCompare(nameB)
+    )
+  })
 })
 
 const setFilter = (filter: string) => {
