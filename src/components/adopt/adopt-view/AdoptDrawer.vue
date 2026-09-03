@@ -24,7 +24,7 @@ const { formData, isSubmitting, isSubmitted, apiError, submitInquiry } = usePetI
 const preferredDate = ref('')
 const preferredTime = ref('')
 const hasAttemptedSubmit = ref(false)
-const showInquiryForm = ref(false)
+const showInquiryForm = ref(true)
 
 const isEmailValid = (value: string) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
@@ -302,7 +302,7 @@ form {
 }
 
 .success__icon-wrapper {
-  color: #ffffff;
+  color: #fff;
   background-color: #0f766e;
   width: 100px;
   height: 100px;
@@ -342,6 +342,7 @@ form {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -353,6 +354,7 @@ form {
     opacity: 0;
     transform: scale(0.5);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

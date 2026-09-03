@@ -5,6 +5,7 @@ import { useRoute } from 'vue-router'
 import { API_ENDPOINTS } from '@/constants/api'
 import type { IPet, IVaccineRecord, IVaccineSeries } from '@/models/common'
 import { usePetStore } from '@/stores/pets'
+import { withPublicOrgId } from '@/utils/api'
 
 interface IMedicalFile {
   name: string
@@ -106,6 +107,37 @@ const vaccineLines = computed(() => {
   return lines
 })
 
+const viralStatusLines = computed(() => {
+  if (!pet.value?.medical) return [] as string[]
+  const lines: string[] = []
+  if (pet.value.medical.fivPositive !== undefined && pet.value.medical.fivPositive !== null) {
+    const fivDate = pet.value.medical.fivTestDate
+      ? ` (Tested: ${toDateLabel(pet.value.medical.fivTestDate)})`
+      : ''
+    lines.push(`FIV: ${pet.value.medical.fivPositive ? 'Positive' : 'Negative'}${fivDate}`)
+  }
+  if (pet.value.medical.felvPositive !== undefined && pet.value.medical.felvPositive !== null) {
+    const felvDate = pet.value.medical.felvTestDate
+      ? ` (Tested: ${toDateLabel(pet.value.medical.felvTestDate)})`
+      : ''
+    lines.push(`FeLV: ${pet.value.medical.felvPositive ? 'Positive' : 'Negative'}${felvDate}`)
+  }
+  return lines
+})
+
+const specialNeedsLines = computed(() => {
+  const items = pet.value?.medical?.specialNeeds ?? []
+  if (items.length > 0) return items
+  if (pet.value?.behavior?.specialNeeds) return [pet.value.behavior.specialNeeds]
+  if (pet.value?.descriptions?.specialNeeds) return [pet.value.descriptions.specialNeeds]
+  return [] as string[]
+})
+
+const healthConcernLines = computed(() => {
+  const concerns = pet.value?.medical?.healthConcerns ?? []
+  return concerns.map((c) => c.replace(/\b\w/g, (l) => l.toUpperCase()))
+})
+
 const toRecord = (value: unknown): Record<string, unknown> | null => {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return null
   return value as Record<string, unknown>
@@ -157,7 +189,7 @@ const medicalFiles = computed(() => {
 
 const findPetFromStatusList = async () => {
   const queryByStatus = async (status: 'adopted' | 'archived') => {
-    const response = await fetch(`${API_ENDPOINTS.PETS_LIST}?status=${status}&orgId=idohr`)
+    const response = await fetch(withPublicOrgId(`${API_ENDPOINTS.PETS_LIST}?status=${status}`))
     if (!response.ok) return [] as IPet[]
 
     const json = await response.json()
@@ -257,6 +289,27 @@ onMounted(async () => {
                   : 'No'
             }}
           </p>
+        </article>
+
+        <article v-if="viralStatusLines.length > 0" class="block">
+          <h2>Infectious Disease Testing</h2>
+          <ul>
+            <li v-for="line in viralStatusLines" :key="line">{{ line }}</li>
+          </ul>
+        </article>
+
+        <article v-if="specialNeedsLines.length > 0" class="block">
+          <h2>Special Needs & Physical Impairments</h2>
+          <ul>
+            <li v-for="item in specialNeedsLines" :key="item">{{ item }}</li>
+          </ul>
+        </article>
+
+        <article v-if="healthConcernLines.length > 0" class="block">
+          <h2>Health Concerns & Conditions</h2>
+          <ul>
+            <li v-for="concern in healthConcernLines" :key="concern">{{ concern }}</li>
+          </ul>
         </article>
 
         <article class="block">

@@ -56,6 +56,7 @@ export type TMedicalConcern =
   | 'kidney disease'
   | 'obesity'
   | 'upper respiratory infections'
+  | (string & {})
 
 export interface IPet {
   id: string
@@ -75,7 +76,6 @@ export interface IPet {
     coatLength: TCoatLength | null
     color: string | null
     dateOfBirth?: string | null
-
     size: TSize | null
     currentWeight?: number | null
   }
@@ -101,6 +101,11 @@ export interface IPet {
   medical: {
     currentMedications?: string[] | null
     healthConcerns?: TMedicalConcern[] | null
+    specialNeeds?: string[] | null
+    fivPositive?: boolean | null
+    felvPositive?: boolean | null
+    fivTestDate?: string | null
+    felvTestDate?: string | null
     microchip: {
       microchipCompany?: string | null
       microchipID?: string | null

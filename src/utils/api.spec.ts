@@ -35,7 +35,9 @@ describe('parseApiErrorMessage', () => {
 
 describe('withPublicOrgId', () => {
   it('appends the default orgId when missing', () => {
-    expect(withPublicOrgId('/applications/inquiry')).toBe('/applications/inquiry?orgId=idohr')
+    expect(withPublicOrgId('/applications/inquiry')).toBe(
+      '/applications/inquiry?orgId=4f18d7bc-92d5-4a1e-b816-e5c83f982104',
+    )
   })
 
   it('preserves an existing orgId query parameter', () => {
@@ -46,7 +48,7 @@ describe('withPublicOrgId', () => {
 
   it('preserves absolute urls while appending orgId', () => {
     expect(withPublicOrgId('https://api.example.com/applications/inquiry?source=request')).toBe(
-      'https://api.example.com/applications/inquiry?source=request&orgId=idohr',
+      'https://api.example.com/applications/inquiry?source=request&orgId=4f18d7bc-92d5-4a1e-b816-e5c83f982104',
     )
   })
 })

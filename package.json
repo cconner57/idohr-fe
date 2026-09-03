@@ -24,7 +24,7 @@
     "lint:style": "stylelint \"src/**/*.{css,vue}\"",
     "check": "run-p type-check lint:check lint:style test:check test:e2e",
     "format": "prettier --write src/",
-    "deploy": "npm run build-only && wrangler deploy"
+    "deploy": "npm run build-only && wrangler pages deploy dist --project-name=idohr-fe --branch=main"
   },
   "dependencies": {
     "eslint-plugin-simple-import-sort": "^12.1.1",

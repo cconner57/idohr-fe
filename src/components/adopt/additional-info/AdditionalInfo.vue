@@ -46,6 +46,30 @@ const houseTrainedText = () => {
     return 'No'
   }
 }
+
+const viralStatusText = computed(() => {
+  const statuses: string[] = []
+  if (props.pet.medical?.fivPositive) statuses.push('FIV Positive')
+  if (props.pet.medical?.felvPositive) statuses.push('FeLV Positive')
+  return statuses.join(', ')
+})
+
+const specialNeedsText = computed(() => {
+  const items = props.pet.medical?.specialNeeds ?? []
+  if (items.length > 0) return items.join(', ')
+  if (props.pet.behavior?.specialNeeds) return props.pet.behavior.specialNeeds
+  if (props.pet.descriptions?.specialNeeds) return props.pet.descriptions.specialNeeds
+  return ''
+})
+
+const healthConcernsText = computed(() => {
+  const concerns = props.pet.medical?.healthConcerns ?? []
+  const filtered = concerns.filter((c) => {
+    const lower = c.toLowerCase()
+    return !lower.includes('fiv') && !lower.includes('felv')
+  })
+  return filtered.map((c) => c.replace(/\b\w/g, (l) => l.toUpperCase())).join(', ')
+})
 </script>
 
 <template>
@@ -75,8 +99,20 @@ const houseTrainedText = () => {
             ? isSpayedOrNeutered(pet)
             : `Not ${isSpayedOrNeutered(pet)}`
         }},
-        {{ pet.medical?.microchip.microchipped ? 'Microchipped' : 'Not Microchipped' }}
+        {{ pet.medical?.microchip?.microchipped ? 'Microchipped' : 'Not Microchipped' }}
       </p>
+    </div>
+    <div v-if="viralStatusText" class="adopt-detail__additional-info__item">
+      <p>Viral Status</p>
+      <p>{{ viralStatusText }}</p>
+    </div>
+    <div v-if="specialNeedsText" class="adopt-detail__additional-info__item">
+      <p>Special Needs</p>
+      <p>{{ specialNeedsText }}</p>
+    </div>
+    <div v-if="healthConcernsText" class="adopt-detail__additional-info__item">
+      <p>Conditions</p>
+      <p>{{ healthConcernsText }}</p>
     </div>
     <div class="adopt-detail__additional-info__item">
       <p>Good in a home with</p>
@@ -96,7 +132,6 @@ const houseTrainedText = () => {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 250px;
 
   @media (width <= 440px) {
     gap: 5px;
