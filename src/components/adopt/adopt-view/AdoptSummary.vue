@@ -35,7 +35,7 @@ const getCapsules = (pet: IPet): string[] => {
     <PetItem
       v-for="(pet, index) in pets"
       :capsules="getCapsules(pet)"
-      :description="pet.descriptions?.fun ?? ''"
+      :description="pet.descriptions?.primary ?? pet.descriptions?.fun ?? ''"
       :id="pet.slug || pet.id"
       :key="pet.id"
       :name="pet.name"

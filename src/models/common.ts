@@ -144,6 +144,8 @@ export interface IPet {
     status: TPetStatus
   }
 
+  org_id?: string
+
   adoption: {
     adoptedBy?: string | null
     date?: string | null
@@ -154,7 +156,7 @@ export interface IPet {
     adopterContactInfo?: IContactInfo
   }
 
-  foster: {
+  foster?: {
     endDate?: string | null
     parentName?: string | null
     parentPhoto?: IPhoto | null
@@ -162,7 +164,7 @@ export interface IPet {
     fosterContactInfo?: IContactInfo
   }
 
-  returned: {
+  returned?: {
     isReturned: boolean
     history: { date: string; reason: string }[]
   }
